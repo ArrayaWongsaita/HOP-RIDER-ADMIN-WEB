@@ -13,12 +13,15 @@ const widthBtn = {
   regist: "w-[138px]",
   send: "w-[82px]",
   accept: "w-[157px]",
+  full: "w-full",
 };
 
 const heightBtn = {
   reply: "h-[60px]",
   regist: "h-[50px]",
   accept: "h-[63px]",
+  full: "h-full",
+  mini: "h-[45px]",
 };
 
 const borderColorBtn = {
@@ -38,6 +41,16 @@ const fontSizeBtn = {
   accept: "text-[30px]",
 };
 
+const needCenter = {
+  none: "",
+  flexCenter: "flex justify-center items-center",
+}
+
+const borderRound = {
+  default: "rounded-[14px]",
+  10: "rounded-[10px]",
+}
+
 export default function CommonButton({
   children,
   bg = "torchRed",
@@ -47,10 +60,12 @@ export default function CommonButton({
   borderColor = "white",
   borderWidth = "common",
   fontSize = "reply",
+  align = "none",
+  rounded = "default",
 }) {
   return (
     <button
-      className={`${bgBtn[bg]} ${textBtn[text]} ${widthBtn[width]} ${heightBtn[height]} border ${borderWidthBtn[borderWidth]} ${borderColorBtn[borderColor]} rounded-[14px] px-1 py-1.5 ${fontSizeBtn[fontSize]} font-semibold`}
+      className={`${bgBtn[bg]} ${textBtn[text]} ${widthBtn[width]} ${heightBtn[height]} border ${borderWidthBtn[borderWidth]} ${borderColorBtn[borderColor]} ${borderRound[rounded]} px-1 py-1.5 ${fontSizeBtn[fontSize]} font-semibold ${needCenter[align]}`}
     >
       {children}
     </button>
