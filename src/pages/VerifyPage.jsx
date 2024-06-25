@@ -2,6 +2,8 @@ import { useState } from "react";
 import Input from "../components/Input";
 import Section from "../components/Section";
 import { ImageRider } from "../icons";
+import Textarea from "../components/Textarea";
+import CommonButton from "../components/CommonButton";
 
 const initialInput = {
     firstName: '',
@@ -23,6 +25,8 @@ export default function VerifyPage() {
     const [input, setInput] = useState(initialInput);
     const [inputError, setInputError] = useState(initialInputError);
 
+    const [edit, setEdit] = useState(false);
+
     const handleChangeInput = (event) => {
         setInput({ ...input, [event.target.name]: event.target.value })
     };
@@ -38,14 +42,25 @@ export default function VerifyPage() {
                     <ImageRider width={90} height={90} />
                 </div>
                 <div className="flex items-center gap-5 text-xl text-[#FF004D]">
-                    <p role="">Save</p>
-                    <p className="text-3xl">|</p>
-                    <p>Edit</p>
-                    <p className="text-3xl">|</p>
-                    <p>Cancel</p>
+                    {edit
+                        ? <>
+                            <p role="button">Save</p>
+                            <p className="text-3xl">|</p>
+                        </> : null}
+                    <p role="button"
+                        onClick={() => setEdit(true)}>
+                        Edit
+                    </p>
+                    {edit
+                        ? <>
+                            <p className="text-3xl">|</p>
+                            <p role="button"
+                                onClick={() => setEdit(false)}>
+                                Cancel</p>
+                        </> : null}
                 </div>
             </div>
-            <div className="flex justify-center pt-2">
+            <div className="flex justify-center mt-4">
                 <hr className="w-[85%] border border-[#FF004D]" />
             </div>
             <div className="flex justify-center ">
@@ -100,6 +115,11 @@ export default function VerifyPage() {
                             error={inputError.phone}
                         />
                     </div>
+                    <div className="col-span-2">
+                        <Textarea
+                            placeholder={"Address"}
+                        />
+                    </div>
                 </div>
             </div>
             <div className="flex justify-center pt-2">
@@ -109,6 +129,24 @@ export default function VerifyPage() {
                 <div className="w-[150px] h-[150px] border-2 rounded-2xl border-[#FF004D]">
 
                 </div>
+            </div>
+            <div className="flex justify-center pt-2">
+                <hr className="w-[85%] border border-[#FF004D]" />
+            </div>
+            <div className="text-white w-full text-sm flex flex-col items-center gap-4 py-4">
+                <p>Clean criminal record.</p>
+                <p>Certify that the above information is true.</p>
+            </div>
+            <div className="flex justify-center pb-10">
+            <CommonButton
+                bg="torchRed"
+                text="white"
+                borderColor="white"
+                width="reply"
+                height="regist"
+            >
+                Verify
+            </CommonButton>
             </div>
         </div>
     )
