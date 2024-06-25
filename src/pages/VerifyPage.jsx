@@ -29,7 +29,7 @@ export default function VerifyPage() {
 
     return (
         <div>
-            <Section>
+            <Section >
                 <h2>identity verification</h2>
             </Section>
             <div className="flex flex-col items-center gap-6">
