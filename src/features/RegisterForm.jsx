@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { AxiosError } from "axios";
+
 import registerValidate from "../validators/register-validate";
 import Input from "../components/Input";
 import CommonButton from "../components/CommonButton";
+import authApi from "../apis/authApi";
 
 
 const initialInput = {
@@ -40,7 +42,7 @@ export default function RegisterForm() {
             setInputError(initialInputError);
             console.log('Register Success!!');
 
-            // await customerApi.register(input);
+            await authApi.register(input);
 
         }   catch (err) {
             console.log(err)
