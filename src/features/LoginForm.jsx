@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Input from "../components/Input";
 import CommonButton from "../components/CommonButton";
 import loginValidate from "../validators/login-validate";
+import useAuth from "../hooks/authHook";
 
 
 const initialInput = {
@@ -18,6 +19,7 @@ const initialInputError = {
 };
 
 export default function LoginForm() {
+    const { login } = useAuth()
 
     const [input, setInput] = useState(initialInput);
     const [inputError, setInputError] = useState(initialInputError);

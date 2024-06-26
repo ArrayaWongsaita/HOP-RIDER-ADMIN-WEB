@@ -30,9 +30,9 @@ export default function VerifyPage() {
     const [inputError, setInputError] = useState(initialInputError);
     const [profileImage, setProfileImage] = useState({});
     const [option1, setOption1] = useState(false);
-    // console.log(option1);
+    console.log(option1);
     const [option2, setOption2] = useState(false);
-    // console.log(option2);
+    console.log(option2);
 
     const handleChangeInput = (event) => {
         setInput({ ...input, [event.target.name]: event.target.value })

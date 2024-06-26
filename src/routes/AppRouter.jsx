@@ -9,7 +9,7 @@ import RegisterAndLoginPage from "../pages/RegisterAndLoginPage";
 
 const router = createBrowserRouter([
     {
-        path: "/auth/register",
+        path: "/auth/login",
         element: (
             <div className="w-lvw h-lvh bg-black flex justify-center">
                 <RegisterAndLoginPage />
@@ -22,9 +22,9 @@ const router = createBrowserRouter([
             <MainContainer />
         ),
         children: [
-            { path: "/raider/verify", element: <VerifyPage /> },
-            { path: "/raider/waiting", element: <WaitingApprovePage /> },
-            { path: "/raider/", element: <RiderHomePage /> },
+            { path: "/rider/verify", element: <VerifyPage /> },
+            { path: "/rider/waiting", element: <WaitingApprovePage /> },
+            { path: "/rider/", element: <RiderHomePage /> },
         ],
     },
 ])
