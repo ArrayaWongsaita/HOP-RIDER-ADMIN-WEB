@@ -6,7 +6,7 @@ import LoginForm from "../features/LoginForm";
 
 
 export default function RegisterAndLoginPage() {
-    const [toggle, setToggle] = useState(true);
+    const [toggle, setToggle] = useState(false);
 
     return (
         <div className="h-[100vh] w-[430px] bg-black" >

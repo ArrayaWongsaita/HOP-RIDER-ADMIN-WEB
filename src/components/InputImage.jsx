@@ -20,6 +20,7 @@ export default function InputImage({
       reader.readAsDataURL(file);
     }
   };
+  
   return (
     <>
       <input
