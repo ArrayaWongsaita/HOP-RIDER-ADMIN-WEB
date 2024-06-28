@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Input from "../components/Input";
 import Section from "../components/Section";
-import { ImageRider, ImportImage } from "../icons";
+import { ImageRider } from "../icons/IconImageRider";
+import { ImportImage } from "../icons/IconImportImage";
 import Textarea from "../components/Textarea";
 import CommonButton from "../components/CommonButton";
 import InputImage from "../components/InputImage";
