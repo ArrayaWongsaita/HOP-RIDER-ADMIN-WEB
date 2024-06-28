@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { LogoHop } from "../icons";
+import { LogoHop } from "../icons/IconLogoHop";
 import RegisterForm from "../features/RegisterForm";
 import LoginForm from "../features/LoginForm";
 

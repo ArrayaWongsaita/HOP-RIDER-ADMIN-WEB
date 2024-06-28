@@ -1,5 +1,5 @@
 import CommonButton from "../components/CommonButton";
-import { IconArrow } from "../icons";
+import { IconArrow } from "../icons/IconArrow";
 
 export default function OrderFromCustomer() {
     return (
