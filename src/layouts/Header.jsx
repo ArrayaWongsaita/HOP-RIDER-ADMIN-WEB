@@ -1,7 +1,9 @@
-import { IconMenu, LogoHopForNav, Xclose } from "../icons";
 import { useState, useEffect } from "react";
-import "./Header.css";
 import { useRef } from "react";
+import "./Header.css";
+import { XClose } from "../icons/IconXClose";
+import { LogoHopForNav} from "../icons/IconLogoHopForNav";
+import { IconMenu } from "../icons/IconMenu";
 
 export default function Header() {
   const [click, setClick] = useState(false);
@@ -40,7 +42,7 @@ export default function Header() {
           </ul>
 
           <div ref={menuRef} className="mobile-menu" onClick={handleClick}>
-            {click ? <Xclose /> : <IconMenu />}
+            {click ? <XClose /> : <IconMenu />}
           </div>
         </div>
       </div>
