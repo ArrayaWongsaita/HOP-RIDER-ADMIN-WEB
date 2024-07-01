@@ -9,35 +9,49 @@ import RegisterAndLoginPage from "../pages/RegisterAndLoginPage";
 import ProtectedRouteCheckPending from "../features/ProtectRouteCheckPending";
 import ProtectedRouteCheckSubmitted from "../features/ProtectRouteCheckSubmitted";
 import ProtectedRouteCheckApproved from "../features/ProtectRouteCheckApproved";
+import PricePlanPage from "../pages/PricePlanPage";
 
 const router = createBrowserRouter([
-    {
-        path: "/auth/login",
+  {
+    path: "/auth/login",
+    element: (
+      <div className="w-lvw h-lvh bg-black flex justify-center">
+        <RegisterAndLoginPage />
+      </div>
+    ),
+  },
+  {
+    path: "/",
+    element: <MainContainer />,
+    children: [
+      { path: "/rider/order", element: <RiderOrder /> },
+      {
+        path: "/rider/verify",
         element: (
-            <div className="w-lvw h-lvh bg-black flex justify-center">
-                <RegisterAndLoginPage />
-            </div>
+          <ProtectedRouteCheckPending>
+            <VerifyPage />
+          </ProtectedRouteCheckPending>
         ),
-    },
-    {
-        path: "/",
+      },
+      {
+        path: "/rider/waiting",
         element: (
-            <MainContainer />
+          <ProtectedRouteCheckSubmitted>
+            <WaitingApprovePage />
+          </ProtectedRouteCheckSubmitted>
         ),
+      },
+      {
+        path: "/rider/",
+        element: <ProtectedRouteCheckApproved />,
         children: [
-                { path: "/rider/order", element: <RiderOrder /> },
-            { path: "/rider/verify", element: <ProtectedRouteCheckPending><VerifyPage /></ProtectedRouteCheckPending> },
-            { path: "/rider/waiting", element: <ProtectedRouteCheckSubmitted><WaitingApprovePage /></ProtectedRouteCheckSubmitted> },
-            {
-                path: "/rider/", element: <ProtectedRouteCheckApproved />,
-                children: [
-                    { path: "/rider/", element: <RiderHomePage /> },
-  
-                ]
-            },
+          { path: "/rider/", element: <RiderHomePage /> },
+          { path: "/rider/price", element: <PricePlanPage /> },
         ],
-    },
-])
+      },
+    ],
+  },
+]);
 
 export default function AppRouter() {
   return <RouterProvider router={router} />;
