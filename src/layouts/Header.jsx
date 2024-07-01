@@ -1,15 +1,21 @@
 import { useState, useEffect } from "react";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Header.css";
+
 import { XClose } from "../icons/IconXClose";
-import { LogoHopForNav} from "../icons/IconLogoHopForNav";
+import { LogoHopForNav } from "../icons/IconLogoHopForNav";
 import { IconMenu } from "../icons/IconMenu";
+import useAuth from "../hooks/authHook";
 
 export default function Header() {
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
   const menuRef = useRef(null);
+  const { logout } = useAuth()
+
+  const navigate = useNavigate()
 
   const handleClickOutside = (event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -24,6 +30,12 @@ export default function Header() {
     };
   }, []);
 
+  const handleLogout = () => {
+    logout()
+    navigate('/auth/login')
+    window.location.reload()
+  }
+
   return (
     <div className="header">
       <div className="container">
@@ -36,7 +48,7 @@ export default function Header() {
             <li className="menu-linkA" onClick={closeMobileMenu}>
               <a href="#">Profile Setting</a>
             </li>
-            <li className="menu-linkB" onClick={closeMobileMenu}>
+            <li className="menu-linkB" onClick={handleLogout}>
               <a href="#">Logout</a>
             </li>
           </ul>

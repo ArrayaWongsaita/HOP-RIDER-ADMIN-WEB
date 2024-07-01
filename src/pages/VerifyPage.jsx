@@ -6,6 +6,7 @@ import { ImportImage } from "../icons/IconImportImage";
 import Textarea from "../components/Textarea";
 import CommonButton from "../components/CommonButton";
 import InputImage from "../components/InputImage";
+import verifyValidate from "../validators/verify-validate";
 
 const initialInput = {
     firstName: '',
@@ -66,12 +67,26 @@ export default function VerifyPage() {
 
     console.log(profileImage);
     
+    const handleSubmitForm = (event) => {
+        try {
+            event.preventDefault();
+            const error = verifyValidate(input);
+            if(error) {
+                return setInputError(error);
+            }
+            setInputError({ ...initialInputError });
+            
+        }   catch (err) {
+            console.log(err)
+        }
+    }
+    
     return (
         <div>
             <Section >
                 <h2>identity verification</h2>
             </Section>
-            <form >
+            <form onSubmit={handleSubmitForm} >
                 <div className="flex flex-col items-center gap-6">
                     <div className="rounded-2xl overflow-hidden">
                         <InputImage

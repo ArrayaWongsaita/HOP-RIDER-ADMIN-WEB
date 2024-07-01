@@ -6,6 +6,9 @@ import VerifyPage from "../pages/VerifyPage";
 import WaitingApprovePage from "../pages/WaitingApprovePage";
 import RiderHomePage from "../pages/RiderHomePage";
 import RegisterAndLoginPage from "../pages/RegisterAndLoginPage";
+import ProtectedRouteCheckPending from "../features/ProtectRouteCheckPending";
+import ProtectedRouteCheckSubmitted from "../features/ProtectRouteCheckSubmitted";
+import ProtectedRouteCheckApproved from "../features/ProtectRouteCheckApproved";
 
 const router = createBrowserRouter([
     {
@@ -22,9 +25,14 @@ const router = createBrowserRouter([
             <MainContainer />
         ),
         children: [
-            { path: "/rider/verify", element: <VerifyPage /> },
-            { path: "/rider/waiting", element: <WaitingApprovePage /> },
-            { path: "/rider/", element: <RiderHomePage /> },
+            { path: "/rider/verify", element: <ProtectedRouteCheckPending><VerifyPage /></ProtectedRouteCheckPending> },
+            { path: "/rider/waiting", element: <ProtectedRouteCheckSubmitted><WaitingApprovePage /></ProtectedRouteCheckSubmitted> },
+            {
+                path: "/rider/", element: <ProtectedRouteCheckApproved />,
+                children: [
+                    { path: "/rider/", element: <RiderHomePage /> },
+                ]
+            },
         ],
     },
 ])
