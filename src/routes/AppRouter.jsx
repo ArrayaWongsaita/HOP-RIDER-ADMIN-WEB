@@ -10,6 +10,7 @@ import ProtectedRouteCheckPending from "../features/ProtectRouteCheckPending";
 import ProtectedRouteCheckSubmitted from "../features/ProtectRouteCheckSubmitted";
 import ProtectedRouteCheckApproved from "../features/ProtectRouteCheckApproved";
 import PricePlanPage from "../pages/PricePlanPage";
+import RiderOrder from "../pages/RiderOrder";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <MainContainer />,
     children: [
+      { path: "/rider/price", element: <PricePlanPage /> },
       { path: "/rider/order", element: <RiderOrder /> },
       {
         path: "/rider/verify",
@@ -44,10 +46,7 @@ const router = createBrowserRouter([
       {
         path: "/rider/",
         element: <ProtectedRouteCheckApproved />,
-        children: [
-          { path: "/rider/", element: <RiderHomePage /> },
-          { path: "/rider/price", element: <PricePlanPage /> },
-        ],
+        children: [{ path: "/rider/", element: <RiderHomePage /> }],
       },
     ],
   },
