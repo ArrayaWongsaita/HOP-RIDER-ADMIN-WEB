@@ -10,17 +10,21 @@ import InputImage from "../components/InputImage";
 const initialInput = {
     firstName: '',
     lastName: '',
+    birthDate: '',
     idCard: '',
     email: '',
     phone: '',
+    address: '',
 };
 
 const initialInputError = {
     firstName: '',
     lastName: '',
+    birthDate: '',
     idCard: '',
     email: '',
     phone: '',
+    address: '',
 };
 
 const color1 = 'bg-[#FF004D] text-[#FFFFFF]'
@@ -31,9 +35,10 @@ export default function VerifyPage() {
     const [inputError, setInputError] = useState(initialInputError);
     const [profileImage, setProfileImage] = useState({});
     const [option1, setOption1] = useState(false);
-    console.log(option1);
+    // console.log(option1);
     const [option2, setOption2] = useState(false);
-    console.log(option2);
+    // console.log(option2);
+    console.log(input)
 
     const handleChangeInput = (event) => {
         setInput({ ...input, [event.target.name]: event.target.value })
@@ -107,7 +112,12 @@ export default function VerifyPage() {
                         </div>
                         <div className="col-span-2">
                             <Input
+                                type="date"
                                 placeholder="Birth Date"
+                                name='birthDate'
+                                value={input.birthDate}
+                                onChange={handleChangeInput}
+                                error={initialInputError.birthDate}
                             />
                         </div>
                         <div className="col-span-2" >
@@ -140,6 +150,10 @@ export default function VerifyPage() {
                         <div className="col-span-2">
                             <Textarea
                                 placeholder={"Address"}
+                                name="address"
+                                value={input.address}
+                                onChange={handleChangeInput}
+                                error={inputError.address}
                             />
                         </div>
                     </div>
