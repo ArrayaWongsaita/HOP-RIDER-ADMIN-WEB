@@ -7,6 +7,7 @@ import WaitingApprovePage from "../pages/WaitingApprovePage";
 import RiderHomePage from "../pages/RiderHomePage";
 import RegisterAndLoginPage from "../pages/RegisterAndLoginPage";
 import RiderOrder from "../pages/RiderOrder";
+import PricePlanPage from "../pages/PricePlanPage";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
       { path: "/rider/order", element: <RiderOrder /> },
       { path: "/rider/waiting", element: <WaitingApprovePage /> },
       { path: "/rider/", element: <RiderHomePage /> },
+      { path: "/rider/price", element: <PricePlanPage /> },
     ],
   },
 ]);
