@@ -40,7 +40,7 @@ export default function LoginForm() {
             console.log('Login Success!!');
 
             await login(input);
-            navigate('/');
+            navigate('/rider/verify');
 
         } catch (err) {
             console.log(err)

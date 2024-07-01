@@ -9,30 +9,31 @@ export const AuthContext = createContext();
 
 export default function AuthContextProvider({ children }) {
     const [authUser, setAuthUser] = useState(null);
-    const [isAuthUserLoading, setIsCustomerUserLoading] = useState(true);
+    const [isAuthUserLoading, setIsAuthUserLoading] = useState(true);
 
     useEffect(() => {
-        customerLogin();
+        authLogin();
     }, []);
 
-    const customerLogin = async () => {
+    const authLogin = async () => {
         try {
             if (getAccessToken()) {
-                const res = await authApi.getCustomerUser();
+                const res = await authApi.getAuthUser();
+                console.log(res)
                 setAuthUser(res.data.user);
             }
         } catch (err) {
             console.log(err);
         } finally {
-            setIsCustomerUserLoading(false);
+            setIsAuthUserLoading(false);
         }
     };
 
     const login = async credentials => {
         const res = await authApi.login(credentials);
         setAccessToken(res.data.accessToken);
-        const resGetCustomerUser = await authApi.getCustomerUser();
-        setAuthUser(resGetCustomerUser.data.user);
+        const resGetAuthUser = await authApi.getAuthUser();
+        setAuthUser(resGetAuthUser.data.user);
     };
 
     const logout = () => {

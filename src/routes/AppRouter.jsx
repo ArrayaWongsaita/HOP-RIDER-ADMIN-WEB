@@ -6,7 +6,9 @@ import VerifyPage from "../pages/VerifyPage";
 import WaitingApprovePage from "../pages/WaitingApprovePage";
 import RiderHomePage from "../pages/RiderHomePage";
 import RegisterAndLoginPage from "../pages/RegisterAndLoginPage";
-import RiderOrder from "../pages/RiderOrder";
+import ProtectedRouteCheckPending from "../features/ProtectRouteCheckPending";
+import ProtectedRouteCheckSubmitted from "../features/ProtectRouteCheckSubmitted";
+import ProtectedRouteCheckApproved from "../features/ProtectRouteCheckApproved";
 import PricePlanPage from "../pages/PricePlanPage";
 
 const router = createBrowserRouter([
@@ -22,11 +24,31 @@ const router = createBrowserRouter([
     path: "/",
     element: <MainContainer />,
     children: [
-      { path: "/rider/verify", element: <VerifyPage /> },
       { path: "/rider/order", element: <RiderOrder /> },
-      { path: "/rider/waiting", element: <WaitingApprovePage /> },
-      { path: "/rider/", element: <RiderHomePage /> },
-      { path: "/rider/price", element: <PricePlanPage /> },
+      {
+        path: "/rider/verify",
+        element: (
+          <ProtectedRouteCheckPending>
+            <VerifyPage />
+          </ProtectedRouteCheckPending>
+        ),
+      },
+      {
+        path: "/rider/waiting",
+        element: (
+          <ProtectedRouteCheckSubmitted>
+            <WaitingApprovePage />
+          </ProtectedRouteCheckSubmitted>
+        ),
+      },
+      {
+        path: "/rider/",
+        element: <ProtectedRouteCheckApproved />,
+        children: [
+          { path: "/rider/", element: <RiderHomePage /> },
+          { path: "/rider/price", element: <PricePlanPage /> },
+        ],
+      },
     ],
   },
 ]);
