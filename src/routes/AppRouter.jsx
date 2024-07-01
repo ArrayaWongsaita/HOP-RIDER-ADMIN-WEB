@@ -25,12 +25,14 @@ const router = createBrowserRouter([
             <MainContainer />
         ),
         children: [
+                { path: "/rider/order", element: <RiderOrder /> },
             { path: "/rider/verify", element: <ProtectedRouteCheckPending><VerifyPage /></ProtectedRouteCheckPending> },
             { path: "/rider/waiting", element: <ProtectedRouteCheckSubmitted><WaitingApprovePage /></ProtectedRouteCheckSubmitted> },
             {
                 path: "/rider/", element: <ProtectedRouteCheckApproved />,
                 children: [
                     { path: "/rider/", element: <RiderHomePage /> },
+  
                 ]
             },
         ],
@@ -38,5 +40,5 @@ const router = createBrowserRouter([
 ])
 
 export default function AppRouter() {
-    return <RouterProvider router={router} />;
+  return <RouterProvider router={router} />;
 }
