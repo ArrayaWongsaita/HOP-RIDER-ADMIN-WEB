@@ -10,7 +10,7 @@ import Section from "../components/Section";
 import verifyValidate from "../validators/verify-validate";
 import { ImageRider } from "../icons/IconImageRider";
 import { ImportImage } from "../icons/IconImportImage";
-import riderApi from "../apis/riderApi";
+// import riderApi from "../apis/riderApi";
 
 const initialInput = {
     // firstName: '',
@@ -108,8 +108,10 @@ export default function VerifyPage() {
             fromData.append("idCard", input.idCard)
             fromData.append("address", input.address)
 
+            console.log('fromData ----->>>');
+            console.log(Object.fromEntries(fromData));
             // console.log('fromData --->>', fromData.get(''));
-            await riderApi.verify(fromData);
+            // await riderApi.verify(fromData);
             console.log('verify success!!');
 
         } catch (err) {
