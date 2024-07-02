@@ -9,6 +9,7 @@ import RegisterAndLoginPage from "../pages/RegisterAndLoginPage";
 import ProtectedRouteCheckPending from "../features/ProtectRouteCheckPending";
 import ProtectedRouteCheckSubmitted from "../features/ProtectRouteCheckSubmitted";
 import ProtectedRouteCheckApproved from "../features/ProtectRouteCheckApproved";
+import WaitingCheckPaymentPage from "../pages/WaitingCheckPaymentPage";
 import PricePlanPage from "../pages/PricePlanPage";
 import RiderOrder from "../pages/RiderOrder";
 
@@ -43,6 +44,8 @@ const router = createBrowserRouter([
           </ProtectedRouteCheckSubmitted>
         ),
       },
+      { path: "/rider/", element: <RiderHomePage /> },
+      { path: "/rider/waitingCheckPayment", element: <WaitingCheckPaymentPage /> },  
       {
         path: "/rider/",
         element: <ProtectedRouteCheckApproved />,
@@ -53,5 +56,5 @@ const router = createBrowserRouter([
 ]);
 
 export default function AppRouter() {
-  return <RouterProvider router={router} />;
+    return <RouterProvider router={router} />;
 }

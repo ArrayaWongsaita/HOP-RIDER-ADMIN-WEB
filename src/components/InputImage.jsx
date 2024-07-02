@@ -8,9 +8,18 @@ export default function InputImage({
   aspectRatio = "1/1",
 }) {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedPdf, setSelectedPdf] = useState(null);
   const fileEl = useRef();
+  const renderPdf = (src) => <iframe className=" " src={src} />
+
   const handleImageChange = (event) => {
     const file = event.target.files[0];
+    console.log(file)
+    if (file.type === "application/pdf") {
+      console.log('PDF yeah')
+      onClick(file); // Call onClick after setting state
+      return setSelectedPdf(file);
+    }
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -20,14 +29,14 @@ export default function InputImage({
       reader.readAsDataURL(file);
     }
   };
-  
+
   return (
     <>
       <input
         ref={fileEl}
         id="file-upload"
         type="file"
-        accept="image/*"
+        accept="application/pdf, image/*"
         onChange={handleImageChange}
         className="hidden"
       />
@@ -35,16 +44,16 @@ export default function InputImage({
       <div
         onClick={() => fileEl.current.click()}
         style={{
-          backgroundImage: `url(${selectedImage})`,
+          backgroundImage:  selectedImage ? `url(${selectedImage})` : 'none',
           width: `${width}`,
           aspectRatio: `${aspectRatio}`,
           backgroundPosition: "center",
           backgroundSize: "cover",
           backgroundRepeat: 'no-repeat',
         }}
-        className="flex justify-center items-center"
+        className="flex justify-center items-center "
       >
-        {!selectedImage && children}
+        {selectedPdf ? renderPdf(URL.createObjectURL(selectedPdf)) : !selectedImage && children}
       </div>
     </>
   );

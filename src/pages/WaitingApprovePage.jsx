@@ -14,11 +14,11 @@ export default function WaitingApprovePage() {
                 <div className="w-[150px] h-[150px] border-2 rounded-2xl border-[#FF004D] 
                 flex justify-center items-center">
                     {authUser?.profileImage
-                        ? <div className="w-[90px] h-[90px]">authUser.profileImage</div>
+                        ? <div className="w-[90px] h-[90px]">{authUser.profileImage}</div>
                         : <ImageRider width={90} height={90} />}
                 </div>
                 <div className="mt-2 text-xl text-white">
-                    <h1>{authUser?.firstName ? authUser?.firstName : 'Donnie'} {authUser?.lastName ? authUser?.lastName : 'Yen'}</h1>
+                    <h1>{authUser?.firstName ? authUser?.firstName : 'First name'} {authUser?.lastName ? authUser?.lastName : 'Last Name'}</h1>
                 </div>
 
                 <div className="flex justify-center m-2 w-full">
