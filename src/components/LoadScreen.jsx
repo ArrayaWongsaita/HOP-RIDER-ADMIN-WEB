@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { LogoHop } from "../icons";
+import { LogoHop } from "../icons/IconLogoHop";
 
 const LoadScreen = ({ status, text }) => {
   const [dots, setDots] = useState("");
@@ -19,12 +19,12 @@ const LoadScreen = ({ status, text }) => {
         <LogoHop />
       </div>
       {text ? (
-        <div className="absolute  mt-10 w-full flex items-center justify-center text-center">
+        <div className="absolute  mt-5 w-full flex items-center justify-center text-center">
           <p className="text-xl text-center text-white mt-2">{text}</p>
         </div>
       ) : (
         status && (
-          <div className="absolute  mt-10 w-full flex items-center justify-center text-center">
+          <div className="absolute  mt-5 w-full flex items-center justify-center text-center">
             <p className="text-xl text-center text-white mt-2">
               {status} {dots}
             </p>
