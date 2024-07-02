@@ -6,6 +6,7 @@ const bgBtn = {
 const textBtn = {
   torchRed: "text-torchRed hover:text-white",
   white: "text-white hover:text-torchRed",
+  whiteToLuckyPoint: "text-white hover:text-luckyPoint",
 };
 
 const widthBtn = {
@@ -15,6 +16,7 @@ const widthBtn = {
   accept: "w-[157px]",
   full: "w-full",
   riderStatus: "w-[240px]",
+  select: "w-[174px]",
 };
 
 const heightBtn = {
@@ -23,12 +25,14 @@ const heightBtn = {
   accept: "h-[63px]",
   full: "h-full",
   mini: "h-[45px]",
+  select: "h-[55px] max-h-[60px]",
 };
 
 const borderColorBtn = {
   torchRed: "border-torchRed hover:border-white",
   white: "border-white hover:border-torchRed",
   none: "border-none",
+  torchRedToLuckyPoint: "border-torchRed hover:border-luckyPoint",
 };
 
 const borderWidthBtn = {
@@ -40,6 +44,7 @@ const fontSizeBtn = {
   reply: "text-[24px]",
   regist: "text-[16px]",
   accept: "text-[30px]",
+  select: "text-[34px]",
 };
 
 const needCenter = {
@@ -50,6 +55,7 @@ const needCenter = {
 const borderRound = {
   default: "rounded-[14px]",
   10: "rounded-[10px]",
+  16: "rounded-[16px]",
 };
 
 export default function CommonButton({
