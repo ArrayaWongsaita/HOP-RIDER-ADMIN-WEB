@@ -10,6 +10,7 @@ import ProtectedRouteCheckPending from "../features/ProtectRouteCheckPending";
 import ProtectedRouteCheckSubmitted from "../features/ProtectRouteCheckSubmitted";
 import ProtectedRouteCheckApproved from "../features/ProtectRouteCheckApproved";
 import RiderOrder from "../pages/RiderOrder";
+import WaitingCheckPaymentPage from "../pages/WaitingCheckPaymentPage";
 
 const router = createBrowserRouter([
     {
@@ -26,20 +27,22 @@ const router = createBrowserRouter([
             <MainContainer />
         ),
         children: [
-                { path: "/rider/order", element: <RiderOrder /> },
+            { path: "/rider/order", element: <RiderOrder /> },
             { path: "/rider/verify", element: <ProtectedRouteCheckPending><VerifyPage /></ProtectedRouteCheckPending> },
             { path: "/rider/waiting", element: <ProtectedRouteCheckSubmitted><WaitingApprovePage /></ProtectedRouteCheckSubmitted> },
-            {
-                path: "/rider/", element: <ProtectedRouteCheckApproved />,
-                children: [
-                    { path: "/rider/", element: <RiderHomePage /> },
-  
-                ]
-            },
+            { path: "/rider/", element: <RiderHomePage /> },
+            { path: "/rider/waitingCheckPayment", element: <WaitingCheckPaymentPage /> },
+            // {
+            //     path: "/rider/", element: <ProtectedRouteCheckApproved />,
+            //     children: [
+            //         { path: "/rider/", element: <RiderHomePage /> },
+
+            //     ]
+            // },
         ],
     },
 ])
 
 export default function AppRouter() {
-  return <RouterProvider router={router} />;
+    return <RouterProvider router={router} />;
 }
