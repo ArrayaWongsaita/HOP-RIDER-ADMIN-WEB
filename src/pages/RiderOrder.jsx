@@ -60,8 +60,6 @@ const RiderOrder = () => {
 
     initializeOrder();
   }, []);
-
-  // ตั้งค่าตำแหน่งปัจจุบันของ rider
   useEffect(() => {
     const setCurrentLocation = async () => {
       if (!order) return;
@@ -70,8 +68,8 @@ const RiderOrder = () => {
         async (position) => {
           try {
             const currentLocation = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
+              lat: position.coords.latitude || 13.7583339,
+              lng: position.coords.longitude || 100.5353214,
             };
             const placeName = await reverseGeocode(
               currentLocation,
@@ -81,14 +79,32 @@ const RiderOrder = () => {
             calculateRoute(currentLocation, order.locationA);
           } catch (err) {
             console.error("เกิดข้อผิดพลาดในการดึงตำแหน่งปัจจุบัน:", err);
-            setRiderGPS((prev) => ({ ...prev, start: "Unknown Location" }));
+            const defaultLocation = {
+              lat: 13.7583339,
+              lng: 100.5353214,
+            };
+            const placeName = await reverseGeocode(
+              defaultLocation,
+              GOOGLE_MAPS_API_KEY
+            );
+            setRiderGPS({ ...defaultLocation, description: placeName });
+            calculateRoute(defaultLocation, order.locationA);
           } finally {
             setLoading(false);
           }
         },
-        (error) => {
+        async (error) => {
           console.error("เกิดข้อผิดพลาดในการดึงตำแหน่งปัจจุบัน:", error);
-          setRiderGPS((prev) => ({ ...prev, start: "Unknown Location" }));
+          const defaultLocation = {
+            lat: 13.7583339,
+            lng: 100.5353214,
+          };
+          const placeName = await reverseGeocode(
+            defaultLocation,
+            GOOGLE_MAPS_API_KEY
+          );
+          setRiderGPS({ ...defaultLocation, description: placeName });
+          calculateRoute(defaultLocation, order.locationA);
           setLoading(false);
         }
       );
