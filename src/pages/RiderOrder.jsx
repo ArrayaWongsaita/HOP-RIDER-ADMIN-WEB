@@ -36,7 +36,7 @@ const fetchOrder = async () => {
 const RiderOrder = () => {
   const [riderGPS, setRiderGPS] = useState({ start: "Your location" });
   const [route, setRoute] = useState(null);
-  const [buttonText, setButtonText] = useState("ฉันมาถึงแล้ว");
+  const [buttonText, setButtonText] = useState("I have arrived.");
   const [modalVisible, setModalVisible] = useState(false);
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -164,10 +164,10 @@ const RiderOrder = () => {
       if (confirmed && order) {
         if (step === 0) {
           console.log("status=3");
-          setButtonText("รับผู้โดยสารแล้ว");
+          setButtonText("picked up.");
           setStep(1);
         } else if (step === 1) {
-          setButtonText("ส่งผู้โดยสารสำเร็จ");
+          setButtonText("drop-off");
           calculateRoute(order.locationA, order.locationB);
           setStep(2);
         } else if (step === 2) {
