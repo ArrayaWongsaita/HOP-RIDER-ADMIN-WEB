@@ -12,6 +12,7 @@ import ProtectedRouteCheckApproved from "../features/ProtectRouteCheckApproved";
 import WaitingCheckPaymentPage from "../pages/WaitingCheckPaymentPage";
 import PricePlanPage from "../pages/PricePlanPage";
 import RiderOrder from "../pages/RiderOrder";
+import ProfileSettingPage from "../pages/ProfileSettingPage";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,7 @@ const router = createBrowserRouter([
           </ProtectedRouteCheckSubmitted>
         ),
       },
+      { path: "/rider/profile", element: <ProfileSettingPage /> },
       { path: "/rider/", element: <RiderHomePage /> },
       { path: "/rider/waitingCheckPayment", element: <WaitingCheckPaymentPage /> },  
       {
