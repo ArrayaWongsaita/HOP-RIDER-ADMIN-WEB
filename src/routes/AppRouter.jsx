@@ -9,6 +9,7 @@ import RegisterAndLoginPage from "../pages/RegisterAndLoginPage";
 import ProtectedRouteCheckPending from "../features/ProtectRouteCheckPending";
 import ProtectedRouteCheckSubmitted from "../features/ProtectRouteCheckSubmitted";
 import ProtectedRouteCheckApproved from "../features/ProtectRouteCheckApproved";
+import RiderOrder from "../pages/RiderOrder";
 
 const router = createBrowserRouter([
     {
