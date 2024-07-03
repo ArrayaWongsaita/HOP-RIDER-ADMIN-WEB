@@ -18,6 +18,7 @@ export default function InputImage({
     console.log(file)
     if (file.type === "application/pdf") {
       console.log('PDF yeah')
+      // setSelectedPdf()
       onClick(file); // Call onClick after setting state
       return (
         setSelectedPdf(file),
