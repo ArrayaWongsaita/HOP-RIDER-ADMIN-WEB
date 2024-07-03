@@ -16,6 +16,7 @@ import AdminMainContainer from "../pages/admin/AdminMainContainer";
 import RiderApproval from "../pages/admin/RiderApproval";
 import PaymentConfirmation from "../pages/admin/PaymentConfirmation";
 import CustomerController from "../pages/admin/CustomerController";
+import ProfileSettingPage from "../pages/ProfileSettingPage";
 
 const router = createBrowserRouter([
   {
@@ -35,19 +36,20 @@ const router = createBrowserRouter([
       {
         path: "/rider/verify",
         element: (
-          <ProtectedRouteCheckPending>
+        //   <ProtectedRouteCheckPending>
             <VerifyPage />
-          </ProtectedRouteCheckPending>
+        //   </ProtectedRouteCheckPending>
         ),
       },
       {
         path: "/rider/waiting",
         element: (
-          <ProtectedRouteCheckSubmitted>
+        //   <ProtectedRouteCheckSubmitted>
             <WaitingApprovePage />
-          </ProtectedRouteCheckSubmitted>
+        //   </ProtectedRouteCheckSubmitted>
         ),
       },
+      { path: "/rider/profile", element: <ProfileSettingPage /> },
       { path: "/rider/", element: <RiderHomePage /> },
       {
         path: "/rider/waitingCheckPayment",
