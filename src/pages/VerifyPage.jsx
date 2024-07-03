@@ -10,25 +10,17 @@ import Section from "../components/Section";
 import verifyValidate from "../validators/verify-validate";
 import { ImageRider } from "../icons/IconImageRider";
 import { ImportImage } from "../icons/IconImportImage";
-// import riderApi from "../apis/riderApi";
+import riderApi from "../apis/riderApi";
 
 const initialInput = {
-    // firstName: '',
-    // lastName: '',
     birthDate: '',
     idCard: '',
-    // email: '',
-    // phone: '',
     address: '',
 };
 
 const initialInputError = {
-    // firstName: '',
-    // lastName: '',
     birthDate: '',
     idCard: '',
-    // email: '',
-    // phone: '',
     address: '',
 };
 
@@ -41,9 +33,7 @@ export default function VerifyPage() {
     const [inputError, setInputError] = useState(initialInputError);
     const [profileImage, setProfileImage] = useState({});
     const [option1, setOption1] = useState(false);
-    // console.log(option1);
     const [option2, setOption2] = useState(false);
-    // console.log(option2);
     const [afterSubmit, setAfterSubmit] = useState(false);
     // console.log(input)
 
@@ -77,11 +67,6 @@ export default function VerifyPage() {
         setProfileImage({ ...profileImage, 'vehicleImage': file });
     };
 
-    // console.log(input.birthDate)
-    // console.log(typeof input.birthDate)
-    // console.log(profileImage);
-    // console.log(typeof profileImage)
-
     const handleSubmitForm = async (event) => {
         try {
             event.preventDefault();
@@ -99,19 +84,19 @@ export default function VerifyPage() {
             if (!profileImage.licenseImage) return missingLicenseImage.current?.scrollIntoView({ behavior: "smooth" });
             if (!profileImage.vehicleRegistrationImage) return missingVehicleRegistrationImage.current?.scrollIntoView({ behavior: "smooth" });
             if (!profileImage.vehicleImage) return missingVehicleImage.current?.scrollIntoView({ behavior: "smooth" });
-            const fromData = new FormData()
-            fromData.append("profileImage", profileImage.profileImage)
-            fromData.append("licenseImage", profileImage.licenseImage)
-            fromData.append("vehicleImage", profileImage.vehicleImage)
-            fromData.append("vehicleRegistrationImage", profileImage.vehicleRegistrationImage)
-            fromData.append("birthDate", input.birthDate)
-            fromData.append("idCard", input.idCard)
-            fromData.append("address", input.address)
+            const formData = new FormData()
+            formData.append("profileImage", profileImage.profileImage)
+            formData.append("licenseImage", profileImage.licenseImage)
+            formData.append("vehicleImage", profileImage.vehicleImage)
+            formData.append("vehicleRegistrationImage", profileImage.vehicleRegistrationImage)
+            formData.append("birthDate", input.birthDate)
+            formData.append("idCard", input.idCard)
+            formData.append("address", input.address)
 
-            console.log('fromData ----->>>');
-            console.log(Object.fromEntries(fromData));
-            // console.log('fromData --->>', fromData.get(''));
-            // await riderApi.verify(fromData);
+            console.log('formData ----->>>');
+            console.log(Object.fromEntries(formData));
+            
+            await riderApi.verify(formData);
             console.log('verify success!!');
 
         } catch (err) {

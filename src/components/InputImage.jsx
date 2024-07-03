@@ -11,14 +11,13 @@ export default function InputImage({
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedPdf, setSelectedPdf] = useState(null);
   const fileEl = useRef();
-  // const renderPdf = (src) => <iframe className=" " src={src} />
+  const renderPdf = (src) => <iframe className=" " src={src} />
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     console.log(file)
     if (file.type === "application/pdf") {
       console.log('PDF yeah')
-      setSelectedPdf()
       onClick(file); // Call onClick after setting state
       return (
         setSelectedPdf(file),
@@ -59,9 +58,9 @@ export default function InputImage({
         }}
         className="flex justify-center items-center "
       >
-        {selectedPdf ? <img src={selectedPdf} alt="Preview" /> : !selectedImage && children}
+        {/* {selectedPdf ? <img src={selectedPdf} alt="Preview" /> : !selectedImage && children} */}
         {/* {selectedPdf ? <IconFile width="200" /> : !selectedImage && children} */}
-        {/* {selectedPdf ? renderPdf(URL.createObjectURL(selectedPdf)) : !selectedImage && children} */}
+        {selectedPdf ? renderPdf(URL.createObjectURL(selectedPdf)) : !selectedImage && children}
       </div>
     </>
   );

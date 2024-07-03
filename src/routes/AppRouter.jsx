@@ -32,17 +32,17 @@ const router = createBrowserRouter([
       {
         path: "/rider/verify",
         element: (
-          <ProtectedRouteCheckPending>
+        //   <ProtectedRouteCheckPending>
             <VerifyPage />
-          </ProtectedRouteCheckPending>
+        //   </ProtectedRouteCheckPending>
         ),
       },
       {
         path: "/rider/waiting",
         element: (
-          <ProtectedRouteCheckSubmitted>
+        //   <ProtectedRouteCheckSubmitted>
             <WaitingApprovePage />
-          </ProtectedRouteCheckSubmitted>
+        //   </ProtectedRouteCheckSubmitted>
         ),
       },
       { path: "/rider/profile", element: <ProfileSettingPage /> },
