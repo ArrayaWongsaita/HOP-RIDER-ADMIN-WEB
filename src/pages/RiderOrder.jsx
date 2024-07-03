@@ -8,15 +8,11 @@ import FooterIcons from "../features/order/components/FooterIcons";
 import ModalCommon from "../components/ModalCommon";
 import CommonButton from "../components/CommonButton";
 import { reverseGeocode } from "../utils/geocodeUtils";
+import ModalPayment from "../features/order/components/ModalPayment";
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
-/**
- * ดึงข้อมูล order จาก backend
- * @returns {Object} ข้อมูล order
- */
 const fetchOrder = async () => {
-  // จำลองการดึงข้อมูลจาก backend
   return {
     distanceInKm: 4.9,
     durationInMinutes: 15,
@@ -46,8 +42,12 @@ const RiderOrder = () => {
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState(null);
   const [error, setError] = useState(null);
+  const [statusLogged, setStatusLogged] = useState({
+    status2: false,
+    status4: false,
+  });
+  const [paymentModalVisible, setPaymentModalVisible] = useState(false);
 
-  // ดึงข้อมูล order เมื่อ component ถูก mount
   useEffect(() => {
     const initializeOrder = async () => {
       try {
@@ -61,7 +61,6 @@ const RiderOrder = () => {
     initializeOrder();
   }, []);
 
-  // ตั้งค่าตำแหน่งปัจจุบันของ rider
   useEffect(() => {
     const setCurrentLocation = async () => {
       if (!order) return;
@@ -70,8 +69,8 @@ const RiderOrder = () => {
         async (position) => {
           try {
             const currentLocation = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
+              lat: position.coords.latitude || 13.7583339,
+              lng: position.coords.longitude || 100.5353214,
             };
             const placeName = await reverseGeocode(
               currentLocation,
@@ -80,15 +79,31 @@ const RiderOrder = () => {
             setRiderGPS({ ...currentLocation, description: placeName });
             calculateRoute(currentLocation, order.locationA);
           } catch (err) {
-            console.error("เกิดข้อผิดพลาดในการดึงตำแหน่งปัจจุบัน:", err);
-            setRiderGPS((prev) => ({ ...prev, start: "Unknown Location" }));
+            const defaultLocation = {
+              lat: 13.7583339,
+              lng: 100.5353214,
+            };
+            const placeName = await reverseGeocode(
+              defaultLocation,
+              GOOGLE_MAPS_API_KEY
+            );
+            setRiderGPS({ ...defaultLocation, description: placeName });
+            calculateRoute(defaultLocation, order.locationA);
           } finally {
             setLoading(false);
           }
         },
-        (error) => {
-          console.error("เกิดข้อผิดพลาดในการดึงตำแหน่งปัจจุบัน:", error);
-          setRiderGPS((prev) => ({ ...prev, start: "Unknown Location" }));
+        async (error) => {
+          const defaultLocation = {
+            lat: 13.7583339,
+            lng: 100.5353214,
+          };
+          const placeName = await reverseGeocode(
+            defaultLocation,
+            GOOGLE_MAPS_API_KEY
+          );
+          setRiderGPS({ ...defaultLocation, description: placeName });
+          calculateRoute(defaultLocation, order.locationA);
           setLoading(false);
         }
       );
@@ -97,11 +112,6 @@ const RiderOrder = () => {
     setCurrentLocation();
   }, [order]);
 
-  /**
-   * คำนวณเส้นทางระหว่างต้นทางและปลายทาง
-   * @param {Object} origin - ตำแหน่งเริ่มต้น
-   * @param {Object} destination - ตำแหน่งปลายทาง
-   */
   const calculateRoute = (origin, destination) => {
     const directionsService = new window.google.maps.DirectionsService();
     directionsService.route(
@@ -113,24 +123,26 @@ const RiderOrder = () => {
       (result, status) => {
         if (status === window.google.maps.DirectionsStatus.OK) {
           setRoute(result);
-        } else {
-          console.error(`เกิดข้อผิดพลาดในการดึงข้อมูลเส้นทาง: ${result}`);
         }
       }
     );
   };
 
-  /**
-   * จัดการคลิกปุ่มนำทาง
-   */
   const handleNavigate = useCallback(() => {
     if (!order || !riderGPS) return;
 
     const getNavigateUrl = () => {
-      if ((step === 0 || step === 1) && order.locationA) {
+      if (step === 0 && order.locationA) {
+        if (!statusLogged.status2) {
+          console.log("status=2");
+          setStatusLogged((prev) => ({ ...prev, status2: true }));
+        }
         return `https://www.google.com/maps/dir/?api=1&origin=${riderGPS.lat},${riderGPS.lng}&destination=${order.locationA.lat},${order.locationA.lng}&travelmode=driving`;
-      }
-      if (step === 2 && order.locationA && order.locationB) {
+      } else if (step === 2 && order.locationA && order.locationB) {
+        if (!statusLogged.status4) {
+          console.log("status=4");
+          setStatusLogged((prev) => ({ ...prev, status4: true }));
+        }
         return `https://www.google.com/maps/dir/?api=1&origin=${order.locationA.lat},${order.locationA.lng}&destination=${order.locationB.lat},${order.locationB.lng}&travelmode=driving`;
       }
       return "";
@@ -140,35 +152,27 @@ const RiderOrder = () => {
     if (navigateUrl) {
       window.open(navigateUrl, "_blank");
     }
-  }, [step, riderGPS, order]);
+  }, [step, riderGPS, order, statusLogged]);
 
-  /**
-   * จัดการคลิกปุ่มหลัก
-   */
   const handleButtonClick = useCallback(() => {
-    if (step === 0) {
-      setButtonText("รับผู้โดยสารแล้ว");
-      setStep(1);
-    } else if (step === 1 || step === 2) {
-      setModalVisible(true);
-    }
-  }, [step]);
+    setModalVisible(true);
+  }, []);
 
-  /**
-   * จัดการปิด modal
-   * @param {boolean} confirmed - ยืนยันการกระทำหรือไม่
-   */
   const handleModalClose = useCallback(
     (confirmed) => {
       setModalVisible(false);
       if (confirmed && order) {
-        if (step === 1) {
+        if (step === 0) {
+          console.log("status=3");
+          setButtonText("รับผู้โดยสารแล้ว");
+          setStep(1);
+        } else if (step === 1) {
           setButtonText("ส่งผู้โดยสารสำเร็จ");
           calculateRoute(order.locationA, order.locationB);
           setStep(2);
         } else if (step === 2) {
-          alert("พาไปหน้าถัดไป");
-          setButtonText("พาไปหน้าถัดไป");
+          console.log("status=5");
+          setPaymentModalVisible(true);
           setStep(3);
         }
       }
@@ -211,6 +215,11 @@ const RiderOrder = () => {
           </div>
         </ModalCommon>
       </LoadScript>
+      <ModalPayment
+        isOpen={paymentModalVisible}
+        fare={order.fare}
+        onClose={() => setPaymentModalVisible(false)}
+      />
     </div>
   );
 };
