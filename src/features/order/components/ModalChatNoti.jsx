@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 
-const ModalChatNoti = ({ children, onClose, isOpen }) => {
+const ModalChatNoti = ({ children, isOpen }) => {
   return (
     <AnimatePresence>
       {isOpen && (
