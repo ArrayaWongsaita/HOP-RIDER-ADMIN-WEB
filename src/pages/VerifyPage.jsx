@@ -48,22 +48,18 @@ export default function VerifyPage() {
     };
 
     const handelImageProfile = (file) => {
-        console.log(file);
         setProfileImage({ ...profileImage, 'profileImage': file });
     };
 
     const handelImageLicense = (file) => {
-        console.log(file);
         setProfileImage({ ...profileImage, 'licenseImage': file });
     };
 
     const handelImageVehicleRegistration = (file) => {
-        console.log(file);
         setProfileImage({ ...profileImage, 'vehicleRegistrationImage': file });
     };
 
     const handelImageVehicle = (file) => {
-        console.log(file);
         setProfileImage({ ...profileImage, 'vehicleImage': file });
     };
 
@@ -96,6 +92,7 @@ export default function VerifyPage() {
             console.log('formData ----->>>');
             console.log(Object.fromEntries(formData));
             
+            console.log('Send formData!!');
             await riderApi.verify(formData);
             console.log('verify success!!');
 

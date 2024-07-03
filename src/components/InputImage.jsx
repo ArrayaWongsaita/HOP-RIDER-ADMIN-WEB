@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useRef } from "react";
-// import IconFile from "../icons/IconFile";
 
 export default function InputImage({
   children,
@@ -11,14 +10,13 @@ export default function InputImage({
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedPdf, setSelectedPdf] = useState(null);
   const fileEl = useRef();
-  const renderPdf = (src) => <iframe className=" " src={src} />
+  const renderPdf = (src) => <iframe className="pdf " src={src} />
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     console.log(file)
     if (file.type === "application/pdf") {
       console.log('PDF yeah')
-      // setSelectedPdf()
       onClick(file); // Call onClick after setting state
       return (
         setSelectedPdf(file),
@@ -50,7 +48,7 @@ export default function InputImage({
       <div
         onClick={() => fileEl.current.click()}
         style={{
-          backgroundImage: selectedImage ? `url(${selectedImage})` : 'none',
+          backgroundImage: selectedImage ? `url(${selectedImage})` : ``,
           width: `${width}`,
           aspectRatio: `${aspectRatio}`,
           backgroundPosition: "center",
@@ -59,8 +57,6 @@ export default function InputImage({
         }}
         className="flex justify-center items-center "
       >
-        {/* {selectedPdf ? <img src={selectedPdf} alt="Preview" /> : !selectedImage && children} */}
-        {/* {selectedPdf ? <IconFile width="200" /> : !selectedImage && children} */}
         {selectedPdf ? renderPdf(URL.createObjectURL(selectedPdf)) : !selectedImage && children}
       </div>
     </>
