@@ -12,6 +12,7 @@ import ProtectedRouteCheckApproved from "../features/ProtectRouteCheckApproved";
 import WaitingCheckPaymentPage from "../pages/WaitingCheckPaymentPage";
 import PricePlanPage from "../pages/PricePlanPage";
 import RiderOrder from "../pages/RiderOrder";
+import ProfileSettingPage from "../pages/ProfileSettingPage";
 
 const router = createBrowserRouter([
   {
@@ -31,19 +32,20 @@ const router = createBrowserRouter([
       {
         path: "/rider/verify",
         element: (
-          <ProtectedRouteCheckPending>
+        //   <ProtectedRouteCheckPending>
             <VerifyPage />
-          </ProtectedRouteCheckPending>
+        //   </ProtectedRouteCheckPending>
         ),
       },
       {
         path: "/rider/waiting",
         element: (
-          <ProtectedRouteCheckSubmitted>
+        //   <ProtectedRouteCheckSubmitted>
             <WaitingApprovePage />
-          </ProtectedRouteCheckSubmitted>
+        //   </ProtectedRouteCheckSubmitted>
         ),
       },
+      { path: "/rider/profile", element: <ProfileSettingPage /> },
       { path: "/rider/", element: <RiderHomePage /> },
       { path: "/rider/waitingCheckPayment", element: <WaitingCheckPaymentPage /> },  
       {
