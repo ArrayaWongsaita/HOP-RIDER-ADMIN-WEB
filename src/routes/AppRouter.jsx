@@ -12,6 +12,10 @@ import ProtectedRouteCheckApproved from "../features/ProtectRouteCheckApproved";
 import WaitingCheckPaymentPage from "../pages/WaitingCheckPaymentPage";
 import PricePlanPage from "../pages/PricePlanPage";
 import RiderOrder from "../pages/RiderOrder";
+import AdminMainContainer from "../pages/admin/AdminMainContainer";
+import RiderApproval from "../pages/admin/RiderApproval";
+import PaymentConfirmation from "../pages/admin/PaymentConfirmation";
+import CustomerController from "../pages/admin/CustomerController";
 
 const router = createBrowserRouter([
   {
@@ -45,7 +49,10 @@ const router = createBrowserRouter([
         ),
       },
       { path: "/rider/", element: <RiderHomePage /> },
-      { path: "/rider/waitingCheckPayment", element: <WaitingCheckPaymentPage /> },  
+      {
+        path: "/rider/waitingCheckPayment",
+        element: <WaitingCheckPaymentPage />,
+      },
       {
         path: "/rider/",
         element: <ProtectedRouteCheckApproved />,
@@ -53,8 +60,17 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/admin",
+    element: <AdminMainContainer />,
+    children: [
+      { path: "/admin/riderApporval", element: <RiderApproval /> },
+      { path: "/admin/paymentConfirmation", element: <PaymentConfirmation /> },
+      { path: "/admin/customerController", element: <CustomerController /> },
+    ],
+  },
 ]);
 
 export default function AppRouter() {
-    return <RouterProvider router={router} />;
+  return <RouterProvider router={router} />;
 }
