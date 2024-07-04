@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 import AdminMenuItem from "./AdminMenuItem";
 
 const menuList = [
-  { id: 1, menuName: "RIDER APPROVE", to: "/admin/riderApporval" },
+  { id: 1, menuName: "RIDER APPROVE", to: "/admin/riderApproval" },
   { id: 2, menuName: "PAYMENT CONFIRMATION", to: "/admin/paymentConfirmation" },
   { id: 3, menuName: "CUSTOMER CONTROLLER", to: "/admin/customerController" },
 ];

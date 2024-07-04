@@ -36,17 +36,17 @@ const router = createBrowserRouter([
       {
         path: "/rider/verify",
         element: (
-        //   <ProtectedRouteCheckPending>
-            <VerifyPage />
-        //   </ProtectedRouteCheckPending>
+          //   <ProtectedRouteCheckPending>
+          <VerifyPage />
+          //   </ProtectedRouteCheckPending>
         ),
       },
       {
         path: "/rider/waiting",
         element: (
-        //   <ProtectedRouteCheckSubmitted>
-            <WaitingApprovePage />
-        //   </ProtectedRouteCheckSubmitted>
+          //   <ProtectedRouteCheckSubmitted>
+          <WaitingApprovePage />
+          //   </ProtectedRouteCheckSubmitted>
         ),
       },
       { path: "/rider/profile", element: <ProfileSettingPage /> },
@@ -66,7 +66,7 @@ const router = createBrowserRouter([
     path: "/admin",
     element: <AdminMainContainer />,
     children: [
-      { path: "/admin/riderApporval", element: <RiderApproval /> },
+      { path: "/admin/riderApproval", element: <RiderApproval /> },
       { path: "/admin/paymentConfirmation", element: <PaymentConfirmation /> },
       { path: "/admin/customerController", element: <CustomerController /> },
     ],
