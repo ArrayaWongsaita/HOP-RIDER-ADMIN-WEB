@@ -3,7 +3,7 @@ import useAuth from "../hooks/authHook";
 
 export default function ProtectedRouteCheckPending({ children }) {
     const { authUser, isAuthUserLoading } = useAuth();
-    // console.log(authUser)
+    console.log(authUser)
 
     const navigate = useNavigate();
 

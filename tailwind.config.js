@@ -21,5 +21,8 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-textshadow")],
+  plugins: [
+    require("@tailwindcss/line-clamp"),
+    require("tailwindcss-textshadow"),
+  ],
 };

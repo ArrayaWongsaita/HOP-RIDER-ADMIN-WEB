@@ -1,30 +1,26 @@
 import { useState } from "react";
+import { useRef } from "react";
+
+import useAuth from "../hooks/authHook";
 import Input from "../components/Input";
-import Section from "../components/Section";
-import { ImageRider } from "../icons/IconImageRider";
-import { ImportImage } from "../icons/IconImportImage";
+import InputImage from "../components/InputImage";
 import Textarea from "../components/Textarea";
 import CommonButton from "../components/CommonButton";
-import InputImage from "../components/InputImage";
+import Section from "../components/Section";
 import verifyValidate from "../validators/verify-validate";
+import { ImageRider } from "../icons/IconImageRider";
+import { ImportImage } from "../icons/IconImportImage";
+import riderApi from "../apis/riderApi";
 
 const initialInput = {
-    firstName: '',
-    lastName: '',
     birthDate: '',
     idCard: '',
-    email: '',
-    phone: '',
     address: '',
 };
 
 const initialInputError = {
-    firstName: '',
-    lastName: '',
     birthDate: '',
     idCard: '',
-    email: '',
-    phone: '',
     address: '',
 };
 
@@ -32,55 +28,79 @@ const color1 = 'bg-[#FF004D] text-[#FFFFFF]'
 const color2 = 'bg-[#FFFFFF] text-[#FF004D]'
 
 export default function VerifyPage() {
+    const { authUser } = useAuth()
     const [input, setInput] = useState(initialInput);
     const [inputError, setInputError] = useState(initialInputError);
     const [profileImage, setProfileImage] = useState({});
     const [option1, setOption1] = useState(false);
-    // console.log(option1);
     const [option2, setOption2] = useState(false);
-    // console.log(option2);
-    console.log(input)
+    const [afterSubmit, setAfterSubmit] = useState(false);
+    // console.log(input)
+
+    const missingProfileImage = useRef(null)
+    const missingInput = useRef(null)
+    const missingLicenseImage = useRef(null)
+    const missingVehicleRegistrationImage = useRef(null)
+    const missingVehicleImage = useRef(null)
 
     const handleChangeInput = (event) => {
         setInput({ ...input, [event.target.name]: event.target.value })
     };
 
     const handelImageProfile = (file) => {
-        console.log(file);
         setProfileImage({ ...profileImage, 'profileImage': file });
     };
 
     const handelImageLicense = (file) => {
-        console.log(file);
         setProfileImage({ ...profileImage, 'licenseImage': file });
     };
 
     const handelImageVehicleRegistration = (file) => {
-        console.log(file);
-        setProfileImage({ ...profileImage, 'vehicleRegistration': file });
+        setProfileImage({ ...profileImage, 'vehicleRegistrationImage': file });
     };
 
     const handelImageVehicle = (file) => {
-        console.log(file);
         setProfileImage({ ...profileImage, 'vehicleImage': file });
     };
 
-    console.log(profileImage);
-    
-    const handleSubmitForm = (event) => {
+    const handleSubmitForm = async (event) => {
         try {
             event.preventDefault();
+            if (!option1 || !option2) {
+                return setAfterSubmit(true);
+            }
+            if (!profileImage.profileImage) return missingProfileImage.current?.scrollIntoView({ behavior: "smooth" });
             const error = verifyValidate(input);
-            if(error) {
+            if (error) {
+                console.log(error);
+                missingInput.current?.scrollIntoView({ behavior: "smooth" });
                 return setInputError(error);
             }
             setInputError({ ...initialInputError });
+            if (!profileImage.licenseImage) return missingLicenseImage.current?.scrollIntoView({ behavior: "smooth" });
+            if (!profileImage.vehicleRegistrationImage) return missingVehicleRegistrationImage.current?.scrollIntoView({ behavior: "smooth" });
+            if (!profileImage.vehicleImage) return missingVehicleImage.current?.scrollIntoView({ behavior: "smooth" });
+            const formData = new FormData()
+            formData.append("profileImage", profileImage.profileImage)
+            formData.append("licenseImage", profileImage.licenseImage)
+            formData.append("vehicleImage", profileImage.vehicleImage)
+            formData.append("vehicleRegistrationImage", profileImage.vehicleRegistrationImage)
+            formData.append("birthDate", input.birthDate)
+            formData.append("idCard", input.idCard)
+            formData.append("address", input.address)
+
+            console.log('formData ----->>>');
+            console.log(Object.fromEntries(formData));
             
-        }   catch (err) {
+            console.log('Send formData!!');
+            await riderApi.verify(formData);
+            console.log('verify success!!');
+
+        } catch (err) {
             console.log(err)
         }
     }
-    
+
     return (
         <div>
             <Section >
@@ -88,7 +108,9 @@ export default function VerifyPage() {
             </Section>
             <form onSubmit={handleSubmitForm} >
                 <div className="flex flex-col items-center gap-6">
-                    <div className="rounded-2xl overflow-hidden">
+                    <div
+                        ref={missingProfileImage}
+                        className="rounded-2xl overflow-hidden">
                         <InputImage
                             width="150px"
                             aspectRatio="1/1"
@@ -105,26 +127,24 @@ export default function VerifyPage() {
                     <hr className="w-[85%] border border-[#FF004D]" />
                 </div>
 
-                <div className="flex justify-center ">
-                    <div className="grid grid-cols-2 gap-2 w-[80%]">
-                        <div>
-                            <Input
-                                placeholder={"First name"}
-                                name="firstName"
-                                value={input.firstName}
-                                onChange={handleChangeInput}
-                                error={inputError.firstName}
-                            />
+                <div className="flex flex-col justify-center items-center ">
+                    <div className="w-[80%] flex flex-col gap-2 pt-4 pb-2 text-[#FF004D] text-lg font-bold">
+                        <div className="">
+                            <p>First name: <span className="text-white">{authUser?.firstName}</span></p>
                         </div>
-                        <div>
-                            <Input
-                                placeholder={"Last name"}
-                                name="lastName"
-                                value={input.lastName}
-                                onChange={handleChangeInput}
-                                error={inputError.lastName}
-                            />
+                        <div className="">
+                            <p>last name: <span className="text-white">{authUser?.lastName}</span></p>
                         </div>
+                        <div className="" >
+                            <p>Email: <span className="text-white">{authUser?.email}</span></p>
+                        </div>
+                        <div className="" >
+                            <p>Phone number: <span className="text-white">{authUser?.phone}</span></p>
+                        </div>
+                    </div>
+                    <div
+                        ref={missingInput}
+                        className="grid grid-cols-2 gap-2 w-[80%]">
                         <div className="col-span-2">
                             <Input
                                 type="date"
@@ -132,7 +152,7 @@ export default function VerifyPage() {
                                 name='birthDate'
                                 value={input.birthDate}
                                 onChange={handleChangeInput}
-                                error={initialInputError.birthDate}
+                                error={inputError.birthDate}
                             />
                         </div>
                         <div className="col-span-2" >
@@ -142,24 +162,6 @@ export default function VerifyPage() {
                                 value={input.idCard}
                                 onChange={handleChangeInput}
                                 error={inputError.idCard}
-                            />
-                        </div>
-                        <div className="col-span-2" >
-                            <Input
-                                placeholder={"Email Address"}
-                                name="email"
-                                value={input.email}
-                                onChange={handleChangeInput}
-                                error={inputError.email}
-                            />
-                        </div>
-                        <div className="col-span-2" >
-                            <Input
-                                placeholder={"Phone number"}
-                                name="phone"
-                                value={input.phone}
-                                onChange={handleChangeInput}
-                                error={inputError.phone}
                             />
                         </div>
                         <div className="col-span-2">
@@ -179,7 +181,9 @@ export default function VerifyPage() {
                 </div>
 
                 <div className="flex flex-col justify-center items-center py-6">
-                    <div className="rounded-2xl overflow-hidden">
+                    <div
+                        ref={missingLicenseImage}
+                        className="rounded-2xl overflow-hidden">
                         <InputImage
                             width="250px"
                             aspectRatio="1/1"
@@ -199,7 +203,9 @@ export default function VerifyPage() {
                 </div>
 
                 <div className="flex flex-col justify-center items-center py-6">
-                    <div className="rounded-2xl overflow-hidden">
+                    <div
+                        ref={missingVehicleRegistrationImage}
+                        className="rounded-2xl overflow-hidden">
                         <InputImage
                             width="250px"
                             aspectRatio="1/1"
@@ -209,7 +215,7 @@ export default function VerifyPage() {
                             </div>
                         </InputImage>
                     </div>
-                    <div className={`mt-5 p-2 rounded-2xl ${profileImage?.vehicleRegistration ? color2 : color1}`} >
+                    <div className={`mt-5 p-2 rounded-2xl ${profileImage?.vehicleRegistrationImage ? color2 : color1}`} >
                         <p>+ upload your vehicle registration copy here</p>
                     </div>
                 </div>
@@ -219,7 +225,9 @@ export default function VerifyPage() {
                 </div>
 
                 <div className="flex flex-col justify-center items-center py-6">
-                    <div className="rounded-2xl overflow-hidden">
+                    <div
+                        ref={missingVehicleImage}
+                        className="rounded-2xl overflow-hidden">
                         <InputImage
                             width="250px"
                             aspectRatio="1/1"
@@ -239,11 +247,11 @@ export default function VerifyPage() {
                 </div>
 
                 <div className="text-white w-full text-sm flex flex-col items-center gap-4 py-4">
-                    <div className="flex items-center gap-2">
+                    <div className={`flex items-center gap-2 ${afterSubmit ? !option1 && 'text-[#FF004D]' : ''}`}>
                         <input type="checkbox" name="option01" onClick={() => setOption1(!option1)} />
                         <label htmlFor="option01" >Clean criminal record.</label>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className={`flex items-center gap-2 ${afterSubmit ? !option2 && 'text-[#FF004D]' : ''}`}>
                         <input type="checkbox" name="option02" onClick={() => setOption2(!option2)} />
                         <label htmlFor="option02" >Certify that the above information is true.</label>
                     </div>

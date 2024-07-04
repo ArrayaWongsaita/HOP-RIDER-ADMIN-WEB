@@ -1,7 +1,7 @@
 import axios from '../configs/axios';
 
-const raiderApi = {};
+const riderApi = {};
 
+riderApi.verify = body => axios.post('', body);
 
-
-export default raiderApi;
+export default riderApi;
