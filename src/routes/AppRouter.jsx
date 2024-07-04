@@ -12,6 +12,7 @@ import ProtectedRouteCheckApproved from "../features/ProtectRouteCheckApproved";
 import WaitingCheckPaymentPage from "../pages/WaitingCheckPaymentPage";
 import PricePlanPage from "../pages/PricePlanPage";
 import RiderOrder from "../pages/RiderOrder";
+import SocketIoContextProvider from "../contexts/SocketIoContext";
 
 const router = createBrowserRouter([
   {
@@ -24,10 +25,14 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <MainContainer />,
+    element: (
+      <SocketIoContextProvider>
+        <MainContainer />
+      </SocketIoContextProvider>
+    ),
     children: [
       { path: "/rider/price", element: <PricePlanPage /> },
-      { path: "/rider/order", element: <RiderOrder /> },
+      { path: "/rider/order/:routeId", element: <RiderOrder /> },
       {
         path: "/rider/verify",
         element: (
@@ -45,7 +50,10 @@ const router = createBrowserRouter([
         ),
       },
       { path: "/rider/", element: <RiderHomePage /> },
-      { path: "/rider/waitingCheckPayment", element: <WaitingCheckPaymentPage /> },  
+      {
+        path: "/rider/waitingCheckPayment",
+        element: <WaitingCheckPaymentPage />,
+      },
       {
         path: "/rider/",
         element: <ProtectedRouteCheckApproved />,
@@ -56,5 +64,5 @@ const router = createBrowserRouter([
 ]);
 
 export default function AppRouter() {
-    return <RouterProvider router={router} />;
+  return <RouterProvider router={router} />;
 }
