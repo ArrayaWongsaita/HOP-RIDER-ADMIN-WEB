@@ -5,6 +5,7 @@ import MainContainer from "../layouts/MainContainer";
 import VerifyPage from "../pages/VerifyPage";
 import WaitingApprovePage from "../pages/WaitingApprovePage";
 import RiderHomePage from "../pages/RiderHomePage";
+import ChatAdminPage from "../pages/ChatAdminPage";
 import RegisterAndLoginPage from "../pages/RegisterAndLoginPage";
 import ProtectedRouteCheckPending from "../features/ProtectRouteCheckPending";
 import ProtectedRouteCheckSubmitted from "../features/ProtectRouteCheckSubmitted";
@@ -36,17 +37,17 @@ const router = createBrowserRouter([
       {
         path: "/rider/verify",
         element: (
-        //   <ProtectedRouteCheckPending>
-            <VerifyPage />
-        //   </ProtectedRouteCheckPending>
+          //   <ProtectedRouteCheckPending>
+          <VerifyPage />
+          //   </ProtectedRouteCheckPending>
         ),
       },
       {
         path: "/rider/waiting",
         element: (
-        //   <ProtectedRouteCheckSubmitted>
-            <WaitingApprovePage />
-        //   </ProtectedRouteCheckSubmitted>
+          //   <ProtectedRouteCheckSubmitted>
+          <WaitingApprovePage />
+          //   </ProtectedRouteCheckSubmitted>
         ),
       },
       { path: "/rider/profile", element: <ProfileSettingPage /> },
@@ -69,6 +70,7 @@ const router = createBrowserRouter([
       { path: "/admin/riderApporval", element: <RiderApproval /> },
       { path: "/admin/paymentConfirmation", element: <PaymentConfirmation /> },
       { path: "/admin/customerController", element: <CustomerController /> },
+      { path: "/admin/chat", element: <ChatAdminPage /> },
     ],
   },
 ]);
