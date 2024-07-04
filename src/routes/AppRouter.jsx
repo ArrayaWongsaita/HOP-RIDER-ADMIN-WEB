@@ -11,6 +11,7 @@ import ProtectedRouteCheckSubmitted from "../features/ProtectRouteCheckSubmitted
 import ProtectedRouteCheckApproved from "../features/ProtectRouteCheckApproved";
 import PricePlanPage from "../pages/PricePlanPage";
 import RiderOrder from "../pages/RiderOrder";
+import PricePlanPaymentPage from "../pages/PricePlanPaymentPage";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
     element: <MainContainer />,
     children: [
       { path: "/rider/price", element: <PricePlanPage /> },
+      {
+        path: "/rider/price/payment/:planId",
+        element: <PricePlanPaymentPage />,
+      },
       { path: "/rider/order", element: <RiderOrder /> },
       {
         path: "/rider/verify",
