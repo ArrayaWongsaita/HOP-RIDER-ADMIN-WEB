@@ -19,12 +19,12 @@ export default function OrderFromCustomer() {
     if (!socket.current) {
       socket.current = socketIOClient(ENDPOINT);
       socket.current.emit("allRoutes");
-      socket.current.on("routeList",(data)=> {
+      socket.current.on("routeList", (data) => {
         console.log(data)
         setOrders(data);
       })
     }
-  },[])
+  }, [])
 
 
 
@@ -49,18 +49,19 @@ export default function OrderFromCustomer() {
           className="bg-white h-[170px] w-[95%] rounded-2xl p-3 flex mb-4"
         >
           <div className="h-full w-[90%] flex flex-col items-center">
-            <div className="text-sm font-bold flex items-center justify-between gap-3 h-[50%] w-full">
-              <h1 className="flex-1 line-clamp-3 max-w-[115px]">
+            <div className="text-base font-bold flex items-center justify-between gap-1 h-[60%] w-full">
+              <h1 className="flex-1 line-clamp-3 max-w-[40%]">
                 {order.pickupPlace}
               </h1>
               {/* ใช้ line-clamp-3 เพื่อจำกัดข้อความที่ 3 บรรทัด */}
-              <IconArrow width="64" height="24" />
-              <h1 className="flex-1 line-clamp-3 max-w-[115px]">
+              <IconArrow width="15%" />
+              <h1 className="flex-1 line-clamp-3 max-w-[40%]">
                 {order.desPlace}
               </h1>
               {/* ใช้ line-clamp-3 เพื่อจำกัดข้อความที่ 3 บรรทัด */}
             </div>
-            <div className="text-[#FF004D] grid grid-cols-3 h-[50%] w-[100%] pb-1">
+
+            <div className="text-[#FF004D] grid grid-cols-3 h-[40%] w-[100%] pb-1">
               <div className="flex items-end gap-2 justify-between w-[100%] -ml-[3px] pb-1">
                 <div className="h-[35px] text-[35px] w-1/2">
                   {order.distance}
@@ -74,7 +75,7 @@ export default function OrderFromCustomer() {
                 <div className="mb-[-4px] text-base">Min</div>
               </div>
               <div className="flex items-end gap-2 justify-between w-[100%] pl-1 pb-1">
-                <div className="h-[35px] text-[35px] w-1/2">{order.rideFare  }</div>
+                <div className="h-[35px] text-[35px] w-1/2">{order.rideFare}</div>
                 <div className="mb-[-4px] text-base">THB</div>
               </div>
             </div>

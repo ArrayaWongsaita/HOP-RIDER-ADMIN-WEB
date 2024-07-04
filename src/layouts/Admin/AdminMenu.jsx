@@ -1,5 +1,4 @@
-import { useLocation } from "react-router-dom";
-import AdminMenuItem from "./AdminMenuItem";
+import { NavLink } from "react-router-dom";
 
 const menuList = [
   { id: 1, menuName: "RIDER APPROVE", to: "/admin/riderApproval" },
@@ -8,17 +7,24 @@ const menuList = [
 ];
 
 export default function AdminMenu() {
-  const { pathname } = useLocation();
+
   return (
-    <nav className="flex items-center justify-center gap-20 text-[20px] saralaB">
-      {menuList.map((el) => (
-        <AdminMenuItem
-          key={el.id}
-          menuName={el.menuName}
-          to={el.to}
-          active={pathname === el.to}
-        />
+
+    <div className="flex items-center justify-center gap-20 text-[18px] 
+     text-white">
+      {menuList.map((item) => (
+        <NavLink
+          key={item.id}
+          to={item.to}
+          className={({ isActive }) =>
+            isActive ? "underline hover:font-bold drop-shadow-[0_35px_35px_rgba(0,0,0,0.25)]"
+              : "text-white hover:underline hover:font-bold"
+          }
+        >
+          {item.menuName}
+        </NavLink>
       ))}
-    </nav>
+    </div>
+
   );
 }

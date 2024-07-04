@@ -1,10 +1,13 @@
 import AuthContextProvider from "./contexts/authContext";
+import RiderContextProvider from "./contexts/riderContext";
 import AppRouter from "./routes/AppRouter";
 
 function App() {
   return (
     <AuthContextProvider>
-      <AppRouter />
+      <RiderContextProvider>
+        <AppRouter />
+      </RiderContextProvider>
     </AuthContextProvider>
   );
 }
