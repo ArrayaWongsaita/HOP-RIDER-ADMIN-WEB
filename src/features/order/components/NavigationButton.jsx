@@ -7,7 +7,7 @@ import CommonButton from "../../../components/CommonButton";
 const NavigationButton = ({ onClick }) => (
   <div className="relative">
     <div className="absolute w-full flex items-center justify-center min-h-[80px] top-[-120px]">
-      <CommonButton onClick={onClick}>นำทาง</CommonButton>
+      <CommonButton onClick={onClick}>Navigate</CommonButton>
     </div>
   </div>
 );

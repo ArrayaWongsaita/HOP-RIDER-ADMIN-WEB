@@ -38,7 +38,7 @@ const ModalPayment = ({ onClose, isOpen, fare }) => {
                 </div>
 
                 <div className="flex w-full items-center justify-center">
-                  <div>ค่าโดยสาร</div>
+                  <div>Fare</div>
                 </div>
                 <div className="flex w-full items-center justify-center">
                   <div>{`${fare} THB`}</div>

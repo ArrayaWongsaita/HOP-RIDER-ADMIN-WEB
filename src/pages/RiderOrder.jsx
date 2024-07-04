@@ -17,7 +17,7 @@ const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 const RiderOrder = () => {
   const [riderGPS, setRiderGPS] = useState({ start: "Your location" });
   const [route, setRoute] = useState(null);
-  const [buttonText, setButtonText] = useState("ฉันมาถึงแล้ว");
+  const [buttonText, setButtonText] = useState("I have arrived.");
   const [modalVisible, setModalVisible] = useState(false);
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(true);
