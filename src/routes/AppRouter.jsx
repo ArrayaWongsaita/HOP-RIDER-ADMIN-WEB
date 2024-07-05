@@ -11,6 +11,7 @@ import ProtectedRouteCheckPending from "../features/ProtectRouteCheckPending";
 import ProtectedRouteCheckSubmitted from "../features/ProtectRouteCheckSubmitted";
 import ProtectedRouteCheckApproved from "../features/ProtectRouteCheckApproved";
 import WaitingCheckPaymentPage from "../pages/WaitingCheckPaymentPage";
+
 import PricePlanPage from "../pages/PricePlanPage";
 import RiderOrder from "../pages/RiderOrder";
 import SocketIoContextProvider from "../contexts/SocketIoContext";
@@ -19,6 +20,7 @@ import RiderApproval from "../pages/admin/RiderApproval";
 import PaymentConfirmation from "../pages/admin/PaymentConfirmation";
 import CustomerController from "../pages/admin/CustomerController";
 import ProfileSettingPage from "../pages/ProfileSettingPage";
+import PricePlanPaymentPage from "../pages/PricePlanPaymentPage";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,11 @@ const router = createBrowserRouter([
     ),
     children: [
       { path: "/rider/price", element: <PricePlanPage /> },
+      {
+        path: "/rider/price/payment/:planId",
+        element: <PricePlanPaymentPage />,
+      },
+      { path: "/rider/order", element: <RiderOrder /> },
       { path: "/rider/order/:routeId", element: <RiderOrder /> },
       {
         path: "/rider/verify",
@@ -72,7 +79,7 @@ const router = createBrowserRouter([
     path: "/admin",
     element: <AdminMainContainer />,
     children: [
-      { path: "/admin/riderApporval", element: <RiderApproval /> },
+      { path: "/admin/riderApproval", element: <RiderApproval /> },
       { path: "/admin/paymentConfirmation", element: <PaymentConfirmation /> },
       { path: "/admin/customerController", element: <CustomerController /> },
       { path: "/admin/chat", element: <ChatAdminPage /> },

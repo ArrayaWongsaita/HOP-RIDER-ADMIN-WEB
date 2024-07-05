@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import OrderFromCustomer from "../components/OrderFromCustomer";
-import Loadscreen from "../components/LoadScreen";
+import LoadScreen from "../components/LoadScreen";
 
 export default function RiderHomePage() {
   const [loading, setLoading] = useState(true);
@@ -33,9 +33,9 @@ export default function RiderHomePage() {
     <div className="flex flex-col items-center gap-4 ">
       {loading ? (
         initialTextVisible ? (
-          <Loadscreen text="For Rider" />
+          <LoadScreen text="For Rider" />
         ) : (
-          <Loadscreen status="Passenger requesting" />
+          <LoadScreen status="Passenger requesting" />
         )
       ) : (
         <OrderFromCustomer />
