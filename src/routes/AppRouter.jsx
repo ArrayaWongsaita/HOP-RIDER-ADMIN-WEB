@@ -10,7 +10,7 @@ import ProtectedRouteCheckPending from "../features/ProtectRouteCheckPending";
 import ProtectedRouteCheckSubmitted from "../features/ProtectRouteCheckSubmitted";
 import ProtectedRouteCheckApproved from "../features/ProtectRouteCheckApproved";
 import WaitingCheckPaymentPage from "../pages/WaitingCheckPaymentPage";
-import WaitingCheckPaymentPage from "../pages/WaitingCheckPaymentPage";
+
 import PricePlanPage from "../pages/PricePlanPage";
 import RiderOrder from "../pages/RiderOrder";
 import SocketIoContextProvider from "../contexts/SocketIoContext";
@@ -39,15 +39,12 @@ const router = createBrowserRouter([
     ),
     children: [
       { path: "/rider/price", element: <PricePlanPage /> },
-<<<<<<< HEAD
       {
         path: "/rider/price/payment/:planId",
         element: <PricePlanPaymentPage />,
       },
       { path: "/rider/order", element: <RiderOrder /> },
-=======
       { path: "/rider/order/:routeId", element: <RiderOrder /> },
->>>>>>> dev
       {
         path: "/rider/verify",
         element: (
