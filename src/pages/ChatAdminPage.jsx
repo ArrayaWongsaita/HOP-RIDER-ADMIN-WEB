@@ -783,7 +783,7 @@ export default function ChatAdminPage() {
             </button>
           </div>
           {/* เพิ่มส่วนนี้สำหรับการจำลองการส่งข้อความ */}
-          {/* <SimulateMessageInput onSimulateSend={handleSimulateSend} /> */}
+          <SimulateMessageInput onSimulateSend={handleSimulateSend} />
         </div>
       </div>
 
