@@ -3,6 +3,7 @@ import InputSearch from "../../components/InputSearch";
 import RiderBar from "../../components/RiderBar";
 import RiderOrder from "../../components/RiderOrder";
 import { dataRider } from "../../constants/dataRider";
+import ComponentOrder from "../../components/ComponentOrder";
 
 export default function CustomerController() {
   const [search, setSearch] = useState('');
@@ -36,7 +37,7 @@ export default function CustomerController() {
       <div className="w-[90%] mx-auto flex flex-col gap-3">
         {targetRider.length > 0 && targetRider.map((item) =>
         <RiderBar key={item.id} data={item} >
-          <RiderOrder data={item} />
+          <ComponentOrder data={item} />
         </RiderBar>
         )}
       </div>
