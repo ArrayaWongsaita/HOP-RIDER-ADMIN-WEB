@@ -5,6 +5,7 @@ import MainContainer from "../layouts/MainContainer";
 import VerifyPage from "../pages/VerifyPage";
 import WaitingApprovePage from "../pages/WaitingApprovePage";
 import RiderHomePage from "../pages/RiderHomePage";
+import ChatAdminPage from "../pages/ChatAdminPage";
 import RegisterAndLoginPage from "../pages/RegisterAndLoginPage";
 import ProtectedRouteCheckPending from "../features/ProtectRouteCheckPending";
 import ProtectedRouteCheckSubmitted from "../features/ProtectRouteCheckSubmitted";
@@ -81,6 +82,7 @@ const router = createBrowserRouter([
       { path: "/admin/riderApproval", element: <RiderApproval /> },
       { path: "/admin/paymentConfirmation", element: <PaymentConfirmation /> },
       { path: "/admin/customerController", element: <CustomerController /> },
+      { path: "/admin/chat", element: <ChatAdminPage /> },
     ],
   },
 ]);
