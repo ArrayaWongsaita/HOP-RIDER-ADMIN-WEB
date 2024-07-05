@@ -11,6 +11,7 @@ import verifyValidate from "../validators/verify-validate";
 import { ImageRider } from "../icons/IconImageRider";
 import { ImportImage } from "../icons/IconImportImage";
 import riderApi from "../apis/riderApi";
+import LoadScreen from "../components/LoadScreen";
 
 const initialInput = {
     birthDate: '',
@@ -36,6 +37,7 @@ export default function VerifyPage() {
     const [option2, setOption2] = useState(false);
     const [afterSubmit, setAfterSubmit] = useState(false);
     // console.log(input)
+    const [initialTextVisible, setInitialTextVisible] = useState(false);
 
     const missingProfileImage = useRef(null)
     const missingInput = useRef(null)
@@ -77,6 +79,7 @@ export default function VerifyPage() {
                 return setInputError(error);
             }
             setInputError({ ...initialInputError });
+            setInitialTextVisible(true);
             if (!profileImage.licenseImage) return missingLicenseImage.current?.scrollIntoView({ behavior: "smooth" });
             if (!profileImage.vehicleRegistrationImage) return missingVehicleRegistrationImage.current?.scrollIntoView({ behavior: "smooth" });
             if (!profileImage.vehicleImage) return missingVehicleImage.current?.scrollIntoView({ behavior: "smooth" });
@@ -91,9 +94,10 @@ export default function VerifyPage() {
 
             console.log('formData ----->>>');
             console.log(Object.fromEntries(formData));
-            
+
             console.log('Send formData!!');
             await riderApi.verify(formData);
+
             console.log('verify success!!');
 
         } catch (err) {
@@ -268,6 +272,7 @@ export default function VerifyPage() {
                     </CommonButton>
                 </div>
             </form>
+            { initialTextVisible ? ( <LoadScreen status="Uploading" />) : ''}
         </div>
     )
 }
