@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Avatar from "./Avatar";
 import CommonButton from "./CommonButton";
-import Modal from "./Modal";
 
 export default function RiderInfo({ data }) {
     const [show, setShow] = useState(false);
@@ -10,16 +9,19 @@ export default function RiderInfo({ data }) {
     const handleClickLicense = () => {
         setShow(true);
         setSelectSrc();
+        console.log('Show License')
     };
 
     const handleClickRegistration = () => {
         setShow(true);
         setSelectSrc();
+        console.log('Show Registration')
     };
 
     const handleClickVehiclePicture = () => {
         setShow(true);
         setSelectSrc();
+        console.log('Show VehiclePicture')
     };
 
     return (
@@ -81,17 +83,17 @@ export default function RiderInfo({ data }) {
                 <div
                     className="p-3 flex justify-center"
                     role="button"
-                    onClick={handleClickVehiclePicture}
+                    onClick={handleClickVehiclePicture} 
                 >
                     Vehicle picture
                 </div>
             </div>
             {show ?
-                <Modal >
+                
                     <div className="">
-                        <img src={setSelectSrc} alt="" />
+                        <img src={selectSrc} alt="" />
                     </div>
-                </Modal>
+                
                 : null}
         </div>
     )
