@@ -12,6 +12,7 @@ import ProtectedRouteCheckApproved from "../features/ProtectRouteCheckApproved";
 import WaitingCheckPaymentPage from "../pages/WaitingCheckPaymentPage";
 import PricePlanPage from "../pages/PricePlanPage";
 import RiderOrder from "../pages/RiderOrder";
+import SocketIoContextProvider from "../contexts/SocketIoContext";
 import AdminMainContainer from "../pages/admin/AdminMainContainer";
 import RiderApproval from "../pages/admin/RiderApproval";
 import PaymentConfirmation from "../pages/admin/PaymentConfirmation";
@@ -29,10 +30,14 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <MainContainer />,
+    element: (
+      <SocketIoContextProvider>
+        <MainContainer />
+      </SocketIoContextProvider>
+    ),
     children: [
       { path: "/rider/price", element: <PricePlanPage /> },
-      { path: "/rider/order", element: <RiderOrder /> },
+      { path: "/rider/order/:routeId", element: <RiderOrder /> },
       {
         path: "/rider/verify",
         element: (

@@ -2,39 +2,35 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // import useNavigate
 import CommonButton from "../components/CommonButton";
 import { IconArrow } from "../icons/IconArrow";
-import { useRef } from "react";
-import socketIOClient from "socket.io-client";
-
-const ENDPOINT = import.meta.env.VITE_API_URL;
-
+import useSocket from "../hooks/socketIoHook";
 
 export default function OrderFromCustomer() {
-
-  const socket = useRef(null)
+  const { socket, setNewOrder } = useSocket();
   const [orders, setOrders] = useState([]);
-  // const [error, setError] = useState(null);
+  const [riderPosition, setRiderPosition] = useState({});
   const navigate = useNavigate(); // ใช้ useNavigate
 
   useEffect(() => {
     if (!socket.current) {
       socket.current = socketIOClient(ENDPOINT);
       socket.current.emit("allRoutes");
-      socket.current.on("routeList", (data) => {
+      socket.current.on("routeList",(data)=> {
         console.log(data)
         setOrders(data);
       })
     }
-  }, [])
+  },[])
 
 
 
   // ฟังก์ชันเมื่อกดปุ่ม ACCEPT
-  const handleAccept = (orderId) => {
-    console.log(`รับงาน ${orderId} RiderId กำลังรอ`);
-    navigate(`/rider/order`); // navigate ไปที่ /rider/order
+  const handleAccept = (routeId) => {
+    const riderLat = riderPosition.lat;
+    const riderLng = riderPosition.lng;
+    socket.emit("acceptRoute", { routeId, riderLat, riderLng });
+    console.log(`รับงาน ${routeId} RiderId กำลังรอ`);
+    // navigate(`/rider/order/${routeId}`); // navigate ไปที่ /rider/order
   };
-
-
 
   if (!orders.length) {
     return <div>กำลังโหลด...</div>;
@@ -75,7 +71,7 @@ export default function OrderFromCustomer() {
                 <div className="mb-[-4px] text-base">Min</div>
               </div>
               <div className="flex items-end gap-2 justify-between w-[100%] pl-1 pb-1">
-                <div className="h-[35px] text-[35px] w-1/2">{order.rideFare}</div>
+                <div className="h-[35px] text-[35px] w-1/2">{order.rideFare  }</div>
                 <div className="mb-[-4px] text-base">THB</div>
               </div>
             </div>
@@ -89,7 +85,7 @@ export default function OrderFromCustomer() {
                 border="accept"
                 align="flexCenter"
                 rounded="10"
-                onClick={() => handleAccept(order.orderId)} // เรียกใช้ฟังก์ชัน handleAccept เมื่อกดปุ่ม
+                onClick={() => handleAccept(order.id)} // เรียกใช้ฟังก์ชัน handleAccept เมื่อกดปุ่ม
               >
                 ACCEPT
               </CommonButton>
