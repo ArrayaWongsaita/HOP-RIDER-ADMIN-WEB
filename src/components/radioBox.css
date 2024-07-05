@@ -1,0 +1,38 @@
+.radio-input {
+  margin: 0;
+  visibility: hidden;
+}
+
+.radio-input:checked + span {
+  border: 2px solid #1d2b53;
+}
+
+.radio-input:checked + span:after {
+  opacity: 1;
+}
+
+.custom-radio {
+  left: -8px;
+  cursor: pointer;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #ff004d;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+}
+
+/* for inner filled circle */
+.custom-radio::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  background: #ff004d;
+  position: absolute;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
