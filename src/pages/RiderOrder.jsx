@@ -158,7 +158,8 @@ const RiderOrder = () => {
         return `https://www.google.com/maps/dir/?api=1&origin=${riderGPS.lat},${riderGPS.lng}&destination=${order.locationA.lat},${order.locationA.lng}&travelmode=driving`;
       } else if (step === 2 && order.locationA && order.locationB) {
         if (!statusLogged.status4) {
-          socket.emit("updateRouteStatus", { routeId, status: "PICKEDUP" });
+                    socket.emit("updateRouteStatus", { routeId, status: "PICKEDUP" });
+          // socket.emit("updateRouteStatus", { routeId, status: "OTW" });
           setStatusLogged((prev) => ({ ...prev, status4: true }));
         }
         return `https://www.google.com/maps/dir/?api=1&origin=${order.locationA.lat},${order.locationA.lng}&destination=${order.locationB.lat},${order.locationB.lng}&travelmode=driving`;
@@ -181,14 +182,16 @@ const RiderOrder = () => {
       setModalVisible(false);
       if (confirmed && order) {
         if (step === 0) {
+          socket.emit("updateRouteStatus", { routeId, status: "ARRIVED" });
           setButtonText("รับผู้โดยสารแล้ว");
           setStep(1);
         } else if (step === 1) {
-          socket.emit("updateRouteStatus", { routeId, status: "PICKEDUP" });
+          // socket.emit("updateRouteStatus", { routeId, status: "PICKEDUP" });
           setButtonText("ส่งผู้โดยสารสำเร็จ");
           calculateRoute(order.locationA, order.locationB);
           setStep(2);
         } else if (step === 2) {
+          socket.emit("updateRouteStatus", { routeId, status: "OTW" });
           setPaymentModalVisible(true);
           setStep(3);
         }
