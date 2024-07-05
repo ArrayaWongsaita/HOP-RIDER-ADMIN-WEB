@@ -1,6 +1,6 @@
+import Avatar from "../components/Avatar";
 import Section from "../components/Section";
 import useAuth from "../hooks/authHook";
-import { ImageRider } from "../icons/IconImageRider";
 
 export default function WaitingApprovePage() {
     const { authUser } = useAuth();
@@ -11,12 +11,7 @@ export default function WaitingApprovePage() {
                 <h2>identity verification</h2>
             </Section>
             <div className="flex flex-col gap-4 items-center ">
-                <div className="w-[150px] h-[150px] border-2 rounded-2xl border-[#FF004D] 
-                flex justify-center items-center">
-                    {authUser?.profileImage
-                        ? <div className="w-[90px] h-[90px]">{authUser.profileImage}</div>
-                        : <ImageRider width={90} height={90} />}
-                </div>
+                <Avatar />
                 <div className="mt-2 text-xl text-white">
                     <h1>{authUser?.firstName ? authUser?.firstName : 'First name'} {authUser?.lastName ? authUser?.lastName : 'Last Name'}</h1>
                 </div>

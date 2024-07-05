@@ -1,6 +1,7 @@
 const bgBtn = {
   torchRed: "bg-torchRed hover:bg-white",
   white: "bg-white hover:bg-torchRed",
+  green: "bg-green-400 hover:bg-green-300",
 };
 
 const textBtn = {
@@ -17,7 +18,7 @@ const widthBtn = {
   full: "w-full",
   riderStatus: "w-[240px]",
   select: "w-[174px]",
-  confirm: "w-[40%]",
+  100: "h-[100%]",
 };
 
 const heightBtn = {
@@ -27,6 +28,7 @@ const heightBtn = {
   full: "h-full",
   mini: "h-[45px]",
   select: "h-[55px] max-h-[60px]",
+  100: "h-[100%]",
 };
 
 const borderColorBtn = {
@@ -34,6 +36,7 @@ const borderColorBtn = {
   white: "border-white hover:border-torchRed",
   none: "border-none",
   torchRedToLuckyPoint: "border-torchRed hover:border-luckyPoint",
+  whiteToBlack: "border-white hover:border-black",
 };
 
 const borderWidthBtn = {

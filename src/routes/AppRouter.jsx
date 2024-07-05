@@ -78,7 +78,7 @@ const router = createBrowserRouter([
     path: "/admin",
     element: <AdminMainContainer />,
     children: [
-      { path: "/admin/riderApporval", element: <RiderApproval /> },
+      { path: "/admin/riderApproval", element: <RiderApproval /> },
       { path: "/admin/paymentConfirmation", element: <PaymentConfirmation /> },
       { path: "/admin/customerController", element: <CustomerController /> },
     ],
