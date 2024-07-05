@@ -17,6 +17,7 @@ const widthBtn = {
   full: "w-full",
   riderStatus: "w-[240px]",
   select: "w-[174px]",
+  confirm: "w-[40%]",
 };
 
 const heightBtn = {
@@ -69,12 +70,14 @@ export default function CommonButton({
   fontSize = "reply",
   align = "none",
   rounded = "default",
+
   onClick,
 }) {
   return (
     <button
-      className={`${bgBtn[bg]} ${textBtn[text]} ${widthBtn[width]} ${heightBtn[height]} border ${borderWidthBtn[borderWidth]} ${borderColorBtn[borderColor]} ${borderRound[rounded]} px-1 py-1.5 ${fontSizeBtn[fontSize]} font-semibold ${needCenter[align]}`}
-      onClick={onClick} // เพิ่ม onClick ที่นี่
+      className={`${bgBtn[bg]} ${textBtn[text]} ${widthBtn[width]} ${heightBtn[height]} border ${borderWidthBtn[borderWidth]} ${borderColorBtn[borderColor]} ${borderRound[rounded]} px-1 py-1.5 ${fontSizeBtn[fontSize]} font-semibold ${needCenter[align]} `}
+      onClick={onClick}
+      // เพิ่ม onClick ที่นี่
     >
       {children}
     </button>

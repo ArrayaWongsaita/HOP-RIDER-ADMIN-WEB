@@ -53,7 +53,7 @@ export default function InputImage({
           aspectRatio: `${aspectRatio}`,
           backgroundPosition: "center",
           backgroundSize: "cover",
-          backgroundRepeat: 'no-repeat',
+          backgroundRepeat: "no-repeat",
         }}
         className="flex justify-center items-center "
       >
