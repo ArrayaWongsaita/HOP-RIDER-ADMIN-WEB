@@ -2,7 +2,9 @@ import { useState } from "react";
 import InputSearch from "../../components/InputSearch";
 import RiderBar from "../../components/RiderBar";
 import { dataRider } from "../../constants/dataRider";
-import RiderSubscribe from "../../components/RiderSubscribe";
+import RiderPaymentSubscribe from "../../layouts/Admin/RiderPaymentSubscribe";
+import RiderPaymentPending from "../../layouts/Admin/RiderPaymentPending";
+import RiderPaymentExpired from "../../layouts/Admin/RiderPaymentExpired";
 
 export default function PaymentConfirmation() {
   const [search, setSearch] = useState('');
@@ -12,7 +14,7 @@ export default function PaymentConfirmation() {
   console.log(userRider);
 
   const menuList = [    // หัวข้อของ sub navbar
-    { id: 1, menuName: "Pending", onClick: () => setFilterBy('SUBMITTED'), isActive: 'SUBMITTED' },
+    { id: 1, menuName: "Pending", onClick: () => setFilterBy('SUBMITTED'), isActive: 'SUBMITTED' },   // อย่าลืมแก้ status ตาม dataBase
     { id: 2, menuName: "Subscribed", onClick: () => setFilterBy('APPROVED'), isActive: 'APPROVED' },
     { id: 3, menuName: "Expired", onClick: () => setFilterBy('CANCELED'), isActive: 'CANCELED' },
   ];
@@ -31,8 +33,8 @@ export default function PaymentConfirmation() {
             font-semibold text-xl text-white
             bg-gradient-to-r from-[#1D2B53] from-30% to-[#FF004D] to-100% `}>
           {menuList.map((item) => (
-            <div key={item.id} role="button" onClick={item.onClick} 
-            className={`hover:underline hover:font-extrabold ${filterBy === item.isActive ? 'underline' : ''}`}>
+            <div key={item.id} role="button" onClick={item.onClick}
+              className={`hover:underline hover:font-extrabold ${filterBy === item.isActive ? 'underline' : ''}`}>
               {item.menuName}
             </div>
           ))}
@@ -47,9 +49,15 @@ export default function PaymentConfirmation() {
         </div>
       </div>
       <div className="w-[90%] mx-auto flex flex-col gap-3">
-        {targetRider.map((item) => 
+        {targetRider.map((item) =>
           <RiderBar key={item.id} data={item}>
-            <RiderSubscribe />
+            {filterBy === 'SUBMITTED'
+              ? <RiderPaymentPending data={item} />
+              : filterBy === 'APPROVED'
+                ? <RiderPaymentSubscribe data={item} />
+                : filterBy === 'CANCELED'
+                  ? <RiderPaymentExpired data={item} />
+                  : 'Something wrong'}
           </RiderBar>
         )}
       </div>
