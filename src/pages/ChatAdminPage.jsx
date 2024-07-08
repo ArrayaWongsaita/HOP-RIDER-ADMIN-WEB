@@ -34,6 +34,7 @@ export default function ChatAdminPage() {
 
   const messagesEndRef = useRef(null);
   const dropdownRef = useRef(null);
+  const inputRef = useRef(null); // เพิ่ม ref สำหรับ input field
 
   const suggestions = [
     "กรุณารอสักครู่ admin กำลังตรวจสอบ",
@@ -69,21 +70,21 @@ export default function ChatAdminPage() {
     });
   }, []);
 
-  const handleUserInteraction = () => {
-    setUserInteracted(true);
-    document.removeEventListener("click", handleUserInteraction);
-    document.removeEventListener("touchstart", handleUserInteraction);
-  };
+  // const handleUserInteraction = () => {
+  //   setUserInteracted(true);
+  //   document.removeEventListener("click", handleUserInteraction);
+  //   document.removeEventListener("touchstart", handleUserInteraction);
+  // };
 
-  useEffect(() => {
-    document.addEventListener("click", handleUserInteraction);
-    document.addEventListener("touchstart", handleUserInteraction);
+  // useEffect(() => {
+  //   document.addEventListener("click", handleUserInteraction);
+  //   document.addEventListener("touchstart", handleUserInteraction);
 
-    return () => {
-      document.removeEventListener("click", handleUserInteraction);
-      document.removeEventListener("touchstart", handleUserInteraction);
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener("click", handleUserInteraction);
+  //     document.removeEventListener("touchstart", handleUserInteraction);
+  //   };
+  // }, []);
 
   useEffect(() => {
     const lastMessage = lastMessages[currentChat.type]?.[currentChat.id];
@@ -124,6 +125,24 @@ export default function ChatAdminPage() {
   useEffect(() => {
     scrollToBottom();
   }, [chats, currentChat]);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    }
+
+    if (showDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -182,10 +201,12 @@ export default function ChatAdminPage() {
 
   const handleSuggestionClick = (suggestion) => {
     setInputValue(suggestion);
+    inputRef.current.focus(); // โฟกัสไปที่ input field หลังจากคลิก suggestion
   };
 
   const handleEndChat = () => {
     setShowModal(true);
+    setShowDropdown(false); // ปิด dropdown เมื่อคลิกปุ่ม
   };
 
   const confirmEndChat = () => {
@@ -214,6 +235,7 @@ export default function ChatAdminPage() {
   const handleShowOrder = (id) => {
     setCurrentOrder(orderData[id]);
     setShowOrderModal(true);
+    setShowDropdown(false); // ปิด dropdown เมื่อคลิกปุ่ม
   };
 
   const closeOrderModal = () => {
@@ -302,7 +324,7 @@ export default function ChatAdminPage() {
                     className="w-16 h-16 rounded-full mr-4"
                   />
                   <div className="flex flex-col justify-center h-full">
-                    <div className="flex-1 flex items-center">{`${
+                    <div className="flex-1 flex items-center truncate">{`${
                       profileData[currentChat.type][id].firstName
                     } ${profileData[currentChat.type][id].lastName}`}</div>
                     <div className="text-xs text-gray-500 flex-1 overflow-hidden line-clamp-2">
@@ -420,11 +442,15 @@ export default function ChatAdminPage() {
           </div>
           <div className="flex items-center">
             <input
+              ref={inputRef} // ตั้งค่า ref สำหรับ input field
               type="text"
               className="flex-1 p-2 border rounded-lg"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="พิมพ์ข้อความ..."
+              onFocus={(e) => {
+                e.target.select(); // เลือกข้อความทั้งหมดเมื่อโฟกัสที่ input field
+              }}
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
                   handleSend();
@@ -438,7 +464,7 @@ export default function ChatAdminPage() {
               Send
             </button>
           </div>
-          <SimulateMessageInput onSimulateSend={handleSimulateSend} />
+          {/* <SimulateMessageInput onSimulateSend={handleSimulateSend} /> */}
         </div>
       </div>
 
