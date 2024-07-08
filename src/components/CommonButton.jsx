@@ -2,12 +2,14 @@ const bgBtn = {
   torchRed: "bg-torchRed hover:bg-white",
   white: "bg-white hover:bg-torchRed",
   green: "bg-green-400 hover:bg-green-300",
+  gray: "bg-gainsboro hover:bg-gray-400",
 };
 
 const textBtn = {
   torchRed: "text-torchRed hover:text-white",
   white: "text-white hover:text-torchRed",
   whiteToLuckyPoint: "text-white hover:text-luckyPoint",
+  luckyPoint: "text-luckyPoint hover:text-white",
 };
 
 const widthBtn = {
@@ -18,7 +20,8 @@ const widthBtn = {
   full: "w-full",
   riderStatus: "w-[240px]",
   select: "w-[174px]",
-  100: "h-[100%]",
+  100: "w-[100%]",
+  confirm: "w-[110px]",
 };
 
 const heightBtn = {
@@ -27,7 +30,7 @@ const heightBtn = {
   accept: "h-[63px]",
   full: "h-full",
   mini: "h-[45px]",
-  select: "h-[55px] max-h-[60px]",
+  select: "h-[55px]",
   100: "h-[100%]",
 };
 
@@ -73,7 +76,7 @@ export default function CommonButton({
   fontSize = "reply",
   align = "none",
   rounded = "default",
-
+  type,
   onClick,
 }) {
   return (
@@ -81,6 +84,7 @@ export default function CommonButton({
       className={`${bgBtn[bg]} ${textBtn[text]} ${widthBtn[width]} ${heightBtn[height]} border ${borderWidthBtn[borderWidth]} ${borderColorBtn[borderColor]} ${borderRound[rounded]} px-1 py-1.5 ${fontSizeBtn[fontSize]} font-semibold ${needCenter[align]} `}
       onClick={onClick}
       // เพิ่ม onClick ที่นี่
+      type={type}
     >
       {children}
     </button>
