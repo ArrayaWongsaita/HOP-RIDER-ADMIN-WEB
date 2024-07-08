@@ -34,7 +34,7 @@ export default function AdminHeader() {
     <header className="flex justify-between items-center shadow-md  bg-none px-20">
       <div>
         <Link to="/admin">
-          <IconLogoHop />
+          <LogoHopForNav width="50" />
         </Link>
       </div>
       <div className="flex gap-20">

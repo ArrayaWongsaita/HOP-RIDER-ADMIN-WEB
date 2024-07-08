@@ -37,6 +37,6 @@ body {
 }
 
 .blink {
-  animation: blink 1s linear 3;
+  animation: blink 1s linear 5;
   animation-fill-mode: forwards;
 }
