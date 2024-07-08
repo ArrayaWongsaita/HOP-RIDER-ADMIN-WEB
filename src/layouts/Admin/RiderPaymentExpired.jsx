@@ -14,15 +14,15 @@ export default function RiderPaymentExpired({ data }) {
                 <div className="flex justify-center">
                     <img src="" alt="Expired" />
                 </div>
-                <div className="flex flex-col gap-8 items-end justify-center">
+                <div className="flex flex-col gap-8 items-end justify-center invisible">
                     <CommonButton
                         bg="green"
                         text="whiteToLuckyPoint"
                         borderColor="whiteToBlack"
                         width="reply"
-                        height="accept"
+                        height="regist"
                     >
-                        Confirm Subscribe
+                        Confirm
                     </CommonButton>
                     <CommonButton
                         bg="torchRed"

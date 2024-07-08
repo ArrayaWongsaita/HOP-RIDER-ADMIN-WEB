@@ -2,12 +2,12 @@ import { useState } from "react";
 import InputSearch from "../../components/InputSearch";
 import RiderBar from "../../components/RiderBar";
 import RiderOrder from "../../components/RiderOrder";
-import { dataRider } from "../../constants/dataRider";
 import ComponentOrder from "../../components/ComponentOrder";
+import useRider from "../../hooks/riderHook";
 
 export default function CustomerController() {
   const [search, setSearch] = useState('');
-  const userRider = dataRider     // mock up
+  const { userRider } = useRider();
   console.log(userRider)
 
   const targetRider = userRider.filter(item => (

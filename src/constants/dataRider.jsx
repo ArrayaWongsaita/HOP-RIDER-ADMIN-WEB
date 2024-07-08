@@ -1,3 +1,4 @@
+import testSlip1 from "../images/testSlip.jpg"
 
 export const dataRider = [
     {
@@ -17,6 +18,10 @@ export const dataRider = [
         status: 'SUBMITTED',
         createdAt: new Date(),
         updatedAt: new Date(),
+        planId: 1,
+        slip: testSlip1,
+        paymentStatus: 'PENDING',
+        expireDate: '2024-06-18',
     },
     {
         id: 2,
@@ -35,6 +40,10 @@ export const dataRider = [
         status: 'APPROVED',
         createdAt: new Date(),
         updatedAt: new Date(),
+        planId: 2,
+        slip: testSlip1,
+        paymentStatus: 'APPROVED',
+        expireDate: '2024-07-18',
     },
     {
         id: 3,
@@ -53,6 +62,10 @@ export const dataRider = [
         status: 'SUBMITTED',
         createdAt: new Date(),
         updatedAt: new Date(),
+        planId: 3,
+        slip: testSlip1,
+        paymentStatus: 'APPROVED',
+        expireDate: '2024-07-28',
     },
     {
         id: 4,
@@ -71,6 +84,11 @@ export const dataRider = [
         status: 'APPROVED',
         createdAt: new Date(),
         updatedAt: new Date(),
+        planId: 4,
+        slip: testSlip1,
+        paymentStatus: 'PENDING',
+        expireDate: '2024-07-07',
+        
     },
     {
         id: 5,
@@ -89,5 +107,9 @@ export const dataRider = [
         status: 'CANCELED',
         createdAt: new Date(),
         updatedAt: new Date(),
+        planId: 5,
+        slip: testSlip1,
+        paymentStatus: 'APPROVED',
+        expireDate: '2024-06-28',
     }
 ];

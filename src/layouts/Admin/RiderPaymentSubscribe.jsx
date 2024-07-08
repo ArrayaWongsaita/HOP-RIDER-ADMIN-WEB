@@ -1,9 +1,10 @@
 import CommonButton from "../../components/CommonButton";
+import DayCard from "../../components/DayCard";
 
 export default function RiderPaymentSubscribe({ data }) {
 
     console.log(data);
-    
+
     return (
         <div className="w-full flex flex-col justify-between items-center px-8 py-3
     text-xl text-white rounded-xl bg-gray-200">
@@ -12,17 +13,17 @@ export default function RiderPaymentSubscribe({ data }) {
                     <img src="" alt="" />
                 </div>
                 <div className="flex justify-center">
-                    <img src="" alt="Count Subscribe" />
+                    <DayCard data={data} />
                 </div>
-                <div className="flex flex-col gap-8 items-end justify-center">
+                <div className="flex flex-col gap-8 items-end justify-center invisible">
                     <CommonButton
                         bg="green"
                         text="whiteToLuckyPoint"
                         borderColor="whiteToBlack"
                         width="reply"
-                        height="accept"
+                        height="regist"
                     >
-                        Confirm Subscribe
+                        Confirm
                     </CommonButton>
                     <CommonButton
                         bg="torchRed"
