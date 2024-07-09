@@ -81,9 +81,8 @@ export default function CommonButton({
 }) {
   return (
     <button
-      className={`${bgBtn[bg]} ${textBtn[text]} ${widthBtn[width]} ${heightBtn[height]} border ${borderWidthBtn[borderWidth]} ${borderColorBtn[borderColor]} ${borderRound[rounded]} px-1 py-1.5 ${fontSizeBtn[fontSize]} font-semibold ${needCenter[align]} `}
+      className={`${bgBtn[bg]} ${textBtn[text]} ${widthBtn[width]} ${heightBtn[height]} border ${borderWidthBtn[borderWidth]} ${borderColorBtn[borderColor]} ${borderRound[rounded]} px-1 py-1.5 ${fontSizeBtn[fontSize]} font-semibold flex justify-center items-center ${needCenter[align]} `}
       onClick={onClick}
-      // เพิ่ม onClick ที่นี่
       type={type}
     >
       {children}

@@ -1,8 +1,8 @@
-import { IconLogoHop } from "../../icons/IconLogoHop";
 import { Link } from "react-router-dom";
 import AdminMenu from "./AdminMenu";
 import { IconMenu } from "../../icons/IconMenu";
 import { useEffect, useRef, useState } from "react";
+import { LogoHopForNav } from "../../icons/IconLogoHopForNav";
 
 export function CircleNoti({ width, height }) {
   return <div className={`rounded-full bg-torchRed ${width} ${height}`}></div>;
@@ -34,7 +34,7 @@ export default function AdminHeader() {
     <header className="flex justify-between items-center shadow-md  bg-none px-20">
       <div>
         <Link to="/admin">
-          <LogoHopForNav width="50" />
+          <LogoHopForNav width="100" />
         </Link>
       </div>
       <div className="flex gap-20">
@@ -58,7 +58,7 @@ export default function AdminHeader() {
             </div>
           </div>
           {openDropdown && (
-            <ul className=" absolute right-15 top-[6.5rem] text-white  bg-gradient-to-r from-torchRed from from-0% to-luckyPoint to-50%   p-4 rounded-md space-y-3 text-right  text-[18px]">
+            <ul className=" absolute right-15 top-[6.5rem] text-white  bg-gradient-to-r from-torchRed from from-0% to-luckyPoint to-50%   p-4 rounded-md space-y-3 text-right  text-[18px] z-50">
               <li>
                 <a href="">Profile Setting</a>
               </li>
