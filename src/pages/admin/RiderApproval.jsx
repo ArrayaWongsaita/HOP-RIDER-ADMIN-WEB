@@ -2,12 +2,12 @@ import { useState } from "react";
 import InputSearch from "../../components/InputSearch";
 import RiderBar from "../../components/RiderBar";
 import RiderInfo from "../../components/RiderInfo";
-import { dataRider } from "../../constants/dataRider";
+import useRider from "../../hooks/riderHook";
 
 export default function RiderApproval() {
+  const { userRider } = useRider();
   const [search, setSearch] = useState('');
   const [filterBy, setFilterBy] = useState('SUBMITTED')
-  const userRider = dataRider     // mock up
 
   console.log(userRider);
 
@@ -18,7 +18,6 @@ export default function RiderApproval() {
   ];
 
   const targetRider = userRider.filter(item => item.status === filterBy)
-  console.log('targetRider -->>', targetRider);
 
   const handleOnChance = (event) => {
     setSearch(event.target.value)

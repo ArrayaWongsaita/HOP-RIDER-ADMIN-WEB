@@ -1,7 +1,7 @@
 import PriceCard from "../components/PriceCard";
 import Section from "../components/Section";
 
-const pricePagkage = [
+const pricePackage = [
   { id: 1, month: 1, price: "3,000", avg: 100 },
   { id: 2, month: 3, price: "8,900", avg: 99 },
   { id: 3, month: 6, price: "17,600", avg: 97 },
@@ -14,7 +14,7 @@ export default function PricePlanPage() {
     <div className="flex flex-col ">
       <Section>Choose your plan</Section>
       <div className="flex flex-col w-full items-center gap-6">
-        {pricePagkage.map((plan) => (
+        {pricePackage.map((plan) => (
           <PriceCard key={plan.id} plan={plan} />
         ))}
       </div>

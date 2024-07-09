@@ -36,7 +36,7 @@ export default function RiderBar({ children, data }) {
           </div>
         </div>
       </div>
-      {open ? children : null}
+      {open ? <div className="w-[80%] flex mx-auto items-center pt-1">{children}</div> : null}
     </div>
   );
 }

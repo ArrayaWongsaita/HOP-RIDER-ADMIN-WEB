@@ -79,10 +79,10 @@ export default function VerifyPage() {
                 return setInputError(error);
             }
             setInputError({ ...initialInputError });
-            setInitialTextVisible(true);
             if (!profileImage.licenseImage) return missingLicenseImage.current?.scrollIntoView({ behavior: "smooth" });
             if (!profileImage.vehicleRegistrationImage) return missingVehicleRegistrationImage.current?.scrollIntoView({ behavior: "smooth" });
             if (!profileImage.vehicleImage) return missingVehicleImage.current?.scrollIntoView({ behavior: "smooth" });
+            setInitialTextVisible(true);
             const formData = new FormData()
             formData.append("profileImage", profileImage.profileImage)
             formData.append("licenseImage", profileImage.licenseImage)
@@ -111,9 +111,10 @@ export default function VerifyPage() {
                 <h2>identity verification</h2>
             </Section>
             <form onSubmit={handleSubmitForm} >
-                <div className="flex flex-col items-center gap-6">
+                <div className="flex flex-col items-center">
                     <div
                         ref={missingProfileImage}
+                        role="button"
                         className="rounded-2xl overflow-hidden">
                         <InputImage
                             width="150px"
@@ -124,6 +125,10 @@ export default function VerifyPage() {
                                 <ImageRider width={90} height={90} />
                             </div>
                         </InputImage>
+                    </div>
+                    <div
+                        className={`mt-5 p-2 rounded-2xl ${profileImage?.profileImage ? color2 : color1} hover:cursor-default`} >
+                        <p>+ upload your profile image</p>
                     </div>
                 </div>
 
@@ -186,6 +191,7 @@ export default function VerifyPage() {
 
                 <div className="flex flex-col justify-center items-center py-6">
                     <div
+                        role="button"
                         ref={missingLicenseImage}
                         className="rounded-2xl overflow-hidden">
                         <InputImage
@@ -197,7 +203,7 @@ export default function VerifyPage() {
                             </div>
                         </InputImage>
                     </div>
-                    <div className={`mt-5 p-2 rounded-2xl ${profileImage?.licenseImage ? color2 : color1}`} >
+                    <div className={`mt-5 p-2 rounded-2xl ${profileImage?.licenseImage ? color2 : color1} hover:cursor-default`} >
                         <p>+ upload your driver&apos;s license here</p>
                     </div>
                 </div>
@@ -208,6 +214,7 @@ export default function VerifyPage() {
 
                 <div className="flex flex-col justify-center items-center py-6">
                     <div
+                        role="button"
                         ref={missingVehicleRegistrationImage}
                         className="rounded-2xl overflow-hidden">
                         <InputImage
@@ -219,7 +226,7 @@ export default function VerifyPage() {
                             </div>
                         </InputImage>
                     </div>
-                    <div className={`mt-5 p-2 rounded-2xl ${profileImage?.vehicleRegistrationImage ? color2 : color1}`} >
+                    <div className={`mt-5 p-2 rounded-2xl ${profileImage?.vehicleRegistrationImage ? color2 : color1} hover:cursor-default`} >
                         <p>+ upload your vehicle registration copy here</p>
                     </div>
                 </div>
@@ -230,6 +237,7 @@ export default function VerifyPage() {
 
                 <div className="flex flex-col justify-center items-center py-6">
                     <div
+                        role="button"
                         ref={missingVehicleImage}
                         className="rounded-2xl overflow-hidden">
                         <InputImage
@@ -241,7 +249,7 @@ export default function VerifyPage() {
                             </div>
                         </InputImage>
                     </div>
-                    <div className={`mt-5 p-2 rounded-2xl ${profileImage?.vehicleImage ? color2 : color1}`} >
+                    <div className={`mt-5 p-2 rounded-2xl ${profileImage?.vehicleImage ? color2 : color1} hover:cursor-default`} >
                         <p>+ upload your picture of your vehicle here</p>
                     </div>
                 </div>
@@ -272,7 +280,7 @@ export default function VerifyPage() {
                     </CommonButton>
                 </div>
             </form>
-            { initialTextVisible ? ( <LoadScreen status="Uploading" />) : ''}
+            {initialTextVisible ? (<LoadScreen status="Uploading" />) : ''}
         </div>
     )
 }
