@@ -6,7 +6,7 @@ import ComponentOrder from "../../components/ComponentOrder";
 import useRider from "../../hooks/riderHook";
 
 export default function CustomerController() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const { userRider } = useRider();
   console.log(userRider)
 
