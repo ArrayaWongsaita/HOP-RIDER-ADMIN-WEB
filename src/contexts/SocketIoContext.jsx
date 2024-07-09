@@ -21,7 +21,14 @@ export default function SocketIoContextProvider({ children }) {
       },
     });
     setSocket(socketIo);
-  }, [navigate]);
+    socketIo.on("connect_error", (err) => {
+      console.error("Connection error:", err.message);
+    });
+
+    socketIo.on("error", (err) => {
+      console.error("Socket error:", err.message);
+    });
+  }, []);
 
   useEffect(() => {
     const checkRouteRider = async () => {
