@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { XClose } from "../icons/IconXClose";
+import { createPortal } from "react-dom";
 
 export default function ModalAdmin({ children, open, onClose }) {
   useEffect(() => {
@@ -14,7 +15,7 @@ export default function ModalAdmin({ children, open, onClose }) {
 
   return (
     <>
-      {open ? (
+      {open ? createPortal (
         <div>
           <div className="fixed inset-0 z-30 bg-gainsboro opacity-80"></div>
           <div
@@ -28,14 +29,16 @@ export default function ModalAdmin({ children, open, onClose }) {
             </div>
 
             <div
-              className="bg-white rounded-lg h-[70%] w-[70%] lg:w-[600px] shadow-2xl"
+              className="bg-white rounded-lg h-[70%] w-[70%] shadow-2xl"
+              // lg:w-[600px]
               onMouseDown={(e) => e.stopPropagation()}
             >
-              <div>{children}</div>
+              <div className="w-full h-full">{children}</div>
             </div>
             <button className=" invisible">&#10005;</button>
           </div>
-        </div>
+        </div>,
+        document.getElementById('modal')
       ) : null}
     </>
   );

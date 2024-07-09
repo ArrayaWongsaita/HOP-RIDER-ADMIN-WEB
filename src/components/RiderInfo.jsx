@@ -1,27 +1,52 @@
 import { useState } from "react";
 import Avatar from "./Avatar";
 import CommonButton from "./CommonButton";
+import ModalAdmin from "./ModalAdmin";
+import ModalApproveRider from "../layouts/Admin/ModalApproveRider";
+import ModalDenyRider from "../layouts/Admin/ModalDenyRider";
 
 export default function RiderInfo({ data }) {
-    const [show, setShow] = useState(false);
+    const [open, setOpen] = useState(false);
     const [selectSrc, setSelectSrc] = useState(null);
+    const [approve, setApprove] = useState(false);
+    const [deny, setDeny] = useState(false);
 
+    console.log(data)
     const handleClickLicense = () => {
-        setShow(true);
-        setSelectSrc();
-        console.log('Show License')
+        setSelectSrc(data.licenseImage);
+        setOpen(true);
+        console.log('Show License');
     };
 
     const handleClickRegistration = () => {
-        setShow(true);
-        setSelectSrc();
-        console.log('Show Registration')
+        setSelectSrc(data.vehicleRegistrationImage);
+        setOpen(true);
+        console.log('Show Registration');
     };
 
     const handleClickVehiclePicture = () => {
-        setShow(true);
-        setSelectSrc();
-        console.log('Show VehiclePicture')
+        setSelectSrc(data.vehicleImage);
+        setOpen(true);
+        console.log('Show VehiclePicture');
+    };
+
+    const handleClickApprove = () => {
+        setApprove(true);
+        setOpen(true);
+        console.log('Show Approve');
+    };
+
+    const handleClickDeny = () => {
+        setDeny(true);
+        setOpen(true);
+        console.log('Show Deny');
+    };
+
+    const handleCloseModal = () => {
+        setOpen(false);
+        setSelectSrc(null);
+        setApprove(false);
+        setDeny(false);
     };
 
     return (
@@ -46,6 +71,7 @@ export default function RiderInfo({ data }) {
                         borderColor="whiteToBlack"
                         width="reply"
                         height="regist"
+                        onClick={handleClickApprove}
                     >
                         Approve
                     </CommonButton>
@@ -55,6 +81,7 @@ export default function RiderInfo({ data }) {
                         borderColor="white"
                         width="reply"
                         height="regist"
+                        onClick={handleClickDeny}
                     >
                         Deny
                     </CommonButton>
@@ -83,18 +110,23 @@ export default function RiderInfo({ data }) {
                 <div
                     className="p-3 flex justify-center"
                     role="button"
-                    onClick={handleClickVehiclePicture} 
+                    onClick={handleClickVehiclePicture}
                 >
                     Vehicle picture
                 </div>
             </div>
-            {show ?
-                
-                    <div className="">
-                        <img src={selectSrc} alt="" />
-                    </div>
-                
-                : null}
+            <ModalAdmin open={open} onClose={handleCloseModal} >
+            {/* onClose={() => setOpen(false)} */}
+                {selectSrc ? <div className="h-[100%] w-[100%] p-8 flex justify-center mx-auto">
+                    <img src={selectSrc} alt="selected Image" />
+                </div>
+                : approve ?
+                <ModalApproveRider data={data} />
+                : deny ?
+                <ModalDenyRider data={data} />
+                : "Something wrong"
+                }
+            </ModalAdmin>
         </div>
     )
 }
