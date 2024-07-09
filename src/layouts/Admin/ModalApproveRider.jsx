@@ -7,8 +7,12 @@ export default function ModalApproveRider({ data, onClose }) {
 
     const handleSubmitApproveRider = async (event) => {
         event.preventDefault();
-        console.log(data.id);
-        await adminApi.approveRider(data.id);
+        const requestBody = {
+            riderId: data.id,
+            status: 'APPROVED',
+        };
+        console.log(requestBody);
+        await adminApi.approveRider(requestBody);
         onClose();
     }
     

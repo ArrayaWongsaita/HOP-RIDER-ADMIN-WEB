@@ -17,8 +17,12 @@ export default function ModalDenyRider({ data, onClose }) {
     
     const handleSubmitDenyRider = async (event) => {
         event.preventDefault();
-        console.log(data.id, input);
-        await adminApi.denyRider(data.id, input);
+        const requestBody = {
+            riderId: data.id,
+            status: 'DENIED',
+        };
+        console.log(requestBody, input);
+        await adminApi.approveRider(requestBody, input);
         onClose();
     };
 

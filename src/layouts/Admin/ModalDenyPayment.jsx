@@ -17,8 +17,13 @@ export default function ModalDenyPayment({ data, onClose }) {
 
     const handleSubmitDeny = async (event) => {
         event.preventDefault();
-        console.log(data.id, input);
-        await adminApi.denyPayment(data.id, input);
+        const requestBody = {
+            riderId: data.id,
+            status: 'DENIED',
+            planId: data.planId,
+        };
+        console.log(requestBody);
+        await adminApi.approvePayment(requestBody, input);
         onClose();
     };
 

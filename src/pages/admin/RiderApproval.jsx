@@ -14,7 +14,7 @@ export default function RiderApproval() {
   const menuList = [    // หัวข้อของ sub navbar
     { id: 1, menuName: "Pending", onClick: () => setFilterBy('SUBMITTED'), isActive: 'SUBMITTED' },
     { id: 2, menuName: "Approved", onClick: () => setFilterBy('APPROVED'), isActive: 'APPROVED' },
-    { id: 3, menuName: "Denied", onClick: () => setFilterBy('CANCELED'), isActive: 'CANCELED' },
+    { id: 3, menuName: "Denied", onClick: () => setFilterBy('DENIED'), isActive: 'DENIED' },
   ];
 
   const targetRider = userRider.filter(item => item.status === filterBy)

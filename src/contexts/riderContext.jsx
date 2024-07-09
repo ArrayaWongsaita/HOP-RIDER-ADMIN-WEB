@@ -8,20 +8,25 @@ export const RiderContext = createContext();
 
 export default function RiderContextProvider({ children }) {
     const mockUpUserRider = dataRider     // mock up
-    const [userRider, setUserRider] = useState(mockUpUserRider);    // mock up userRider
-
+    const [userRider, setUserRider] = useState([]);    // mock up userRider
+    // const [testRider, setTestRider] = useState([]);
+    const [testPayment, setTestPayment] = useState([]);
 
     useEffect(() => {
-        // fetchAllRider();
-        checkDate();
+        fetchAllRider();
+        // fetchRiderApproval();
+        fetchRiderPayment();
+        // checkDate();
 
     }, []);
     
+    // console.log('testRider -->>', testRider);
+    console.log('testPayment -->>', testPayment);
     console.log('userRider -->>', userRider);
 
     const fetchAllRider = async () => {
         try {
-            const res = await adminApi.fetchAllRider();
+            const res = await adminApi.fetchRiderApprove();
             setUserRider(res.data)
         } catch (err) {
             console.log(err)
@@ -50,6 +55,23 @@ export default function RiderContextProvider({ children }) {
         // console.log(data)
     }
 
+    // const fetchRiderApproval = async () => {
+    //     try {
+    //         const res = await adminApi.fetchRiderApprove();
+    //         setTestRider(res.data);
+    //     }   catch (err) {
+    //         console.log(err)
+    //     }
+    // }
+    const fetchRiderPayment = async () => {
+        try {
+            const res = await adminApi.fetchRiderPayment();
+            setTestPayment(res.data);
+        }   catch (err) {
+            console.log(err)
+        }
+    }
+    
     const value = {
         userRider,
     };

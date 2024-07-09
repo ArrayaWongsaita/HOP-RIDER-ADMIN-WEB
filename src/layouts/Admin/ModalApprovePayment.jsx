@@ -7,8 +7,13 @@ export default function ModalApprovePayment({ data, usedPlan, onClose }) {
 
     const handleSubmitApproveRider = async (event) => {
         event.preventDefault();
-        console.log(data.id);
-        await adminApi.approvePayment(data.id);
+        const requestBody = {
+            riderId: data.id,
+            status: 'CONFIRMED',
+            planId: data.planId,
+        };
+        console.log(requestBody);
+        await adminApi.approvePayment(requestBody);
         onClose();
     };
 
