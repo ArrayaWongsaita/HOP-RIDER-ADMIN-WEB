@@ -8,7 +8,7 @@ import useRider from "../../hooks/riderHook";
 export default function CustomerController() {
   const [search, setSearch] = useState("");
   const { userRider } = useRider();
-  console.log(userRider)
+  console.log(userRider);
 
   const targetRider = userRider.filter(
     (item) =>
@@ -23,7 +23,7 @@ export default function CustomerController() {
   return (
     <div className="w-full h-full">
       <div
-        className={`w-full h-[12%] flex items-center justify-center 
+        className={`w-full h-[80px] flex items-center justify-center 
            mb-5
             font-semibold text-xl text-white
             bg-gradient-to-r from-[#1D2B53] from-30% to-[#FF004D] to-100% `}

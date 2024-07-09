@@ -1,7 +1,7 @@
 const bgBtn = {
   torchRed: "bg-torchRed hover:bg-white",
   white: "bg-white hover:bg-torchRed",
-  green: "bg-green-400 hover:bg-green-300",
+  green: "bg-[#0FA958] hover:bg-green-500",
 };
 
 const textBtn = {
