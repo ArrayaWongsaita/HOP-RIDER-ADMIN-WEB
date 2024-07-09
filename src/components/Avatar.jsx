@@ -10,7 +10,7 @@ const sizeAll = {
   default: "w-[150px] h-[150px]",
   full: "w-[100%] h-[100%]",
   90: "w-[90%] h-[90%]",
-  aaa: "w-[80px] h-[80px]",
+  aaa: "w-[70px] h-[70px]",
 };
 
 export default function Avatar({ border = "redTouch", size = "default" }) {

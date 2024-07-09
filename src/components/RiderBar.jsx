@@ -12,7 +12,7 @@ export default function RiderBar({ children, data }) {
       <div
         role="button"
         onClick={() => setOpen(!open)}
-        className="w-[80%] h-[12%] flex justify-between items-center px-12 text-xl text-white rounded-xl mx-auto
+        className="w-[80%] h-[80px] flex justify-between items-center px-12 text-xl text-white rounded-xl mx-auto
         bg-gradient-to-r from-[#1D2B53] from-30% to-[#FF004D] to-100% p-3"
       >
         <div className="flex justify-start items-center w-[5%]">{data.id}</div>
@@ -36,7 +36,9 @@ export default function RiderBar({ children, data }) {
           </div>
         </div>
       </div>
-      {open ? <div className="w-[80%] flex mx-auto items-center pt-1">{children}</div> : null}
+      {open ? (
+        <div className="w-[80%] flex mx-auto items-center pt-1">{children}</div>
+      ) : null}
     </div>
   );
 }
