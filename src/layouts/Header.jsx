@@ -13,9 +13,9 @@ export default function Header() {
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
   const menuRef = useRef(null);
-  const { logout } = useAuth()
+  const { logout } = useAuth();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleClickOutside = (event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -31,10 +31,10 @@ export default function Header() {
   }, []);
 
   const handleLogout = () => {
-    logout()
-    navigate('/auth/login')
-    window.location.reload()
-  }
+    logout();
+    navigate("/auth/login");
+    window.location.reload();
+  };
 
   return (
     <div className="header">

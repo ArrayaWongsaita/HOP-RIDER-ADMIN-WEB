@@ -3,6 +3,16 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      rotate: {
+        210: "210deg",
+        225: "225deg",
+        240: "240deg",
+        270: "270deg",
+        300: "300deg",
+        315: "315deg",
+        330: "330deg",
+        360: "360deg",
+      },
       gridTemplateColumns: {
         "auto-fit-minmax-255": "repeat(auto-fit, minmax(255px, 1fr))",
       },
