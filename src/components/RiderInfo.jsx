@@ -64,7 +64,8 @@ export default function RiderInfo({ data }) {
                     <h1>Email: <span className="font-medium">{data.email}</span></h1>
                     <h1>Address: <span className="font-medium">{data.address}</span></h1>
                 </div>
-                <div className="flex flex-col items-end justify-center gap-4 col-span-1">
+                {data.status !== 'APPROVED' 
+                ? <div className="flex flex-col items-end justify-center gap-4 col-span-1">
                     <CommonButton
                         bg="green"
                         text="whiteToLuckyPoint"
@@ -86,6 +87,7 @@ export default function RiderInfo({ data }) {
                         Deny
                     </CommonButton>
                 </div>
+                : ''}
             </div>
 
             <div className="flex justify-center w-full py-3">
@@ -121,9 +123,9 @@ export default function RiderInfo({ data }) {
                     <img src={selectSrc} alt="selected Image" />
                 </div>
                 : approve ?
-                <ModalApproveRider data={data} />
+                <ModalApproveRider data={data} onClose={handleCloseModal} />
                 : deny ?
-                <ModalDenyRider data={data} />
+                <ModalDenyRider data={data} onClose={handleCloseModal} />
                 : "Something wrong"
                 }
             </ModalAdmin>

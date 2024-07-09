@@ -47,7 +47,7 @@ export default function RiderApproval() {
       </div>
       <div className="w-[90%] mx-auto flex flex-col gap-3">
         {targetRider.map((item) =>
-          <RiderBar key={item.id} data={item}>
+          <RiderBar status={item.status} key={item.id} data={item}>
             <RiderInfo data={item} />
           </RiderBar>
         )}

@@ -1,18 +1,15 @@
-import { useNavigate } from "react-router-dom";
 import adminApi from "../../apis/adminApi";
 import Avatar from "../../components/Avatar";
 import CommonButton from "../../components/CommonButton";
 
-export default function ModalApproveRider({ data }) {
+export default function ModalApproveRider({ data, onClose }) {
     console.log(data)
 
-    const navigate = useNavigate();
-    
     const handleSubmitApproveRider = async (event) => {
         event.preventDefault();
         console.log(data.id);
         await adminApi.approveRider(data.id);
-        // navigate('/admin/riderApproval');
+        onClose();
     }
     
     return (

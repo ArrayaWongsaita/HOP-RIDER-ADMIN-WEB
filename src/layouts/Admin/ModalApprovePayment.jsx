@@ -2,14 +2,15 @@ import adminApi from "../../apis/adminApi";
 import CommonButton from "../../components/CommonButton";
 import PriceCard from "../../components/PriceCard";
 
-export default function ModalApprovePayment({ data, usedPlan }) {
+export default function ModalApprovePayment({ data, usedPlan, onClose }) {
     console.log(data)
 
     const handleSubmitApproveRider = async (event) => {
         event.preventDefault();
         console.log(data.id);
         await adminApi.approvePayment(data.id);
-    }
+        onClose();
+    };
 
     return (
         <div className="w-[100%] h-[100%] flex flex-col justify-center items-center gap-8">

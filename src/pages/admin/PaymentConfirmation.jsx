@@ -67,7 +67,7 @@ export default function PaymentConfirmation() {
       </div>
       <div className="w-[90%] mx-auto flex flex-col gap-3">
         {filterData.map((item) =>
-          <RiderBar key={item.id} data={item}>
+          <RiderBar status={item.subScribeDate > 0 ? item.expireDate : "Expired"} key={item.id} data={item}>
             {filterBy === 'PENDING'
               ? <RiderPaymentPending data={item} />
               : filterBy === 'APPROVED'

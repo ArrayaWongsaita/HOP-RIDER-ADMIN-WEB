@@ -89,9 +89,9 @@ export default function RiderPaymentPending({ data }) {
                     <img src={selectSrc} alt="selected Image" />
                 </div>
                     : approve ?
-                        <ModalApprovePayment data={data} usedPlan={usedPlan} />
+                        <ModalApprovePayment data={data} usedPlan={usedPlan} onClose={handleCloseModal} />
                         : deny ?
-                            <ModalDenyPayment data={data} />
+                            <ModalDenyPayment data={data} onClose={handleCloseModal} />
                             : "Something wrong"
                 }
             </ModalAdmin>

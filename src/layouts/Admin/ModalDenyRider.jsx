@@ -7,7 +7,7 @@ const initialInput = {
     comment: '',
 };
 
-export default function ModalDenyRider({ data }) {
+export default function ModalDenyRider({ data, onClose }) {
     const [input, setInput] = useState(initialInput);
     console.log(data)
 
@@ -19,8 +19,8 @@ export default function ModalDenyRider({ data }) {
         event.preventDefault();
         console.log(data.id, input);
         await adminApi.denyRider(data.id, input);
-        
-    }
+        onClose();
+    };
 
     return (
         <div className="w-[100%] h-[100%] flex flex-col justify-center items-center gap-8">
@@ -32,7 +32,7 @@ export default function ModalDenyRider({ data }) {
                     <Textarea
                     rows={9}
                     border='none'
-                        placeholder={"Why to deny ?"}
+                        // placeholder={"Why to deny ?"}
                         name="comment"
                         value={input.comment}
                         onChange={handleChangeInput}

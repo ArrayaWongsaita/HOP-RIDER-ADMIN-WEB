@@ -41,7 +41,7 @@ export default function CustomerController() {
       <div className="flex flex-col gap-3 ">
         {targetRider.length > 0 &&
           targetRider.map((item) => (
-            <RiderBar key={item.id} data={item}>
+            <RiderBar status={item.status} key={item.id} data={item}>
               <ComponentOrder data={item} />
             </RiderBar>
           ))}
