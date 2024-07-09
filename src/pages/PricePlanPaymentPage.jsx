@@ -11,10 +11,11 @@ import InputImage from "../components/InputImage";
 import { ImportImage } from "../icons/IconImportImage";
 import CommonButton from "../components/CommonButton";
 import PriceCard from "../components/PriceCard";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import riderApi from "../apis/riderApi";
 
-const pricePagkage = [
+const pricePackage = [
   { id: 1, month: 1, price: "3,000", avg: 100 },
   { id: 2, month: 3, price: "8,900", avg: 99 },
   { id: 3, month: 6, price: "17,600", avg: 97 },
@@ -24,7 +25,7 @@ const pricePagkage = [
 
 export default function PricePlanPaymentPage() {
   const [selected, setSelected] = useState("");
-  const [slipImage, setSlipImage] = useState({});
+  const [slipImage, setSlipImage] = useState("");
   const { planId } = useParams();
   const navigate = useNavigate();
 
@@ -38,10 +39,19 @@ export default function PricePlanPaymentPage() {
   const handleSubmitForm = async (e) => {
     try {
       e.preventDefault();
-      if (!slipImage || null) {
-        return {};
+      if (!slipImage) {
+        return
       }
-      navigate("");
+
+      const formData = new FormData()
+      formData.append("slipImage", slipImage)
+      formData.append("package", planId)
+
+      console.log('formData ----->>>');
+      console.log(Object.fromEntries(formData));
+
+      await riderApi.subscribe(formData);
+      navigate("/rider/");
     } catch (err) {
       console.log(err);
     }
@@ -53,7 +63,7 @@ export default function PricePlanPaymentPage() {
       <div className="flex items-center flex-col pb-10 gap-5">
         <PriceCard
           hidden="hidden"
-          plan={pricePagkage[planId - 1]}
+          plan={pricePackage[planId - 1]}
           planId={planId}
         />
         <div className="form-box flex flex-col items-center gap-1 w-full">
@@ -174,9 +184,22 @@ export default function PricePlanPaymentPage() {
               </div>
             </InputImage>
           </div>
-          <CommonButton width="confirm" height="select">
-            confirm
-          </CommonButton>
+          <div className="flex justify-evenly w-full">
+            <Link to="/rider/price">
+              <CommonButton
+                bg="gray"
+                text="luckyPoint"
+                borderColor="whiteToLuckyPoint"
+                width="confirm"
+                height="regist"
+              >
+                Back
+              </CommonButton>
+            </Link>
+            <CommonButton width="confirm" height="regist" type="submit">
+              Confirm
+            </CommonButton>
+          </div>
         </form>
       </div>
     </div>
