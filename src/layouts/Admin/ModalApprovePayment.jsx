@@ -1,11 +1,14 @@
+import adminApi from "../../apis/adminApi";
 import CommonButton from "../../components/CommonButton";
 import PriceCard from "../../components/PriceCard";
 
 export default function ModalApprovePayment({ data, usedPlan }) {
     console.log(data)
 
-    const handleSubmitApprove = () => {
-        console.log('Submit Approve');
+    const handleSubmitApproveRider = async (event) => {
+        event.preventDefault();
+        console.log(data.id);
+        await adminApi.approvePayment(data.id);
     }
 
     return (
@@ -34,7 +37,7 @@ export default function ModalApprovePayment({ data, usedPlan }) {
                     borderColor="whiteToBlack"
                     width="riderStatus"
                     height="regist"
-                    onClick={handleSubmitApprove}
+                    onClick={handleSubmitApproveRider}
                 >
                     Confirm Approve
                 </CommonButton>

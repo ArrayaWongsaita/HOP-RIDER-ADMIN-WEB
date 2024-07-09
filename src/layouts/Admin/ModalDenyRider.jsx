@@ -1,6 +1,7 @@
 import { useState } from "react";
 import CommonButton from "../../components/CommonButton";
 import Textarea from "../../components/Textarea";
+import adminApi from "../../apis/adminApi";
 
 const initialInput = {
     comment: '',
@@ -14,8 +15,11 @@ export default function ModalDenyRider({ data }) {
         setInput({ ...input, [event.target.name]: event.target.value })
     };
     
-    const handleSubmitDeny = () => {
-        console.log('Submit Deny');
+    const handleSubmitDenyRider = async (event) => {
+        event.preventDefault();
+        console.log(data.id, input);
+        await adminApi.denyRider(data.id, input);
+        
     }
 
     return (
@@ -43,7 +47,7 @@ export default function ModalDenyRider({ data }) {
                     borderColor="white"
                     width="riderStatus"
                     height="regist"
-                    onClick={handleSubmitDeny}
+                    onClick={handleSubmitDenyRider}
                 >
                     Confirm Deny
                 </CommonButton>

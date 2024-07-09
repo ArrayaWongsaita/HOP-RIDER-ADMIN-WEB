@@ -49,10 +49,6 @@ export default function RiderInfo({ data }) {
         setDeny(false);
     };
 
-    console.log('selectSrc -->>', selectSrc);
-    console.log('approve -->>', approve);
-    console.log('deny -->>', deny);
-
     return (
         <div className="w-full flex flex-col justify-between items-center px-8 py-3
             text-xl text-white rounded-xl bg-gray-200">

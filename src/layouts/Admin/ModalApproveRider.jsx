@@ -1,13 +1,20 @@
+import { useNavigate } from "react-router-dom";
+import adminApi from "../../apis/adminApi";
 import Avatar from "../../components/Avatar";
 import CommonButton from "../../components/CommonButton";
 
 export default function ModalApproveRider({ data }) {
     console.log(data)
 
-    const handleSubmitApprove = () => {
-        console.log('Submit Approve');
+    const navigate = useNavigate();
+    
+    const handleSubmitApproveRider = async (event) => {
+        event.preventDefault();
+        console.log(data.id);
+        await adminApi.approveRider(data.id);
+        // navigate('/admin/riderApproval');
     }
-
+    
     return (
         <div className="w-[100%] h-[100%] flex flex-col justify-center items-center gap-8">
             <div className="text-[#00A850] flex justify-center font-bold text-xl">
@@ -35,7 +42,7 @@ export default function ModalApproveRider({ data }) {
                     borderColor="whiteToBlack"
                     width="riderStatus"
                     height="regist"
-                    onClick={handleSubmitApprove}
+                    onClick={handleSubmitApproveRider}
                 >
                     Confirm Approve
                 </CommonButton>
