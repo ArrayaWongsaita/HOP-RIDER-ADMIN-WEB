@@ -1,15 +1,16 @@
-import { IconLogoHop } from "../../icons/IconLogoHop";
+// import { IconLogoHop } from "../../icons/IconLogoHop";
 import { Link } from "react-router-dom";
 import AdminMenu from "./AdminMenu";
 import { IconMenu } from "../../icons/IconMenu";
 import { useEffect, useRef, useState } from "react";
+import { LogoHopForNav } from "../../icons/IconLogoHopForNav";
 
 export function CircleNoti({ width, height }) {
   return <div className={`rounded-full bg-torchRed ${width} ${height}`}></div>;
 }
 
 export default function AdminHeader() {
-  const [openDropdown, setOpenDropdown] = useState(false);
+  const [open, setOpen] = useState(false);
   const [hasNotification, setHasNotification] = useState(true);
   const dropdownRef = useRef(null);
 
@@ -33,47 +34,39 @@ export default function AdminHeader() {
   return (
     <header className="flex justify-between items-center shadow-md  bg-none px-20">
       <div>
-        <Link to="/admin">
-          <LogoHopForNav width="50" />
+        <Link to="/admin" className="flex justify-center items-center">
+          <LogoHopForNav width="120" />
         </Link>
       </div>
       <div className="flex gap-20">
         <div>
           <AdminMenu />
         </div>
+      </div>
+      <div
+        ref={dropdownRef}
+        onClick={toggleDropdown}
+        className="flex flex-col items-end"
+      >
         <div
-          ref={dropdownRef}
-          onClick={toggleDropdown}
-          className="flex flex-col items-end"
+          role="button"
+          className=" relative flex"
+          onClick={() => setOpen((prev) => !prev)}
         >
-          <div className=" relative flex">
-            <IconMenu />
-            <div className="absolute left-7 bottom-1">
-              {hasNotification && (
-                <div className="relative flex justify-center items-center text-[15px]">
-                  <CircleNoti width="w-[30px]" height="h-[30px]" />
-                  <span className="text-white absolute">20</span>
-                </div>
-              )}
-            </div>
+          <IconMenu />
+          <div className="absolute left-7 bottom-1">
+            {hasNotification && (
+              <div className="relative flex justify-center items-center text-[15px]">
+                <CircleNoti width="w-[30px]" height="h-[30px]" />
+                <span className="text-white absolute">20</span>
+              </div>
+            )}
           </div>
-          {openDropdown && (
-            <ul className=" absolute right-15 top-[6.5rem] text-white  bg-gradient-to-r from-torchRed from from-0% to-luckyPoint to-50%   p-4 rounded-md space-y-3 text-right  text-[18px]">
-              <li>
-                <a href="">Profile Setting</a>
-              </li>
-              <li className="flex justify-end gap-2">
-                <div className="flex items-center">
-                  <CircleNoti width="w-[15px]" height="h-[15px]" />
-                </div>
-                <a href="/admin/chat">Chat</a>
-              </li>
-            </ul>
-          )}
         </div>
       </div>
+
       {open && (
-        <div className=" absolute bg-gradient-to-r from-[#1D2B53] from-30% to-[#FF004D] to-100%  w-[20%] h-[190px] right-0 top-12 z-40 flex justify-center items-center flex-col ">
+        <div className=" absolute bg-gradient-to-r from-[#FF004D] from-10% to-[#1D2B53] to-100%  w-[20%] h-[190px] right-0 top-28 z-40 flex justify-center items-center flex-col ">
           <div
             role="button"
             className="h-[50px] w-[100%] bg-transparent text-white font-bold text-[20px] text-right px-8 hover:underline flex justify-end items-end "
@@ -82,9 +75,15 @@ export default function AdminHeader() {
           </div>
           <div
             role="button"
-            className="h-[50px] w-[100%] bg-transparent text-white font-bold text-[20px] text-right px-8 hover:underline flex justify-end items-end"
+            className="relative h-[50px] w-[100%] bg-transparent text-white font-bold text-[20px] text-right px-8 hover:underline flex justify-end items-end"
           >
             Chat
+            {hasNotification && (
+              <div className="relative flex justify-center items-center text-[15px] right-20">
+                <CircleNoti width="w-[30px]" height="h-[30px]" />
+                <span className="text-white absolute">20</span>
+              </div>
+            )}
           </div>
           <div
             role="button"
