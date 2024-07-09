@@ -11,7 +11,7 @@ import InputImage from "../components/InputImage";
 import { ImportImage } from "../icons/IconImportImage";
 import CommonButton from "../components/CommonButton";
 import PriceCard from "../components/PriceCard";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import riderApi from "../apis/riderApi";
 
@@ -184,9 +184,22 @@ export default function PricePlanPaymentPage() {
               </div>
             </InputImage>
           </div>
-          <CommonButton width="confirm" height="select">
-            confirm
-          </CommonButton>
+          <div className="flex justify-evenly w-full">
+            <Link to="/rider/price">
+              <CommonButton
+                bg="gray"
+                text="luckyPoint"
+                borderColor="whiteToLuckyPoint"
+                width="confirm"
+                height="regist"
+              >
+                Back
+              </CommonButton>
+            </Link>
+            <CommonButton width="confirm" height="regist" type="submit">
+              Confirm
+            </CommonButton>
+          </div>
         </form>
       </div>
     </div>
