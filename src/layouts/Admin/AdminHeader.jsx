@@ -2,23 +2,75 @@ import { IconLogoHop } from "../../icons/IconLogoHop";
 import { Link } from "react-router-dom";
 import AdminMenu from "./AdminMenu";
 import { IconMenu } from "../../icons/IconMenu";
-import { LogoHopForNav } from "../../icons/IconLogoHopForNav";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+export function CircleNoti({ width, height }) {
+  return <div className={`rounded-full bg-torchRed ${width} ${height}`}></div>;
+}
 
 export default function AdminHeader() {
-  const [open, setOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(false);
+  const [hasNotification, setHasNotification] = useState(true);
+  const dropdownRef = useRef(null);
+
+  const toggleDropdown = () => {
+    setOpenDropdown(!openDropdown);
+  };
+
+  const handleClickOutside = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setOpenDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <header className=" relative flex justify-between items-center shadow-md px-4 bg-none max-h-[50px]">
+    <header className="flex justify-between items-center shadow-md  bg-none px-20">
       <div>
         <Link to="/admin">
           <LogoHopForNav width="50" />
         </Link>
       </div>
-      <div>
-        <AdminMenu />
-      </div>
-      <div onClick={() => setOpen((prev) => !prev)} role="button">
-        <IconMenu />
+      <div className="flex gap-20">
+        <div>
+          <AdminMenu />
+        </div>
+        <div
+          ref={dropdownRef}
+          onClick={toggleDropdown}
+          className="flex flex-col items-end"
+        >
+          <div className=" relative flex">
+            <IconMenu />
+            <div className="absolute left-7 bottom-1">
+              {hasNotification && (
+                <div className="relative flex justify-center items-center text-[15px]">
+                  <CircleNoti width="w-[30px]" height="h-[30px]" />
+                  <span className="text-white absolute">20</span>
+                </div>
+              )}
+            </div>
+          </div>
+          {openDropdown && (
+            <ul className=" absolute right-15 top-[6.5rem] text-white  bg-gradient-to-r from-torchRed from from-0% to-luckyPoint to-50%   p-4 rounded-md space-y-3 text-right  text-[18px]">
+              <li>
+                <a href="">Profile Setting</a>
+              </li>
+              <li className="flex justify-end gap-2">
+                <div className="flex items-center">
+                  <CircleNoti width="w-[15px]" height="h-[15px]" />
+                </div>
+                <a href="/admin/chat">Chat</a>
+              </li>
+            </ul>
+          )}
+        </div>
       </div>
       {open && (
         <div className=" absolute bg-gradient-to-r from-[#1D2B53] from-30% to-[#FF004D] to-100%  w-[20%] h-[190px] right-0 top-12 z-40 flex justify-center items-center flex-col ">
