@@ -14,17 +14,17 @@ import useSocket from "../hooks/socketIoHook";
 import { useParams } from "react-router-dom";
 import ChatContainer from "../features/chat/components/ChatContainer";
 import ModalChatNotification from "../features/order/components/ModalChatNotification";
+import { log } from "react-modal/lib/helpers/ariaAppHider";
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-let chatOpen = false 
-
+let chatOpen = false;
 
 const RiderOrder = () => {
-
   const [riderGPS, setRiderGPS] = useState({ start: "Your location" });
   const [route, setRoute] = useState(null);
   const [buttonText, setButtonText] = useState("I have arrived.");
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalTelephone, setModalTelephone] = useState(false);
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(true);
   // const [error, setError] = useState(null);
@@ -35,18 +35,18 @@ const RiderOrder = () => {
   const [paymentModalVisible, setPaymentModalVisible] = useState(false);
 
   const [isModalChatOpen, setIsModalChatOpen] = useState(false);
-  const [isChatOpen , setIsChatOpen] = useState(false)
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isChatAdminOpen, setIsChatAdminOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [chatId, setChatId] = useState(null);
 
   const { socket, order, setNewOrder, setSocketIoClient } = useSocket();
   const { routeId } = useParams();
 
-
   useEffect(() => {
     if (socket) {
       const handleRouteHistory = (data) => {
-        console.log(data)
+        console.log(data);
         if (data?.chatInfo) {
           console.log(data.chatInfo.id, "chat----------------");
           setChatId(data.chatInfo.id);
@@ -67,80 +67,82 @@ const RiderOrder = () => {
 
       return () => {
         socket.off("routeHistory", handleRouteHistory);
-        socket.emit("leaveRoute", {routeId});
+        socket.emit("leaveRoute", { routeId });
       };
     } else {
       setSocketIoClient();
     }
   }, [socket]);
 
+  // ---------- chat -------------------
+  useEffect(() => {
+    if (socket && chatId) {
+      const handleChatHistory = (messages) => {
+        setMessages(messages);
+      };
+      const handleNewMessage = (message) => {
+        console.log(message);
+        if (!chatOpen && message.senderRole !== "RIDER") {
+          setIsModalChatOpen(true);
+        }
+        setMessages((messages) =>
+          messages.filter((item) => item.senderRole !== "TYPING")
+        );
+        setMessages((messages) => [...messages, message]);
+      };
+      const handleTyping = ({ role }) => {
+        if (role !== "RIDER") {
+          setMessages((messages) => {
+            const newMessages = messages.filter(
+              (item) => item.senderRole !== "TYPING"
+            );
+            return [
+              ...newMessages,
+              { senderRole: "TYPING", content: "message" },
+            ];
+          });
+          setTimeout(() => {
+            setMessages((messages) =>
+              messages.filter((item) => item.senderRole !== "TYPING")
+            );
+          }, 5000);
+        }
+      };
 
+      console.log("--------------------------joinChat", chatId);
+      socket.emit("joinChat", { chatId });
+      socket.on("chatHistory", handleChatHistory);
+      socket.on("newMessage", handleNewMessage);
+      socket.on("typing", handleTyping);
 
-// ---------- chat -------------------  
-useEffect(() => {
-  if (socket && chatId) {
-    const handleChatHistory = (messages) => {
-      setMessages(messages);
-    };
-    const handleNewMessage = (message) => {
-      console.log(message)
-      if (!chatOpen && message.senderRole !== "RIDER") {
-        setIsModalChatOpen(true);
-      }
-      setMessages((messages) =>
-        messages.filter((item) => item.senderRole !== "TYPING")
-      );
-      setMessages((messages) => [...messages, message]);
-    };
-    const handleTyping = ({ role }) => {
-      if (role !== "RIDER") {
-        setMessages((messages) => {
-          const newMessages = messages.filter(
-            (item) => item.senderRole !== "TYPING"
-          );
-          return [
-            ...newMessages,
-            { senderRole: "TYPING", content: "message" },
-          ];
-        });
-        setTimeout(() => {
-          setMessages((messages) =>
-            messages.filter((item) => item.senderRole !== "TYPING")
-          );
-        }, 5000);
-      }
-    };
+      return () => {
+        socket.off("chatHistory", handleChatHistory);
+        socket.off("newMessage", handleNewMessage);
+        socket.off("typing", handleTyping);
+        socket.emit("leaveChat", { chatId });
+      };
+    }
+  }, [chatId, socket]);
 
-    console.log("--------------------------joinChat", chatId);
-    socket.emit("joinChat", { chatId });
-    socket.on("chatHistory", handleChatHistory);
-    socket.on("newMessage", handleNewMessage);
-    socket.on("typing", handleTyping);
+  const handleChatClick = () => {
+    setIsChatOpen(true);
+    chatOpen = true;
+  };
+  const handleChatClose = () => {
+    setIsChatOpen(false);
+    chatOpen = false;
+  };
 
-    return () => {
-      socket.off("chatHistory", handleChatHistory);
-      socket.off("newMessage", handleNewMessage);
-      socket.off("typing", handleTyping);
-      socket.emit("leaveChat", {chatId});
-    };
-  }
-}, [chatId, socket]);
+  const handleChatAdminClick = () => {
+    setIsChatAdminOpen(true);
+    chatOpen = true;
+  };
+  const handleChatAdminClose = () => {
+    setIsChatAdminOpen(false);
+    chatOpen = false;
+  };
 
-
-const handleChatClick = () => {
-  setIsChatOpen(true)
-  chatOpen = true
-};
-const handleChatClose = () => {
- setIsChatOpen(false)
- chatOpen = false
-};
-
-
-
-// ----------end chat ------------------- 
-
-
+  // ----------end chat -------------------
 
   useEffect(() => {
     const setCurrentLocation = async () => {
@@ -240,7 +242,7 @@ const handleChatClose = () => {
         return `https://www.google.com/maps/dir/?api=1&origin=${riderGPS.lat},${riderGPS.lng}&destination=${order.locationA.lat},${order.locationA.lng}&travelmode=driving`;
       } else if (step === 2 && order.locationA && order.locationB) {
         if (!statusLogged.status4) {
-        socket.emit("updateRouteStatus", { routeId, status: "PICKEDUP" });
+          socket.emit("updateRouteStatus", { routeId, status: "PICKEDUP" });
           // socket.emit("updateRouteStatus", { routeId, status: "OTW" });
           setStatusLogged((prev) => ({ ...prev, status4: true }));
         }
@@ -259,13 +261,17 @@ const handleChatClose = () => {
     setModalVisible(true);
   }, []);
 
+  const handleButtonTelClick = useCallback(() => {
+    setModalTelephone(true);
+  }, []);
+
   const handleModalClose = useCallback(
     (confirmed) => {
       setModalVisible(false);
       if (confirmed && order) {
         if (step === 0) {
           socket.emit("updateRouteStatus", { routeId, status: "ARRIVED" });
-          
+
           socket.emit("sendMessage", {
             chatId,
             senderId: order.riderId,
@@ -280,7 +286,6 @@ const handleChatClose = () => {
           calculateRoute(order.locationA, order.locationB);
           setStep(2);
         } else if (step === 2) {
-
           socket.emit("updateRouteStatus", { routeId, status: "DELIVERING" });
           setPaymentModalVisible(true);
           setStep(3);
@@ -289,12 +294,17 @@ const handleChatClose = () => {
     },
     [step, order, routeId, socket]
   );
+  const handleModalTelClose = useCallback((confirmedTel) => {
+    setModalTelephone(false);
+    if (confirmedTel) {
+      window.location.href = "tel:+6601234567"; // หมายเลขโทรศัพท์ที่ต้องการโทรออก
+    }
+  }, []);
 
   const handleFinishedRoute = () => {
-
-    socket.emit("finishRoute", {...order,chatId});
-    socket.emit("leaveRoute", {routeId});
-    socket.emit("leaveChat", {chatId});
+    socket.emit("finishRoute", { ...order, chatId });
+    socket.emit("leaveRoute", { routeId });
+    socket.emit("leaveChat", { chatId });
     setPaymentModalVisible(false);
   };
 
@@ -306,17 +316,35 @@ const handleChatClose = () => {
   //   return <div>Loading order...</div>;
   // }
 
-  console.log(route,"-------===========================")
+  console.log(route, "-------===========================");
 
   return (
     <div className="flex flex-col min-h-[862px]">
       <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={["places"]}>
-      {isChatOpen && <ChatContainer messages={messages} socket={socket} chatId={chatId} closeChat={handleChatClose} senderId={order.riderId}/>}
+        {isChatOpen && (
+          <ChatContainer
+            messages={messages}
+            socket={socket}
+            chatId={chatId}
+            closeChat={handleChatClose}
+            senderId={order.riderId}
+          />
+        )}
+        {isChatAdminOpen && (
+          <ChatContainer
+            messages={messages}
+            socket={socket}
+            chatId={chatId}
+            closeChat={handleChatAdminClose}
+            senderId={order.riderId}
+            chatWith="Admin"
+          />
+        )}
         {!order ? (
           <div>Loading order...</div>
         ) : (
           <>
-            <OrderDetails order={order} />
+            <OrderDetails order={order} step={step} />
             <MapSectionWrapper loading={loading} route={route} />
             <NavigationButton onClick={handleNavigate} />
             <FareDetails
@@ -324,8 +352,12 @@ const handleChatClose = () => {
               buttonText={buttonText}
               onClick={handleButtonClick}
             />
-            
-            <FooterIcons onClickChat={handleChatClick}  />
+
+            <FooterIcons
+              onClickChat={handleChatClick}
+              onClickChatAdmin={handleChatAdminClick}
+              onClickTelUser={handleButtonTelClick}
+            />
             <ModalCommon
               isOpen={modalVisible}
               onClose={() => handleModalClose(false)}
@@ -340,6 +372,21 @@ const handleChatClose = () => {
                 </CommonButton>
               </div>
             </ModalCommon>
+
+            <ModalCommon
+              isOpen={modalTelephone}
+              onClose={() => handleModalTelClose(false)}
+            >
+              <p>{`tel xxxxxx`}</p>
+              <div className="flex w-full items-center justify-between">
+                <CommonButton onClick={() => handleModalTelClose(true)}>
+                  Yes
+                </CommonButton>
+                <CommonButton onClick={() => handleModalTelClose(false)}>
+                  No
+                </CommonButton>
+              </div>
+            </ModalCommon>
           </>
         )}
       </LoadScript>
@@ -350,13 +397,16 @@ const handleChatClose = () => {
           onClose={handleFinishedRoute}
         />
       )}
-      {order && <ModalChatNotification
-      isOpen={isModalChatOpen}
-      openChat={handleChatClick}
-      onClose={() => setIsModalChatOpen(false)}
-      message={messages[messages.length -1]?.content}
-      riderName={order.riderName}
-      riderProfilePic={order.riderProfilePic}/>}
+      {order && (
+        <ModalChatNotification
+          isOpen={isModalChatOpen}
+          openChat={handleChatClick}
+          onClose={() => setIsModalChatOpen(false)}
+          message={messages[messages.length - 1]?.content}
+          riderName={order.riderName}
+          riderProfilePic={order.riderProfilePic}
+        />
+      )}
     </div>
   );
 };

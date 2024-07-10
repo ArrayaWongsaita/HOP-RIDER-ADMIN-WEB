@@ -5,11 +5,17 @@ import AdminIcon from "../../../icons/AdminIcon";
 /**
  * แสดงไอคอนในส่วนท้าย
  */
-const FooterIcons = ({onClickChat}) => (
+const FooterIcons = ({ onClickChat, onClickChatAdmin, onClickTelUser }) => (
   <div className="flex justify-around bg-gray-800 p-4 text-white max-h-[85px] min-h-[85px]">
-    <FooterIcon icon={<CallIcon />} />
-    <dev  onClick={onClickChat}>  <FooterIcon icon={<ChatIcon  />} /></dev>
-    <FooterIcon icon={<AdminIcon />} />
+    <dev onClick={onClickTelUser}>
+      <FooterIcon icon={<CallIcon />} />
+    </dev>
+    <dev onClick={onClickChat}>
+      <FooterIcon icon={<ChatIcon />} />
+    </dev>
+    <dev onClick={onClickChatAdmin}>
+      <FooterIcon icon={<AdminIcon />} />
+    </dev>
   </div>
 );
 
