@@ -1,7 +1,6 @@
 import { useState } from "react";
 import InputSearch from "../../components/InputSearch";
 import RiderBar from "../../components/RiderBar";
-import RiderOrder from "../../components/RiderOrder";
 import ComponentOrder from "../../components/ComponentOrder";
 import useRider from "../../hooks/riderHook";
 

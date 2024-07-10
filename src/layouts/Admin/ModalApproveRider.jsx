@@ -1,22 +1,34 @@
 import adminApi from "../../apis/adminApi";
-import Avatar from "../../components/Avatar";
+import AvatarRider from "../../components/AvatarRider";
 import CommonButton from "../../components/CommonButton";
+import useRider from "../../hooks/riderHook";
 
 export default function ModalApproveRider({ data, onClose }) {
-    console.log(data)
+    const { setUserRider } = useRider();
+    console.log(data);
 
     const handleSubmitApproveRider = async (event) => {
-        event.preventDefault();
-        const requestBody = {
-            riderId: data?.id,
-            status: 'APPROVED',
-        };
-        console.log(requestBody);
-        await adminApi.approveRider(requestBody);
-        console.log('submit');
-        onClose();
+        try {
+            event.preventDefault();
+            const requestBody = {
+                riderId: data?.id,
+                status: 'APPROVED',
+            };
+            console.log(requestBody);
+            await adminApi.approveRider(requestBody);
+            console.log('submit');
+            // update state ใน context
+            setUserRider(prevState =>
+                prevState.map(item =>
+                    item.id === data.id ? { ...item, status: 'APPROVED' } : item
+                )
+            );
+            onClose();
+        } catch (err) {
+            console.log(err)
+        }
     }
-    
+
     return (
         <div className="w-[100%] h-[100%] flex flex-col justify-center items-center gap-8">
             <div className="text-[#00A850] flex justify-center font-bold text-xl">
@@ -25,7 +37,7 @@ export default function ModalApproveRider({ data, onClose }) {
             <div className="border-2 border-[#00A850] w-[75%] h-[50%] rounded-xl flex justify-center items-center">
                 <div className="grid grid-cols-3">
                     <div className="col-span-1 h-[75%] w-[75%]">
-                        <Avatar size="full" />
+                        <AvatarRider srcImage={data.profileImage} size="full" />
                     </div>
                     <div className="col-span-2">
                         <h1>ID: <span className="font-medium">{data.id}</span></h1>

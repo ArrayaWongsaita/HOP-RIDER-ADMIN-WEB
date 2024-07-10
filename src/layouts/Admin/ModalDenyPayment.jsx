@@ -2,12 +2,14 @@ import { useState } from "react";
 import CommonButton from "../../components/CommonButton";
 import Textarea from "../../components/Textarea";
 import adminApi from "../../apis/adminApi";
+import useRider from "../../hooks/riderHook";
 
 const initialInput = {
     comment: '',
 };
 
 export default function ModalDenyPayment({ data, onClose }) {
+    const { fetchAllRider } = useRider();
     const [input, setInput] = useState(initialInput);
     console.log(data)
 
@@ -16,16 +18,22 @@ export default function ModalDenyPayment({ data, onClose }) {
     };
 
     const handleSubmitDeny = async (event) => {
-        event.preventDefault();
-        const requestBody = {
-            riderId: data?.id,
-            status: 'DENIED',
-            planId: data?.payments?.planId,
-        };
-        console.log(requestBody);
-        await adminApi.approvePayment(requestBody, input);
-        console.log('submit');
-        onClose();
+        try {
+            event.preventDefault();
+            const requestBody = {
+                riderId: data?.id,
+                paymentId: data?.payments?.id,
+                status: 'DENIED',
+                planId: data?.payments?.planId,
+            };
+            console.log(requestBody);
+            await adminApi.approvePayment(requestBody, input);
+            console.log('submit');
+            fetchAllRider();
+            onClose();
+        }   catch (err) {
+            console.log(err)
+        }
     };
 
     return (

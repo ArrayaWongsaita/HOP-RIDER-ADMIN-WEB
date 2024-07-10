@@ -9,26 +9,22 @@ export const RiderContext = createContext();
 export default function RiderContextProvider({ children }) {
     // const mockUpUserRider = dataRider     // mock up
     const [userRider, setUserRider] = useState([]);
-    const [riderPaymentPending, setRiderPaymentPending] = useState([]);
-    // const [testPayment, setTestPayment] = useState([]);
+    const [userRiderSubscribe, setUserRiderSubscribe] = useState([]);
+    const [userRiderExpired, setUserRiderExpired] = useState([]);
+    const [userRiderPaymentPending, setUserRiderPaymentPending] = useState([]);
 
     useEffect(() => {
         fetchAllRider();
-        // fetchRiderApproval();
-        // fetchRiderPayment();
-        // checkDate();
-
     }, []);
 
-    // console.log('testPayment -->>', testPayment);
     console.log('userRider -->>', userRider);
-    console.log('riderPaymentPending -->>', riderPaymentPending);
+    console.log('userRiderExpired -->>', userRiderExpired);
+    console.log('userRiderPaymentPending -->>', userRiderPaymentPending);
 
     const fetchAllRider = async () => {
         try {
             const res = await adminApi.fetchRiderApprove();
             console.log('res --->>', res);
-            // setDataAllRider(res);
             const riderDataMap = res.data.map(item => {
                 // กรองหา object ใน array payments ที่มี key status === "SUBSCRIBED"
                 const subscribedPayments = item.payments.filter(payment => payment.status === "SUBSCRIBED");
@@ -39,21 +35,28 @@ export default function RiderContextProvider({ children }) {
                 // เลือก object ที่มี id มากที่สุด
                 const latestSubscribedPayment = subscribedPayments.reduce((latest, current) => {
                     return latest.id > current.id ? latest : current;
+
                 });
                 return { ...item, payments: latestSubscribedPayment };
             })
-            console.log('riderDataMap --->', riderDataMap);
+            // console.log('riderDataMap --->', riderDataMap);
 
             const data = riderDataMap.map((item) => {
-                item.subScribeDate = checkSubScribeDateRider(item.payments.expiredDate)
+                item.subScribeDate = checkSubScribeDateRider(item.payments.expiredDate);
+
+                item.payments.expiredDate = item.payments.expiredDate.slice(0, 10)
+                // console.log('item -->', item)
                 return item
             })
             setUserRider(data);
+            setUserRiderExpired(data.filter(item => item.subScribeDate <= 0));
+            setUserRiderSubscribe(data.filter(item => item.subScribeDate > 0));
+
 
             const paymentPending = res.data.map(item => {
                 // กรองหา object ใน array payments ที่มี key status === "PENDING"
                 const pendingPayment = item.payments.find(payment => payment.status === "PENDING");
-                console.log('pendingPayment -->>', pendingPayment);
+                // console.log('pendingPayment -->>', pendingPayment);
                 if (pendingPayment) {
                     return { ...item, payments: pendingPayment };
                 }
@@ -61,37 +64,15 @@ export default function RiderContextProvider({ children }) {
             })
                 .filter(item => item !== null); // กรอง null ออกไป
 
-            console.log('paymentPending --->', paymentPending);
+            // console.log('paymentPending --->', paymentPending);
 
             // ตั้งค่า state ด้วยข้อมูลที่กรองแล้ว
-            setRiderPaymentPending(paymentPending);
+            setUserRiderPaymentPending(paymentPending);
 
         } catch (err) {
             console.log(err)
         }
     }
-
-    // const findPaymentPending = async () => {
-    //     try {
-    //         console.log('dataAllRider -->>', dataAllRider);
-    //         const paymentPending = dataAllRider.map(item => {
-    //             const pendingPayment = item.payments.find(payment => payment.status === "PENDING");
-    //             console.log('pendingPayment -->>', pendingPayment);
-    //             if (pendingPayment) {
-    //                 return { ...item, payments: pendingPayment };
-    //             }
-    //             return null;
-    //         })
-    //             .filter(item => item !== null); // กรอง null ออกไป
-
-    //         console.log('paymentPending --->', paymentPending);
-
-    //         // ตั้งค่า state ด้วยข้อมูลที่กรองแล้ว
-    //         setRiderPaymentPending(paymentPending);
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // }
 
     // const fetchAllRider = async () => {
     //     try {
@@ -132,18 +113,14 @@ export default function RiderContextProvider({ children }) {
         // console.log(data)
     }
 
-    // const fetchRiderPayment = async () => {
-    //     try {
-    //         const res = await adminApi.fetchRiderPayment();
-    //         setTestPayment(res.data);
-    //     }   catch (err) {
-    //         console.log(err)
-    //     }
-    // }
-
     const value = {
         userRider,
-        riderPaymentPending,
+        userRiderSubscribe,
+        userRiderPaymentPending,
+        userRiderExpired,
+        setUserRider,
+        setUserRiderPaymentPending,
+        fetchAllRider,
     };
 
     return (

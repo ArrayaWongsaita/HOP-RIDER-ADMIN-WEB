@@ -12,6 +12,7 @@ import { ImageRider } from "../icons/IconImageRider";
 import { ImportImage } from "../icons/IconImportImage";
 import riderApi from "../apis/riderApi";
 import LoadScreen from "../components/LoadScreen";
+import { useNavigate } from "react-router-dom";
 
 const initialInput = {
     birthDate: '',
@@ -29,7 +30,7 @@ const color1 = 'bg-[#FF004D] text-[#FFFFFF]'
 const color2 = 'bg-[#FFFFFF] text-[#FF004D]'
 
 export default function VerifyPage() {
-    const { authUser } = useAuth()
+    const { authUser, setAuthUser } = useAuth()
     const [input, setInput] = useState(initialInput);
     const [inputError, setInputError] = useState(initialInputError);
     const [profileImage, setProfileImage] = useState({});
@@ -38,6 +39,7 @@ export default function VerifyPage() {
     const [afterSubmit, setAfterSubmit] = useState(false);
     // console.log(input)
     const [initialTextVisible, setInitialTextVisible] = useState(false);
+    const navigate = useNavigate()
 
     const missingProfileImage = useRef(null)
     const missingInput = useRef(null)
@@ -96,9 +98,10 @@ export default function VerifyPage() {
             console.log(Object.fromEntries(formData));
 
             console.log('Send formData!!');
-            await riderApi.verify(formData);
-
+            const response = await riderApi.verify(formData);
             console.log('verify success!!');
+            setAuthUser(response.data); 
+            navigate('/rider/waiting');
 
         } catch (err) {
             console.log(err)

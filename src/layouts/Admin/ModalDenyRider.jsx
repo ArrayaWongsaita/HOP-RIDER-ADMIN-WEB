@@ -2,12 +2,14 @@ import { useState } from "react";
 import CommonButton from "../../components/CommonButton";
 import Textarea from "../../components/Textarea";
 import adminApi from "../../apis/adminApi";
+import useRider from "../../hooks/riderHook";
 
 const initialInput = {
     comment: '',
 };
 
 export default function ModalDenyRider({ data, onClose }) {
+    const { setUserRider } = useRider();
     const [input, setInput] = useState(initialInput);
     console.log(data)
 
@@ -16,14 +18,25 @@ export default function ModalDenyRider({ data, onClose }) {
     };
     
     const handleSubmitDenyRider = async (event) => {
-        event.preventDefault();
-        const requestBody = {
-            riderId: data?.id,
-            status: 'DENIED',
-        };
-        console.log(requestBody, input);
-        await adminApi.approveRider(requestBody, input);
-        onClose();
+        try {
+            event.preventDefault();
+            const requestBody = {
+                riderId: data?.id,
+                status: 'DENIED',
+            };
+            console.log(requestBody, input);
+            await adminApi.approveRider(requestBody, input);
+            console.log('submit');
+            // update state ใน context
+            setUserRider(prevState =>
+                prevState.map(item =>
+                    item.id === data.id ? { ...item, status: 'APPROVED' } : item
+                )
+            );
+            onClose();
+        }   catch (err) {
+            console.log(err)
+        }
     };
 
     return (

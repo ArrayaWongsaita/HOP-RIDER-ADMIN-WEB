@@ -1,8 +1,6 @@
 import { useState } from "react";
-import Avatar from "./Avatar";
-import IconArrowDown from "../icons/IconArrowDown";
-import IconArrowUp from "../icons/IconArrowUp";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import AvatarRider from "./AvatarRider";
 
 export default function RiderBar({ children, data, status }) {
     const [open, setOpen] = useState(false);
@@ -16,11 +14,7 @@ export default function RiderBar({ children, data, status }) {
         bg-gradient-to-r from-[#1D2B53] from-30% to-[#FF004D] to-100% p-3"
             >
                 <div className="flex justify-start items-center w-[5%]">{data.id}</div>
-                {/* <div className="flex justify-center items-center "> */}
-                {/* <div className=" "> */}
-                <Avatar size="aaa" />
-                {/* </div> */}
-                {/* </div> */}
+                <AvatarRider size="aaa" srcImage={data.profileImage} />
                 <div className="flex justify-center items-center col-span-2 w-[30%]">
                     {data.firstName} {data.lastName}
                 </div>
@@ -34,7 +28,6 @@ export default function RiderBar({ children, data, status }) {
                         ) : (
                             <IoIosArrowUp size="55px" color="#FF004D" />
                         )}
-                        {/* {!open ? <IconArrowDown fill="#FF004D" /> : <IconArrowUp fill="#FF004D" />} */}
                     </div>
                 </div>
             </div>
