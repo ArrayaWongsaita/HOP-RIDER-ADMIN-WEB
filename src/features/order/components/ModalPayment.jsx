@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import CommonButton from "../../../components/CommonButton";
 import { IconLogoHop } from "../../../icons/IconLogoHop";
 import { useNavigate } from "react-router-dom"; // เพิ่มการนำเข้า useNavigate
+import { GiReceiveMoney } from "react-icons/gi";
 
 const ModalPayment = ({ onClose, isOpen, fare }) => {
   const navigate = useNavigate(); // ใช้ useNavigate
@@ -37,10 +38,13 @@ const ModalPayment = ({ onClose, isOpen, fare }) => {
                   <IconLogoHop />
                 </div>
 
-                <div className="flex w-full items-center justify-center">
+                <div className="flex w-full items-center justify-center ">
                   <div>Fare</div>
                 </div>
-                <div className="flex w-full items-center justify-center">
+                <div className="flex w-full items-center justify-center gap-2 ">
+                  <div className=" text-[#ff004d] ">
+                    <GiReceiveMoney className="w-8 h-8" />
+                  </div>
                   <div>{`${fare} THB`}</div>
                 </div>
 

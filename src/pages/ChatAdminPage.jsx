@@ -15,6 +15,9 @@ import {
 import InputSearch from "../components/InputSearch";
 import CommonButton from "../components/CommonButton";
 import { VscSend } from "react-icons/vsc";
+import { IconPersonImg } from "../icons/IconPersonImg";
+import { ImageRider } from "../icons/IconImageRider";
+
 export default function ChatAdminPage() {
   const [currentChat, setCurrentChat] = useState({ type: "rider", id: 1 });
   const [inputValue, setInputValue] = useState("");
@@ -381,18 +384,28 @@ export default function ChatAdminPage() {
                       }
                     >
                       <div className="flex items-center">
-                        <img
-                          src={profileData[currentChat.type][id].profileImg}
-                          alt="Profile"
-                          className="w-16 h-16 rounded-xl mr-4"
-                        />
+                        {profileData[currentChat.type][id].profileImg ? (
+                          <img
+                            src={profileData[currentChat.type][id].profileImg}
+                            alt="Profile"
+                            className="w-16 h-16 rounded-xl mr-4"
+                          />
+                        ) : currentChat.type === "rider" ? (
+                          <div className="flex h-16 w-16 items-center justify-center border-[#ff004d] border-2 rounded-xl mr-4">
+                            <ImageRider />
+                          </div>
+                        ) : (
+                          <div className="flex h-16 w-16 items-center justify-center border-[#ff004d] border-2 rounded-xl mr-4">
+                            <IconPersonImg />
+                          </div>
+                        )}
                         <div className="flex flex-col justify-center h-full">
-                          <div className="flex-1 flex items-center truncate text-white">{`${
+                          <div className="flex-1 flex items-center truncate text-white ">{`${
                             profileData[currentChat.type][id].firstName
                           } ${
                             profileData[currentChat.type][id].lastName
                           }`}</div>
-                          <div className="text-xs text-white flex-1 overflow-hidden line-clamp-2 ">
+                          <div className="text-xs text-white flex-1 overflow-hidden line-clamp-2 w-[120px] ">
                             {`${
                               lastMessage.sender === "admin"
                                 ? "Admin"
@@ -425,11 +438,21 @@ export default function ChatAdminPage() {
             <div className="w-[75%] bg-gradient-to-br from-[#1D2B53] from-10% to-[#FF004D]  to-70%  rounded-xl p-4 flex flex-col h-full">
               <div className="h-[10%] flex items-center">
                 <div className="w-16 h-16 rounded-xl mr-2 self-start  flex items-center justify-center">
-                  <img
-                    src={currentProfile?.profileImg}
-                    alt="Profile"
-                    className="max-h-16 max-w-16 min-h-16 min-w-16 rounded-lg   ml-4 object-cover"
-                  />
+                  {currentProfile?.profileImg ? (
+                    <img
+                      src={currentProfile?.profileImg}
+                      alt="Profile"
+                      className="w-16 h-16 rounded-xl ml-4"
+                    />
+                  ) : currentChat.type === "rider" ? (
+                    <div className="flex h-16 w-16 items-center justify-center border-[#ff004d] border-2 rounded-xl ml-4">
+                      <ImageRider />
+                    </div>
+                  ) : (
+                    <div className="flex h-16 w-16 items-center justify-center border-[#ff004d] border-2 rounded-xl ml-4">
+                      <IconPersonImg />
+                    </div>
+                  )}
                 </div>
                 <div className="ml-4">
                   <div className="text-white font-semibold">
@@ -483,15 +506,33 @@ export default function ChatAdminPage() {
                   >
                     {message.sender !== "admin" && (
                       <div className="w-16 h-16 rounded-xl mr-2 self-start flex items-center justify-center">
-                        <img
-                          src={
-                            currentChat.type === "rider"
-                              ? profileData.rider[currentChat.id].profileImg
-                              : profileData.customer[currentChat.id].profileImg
-                          }
-                          alt="Profile"
-                          className="w-16 h-16 rounded-xl mr-2 self-start border-[2px] border-[#ff004d]"
-                        />
+                        {currentChat.type === "rider" ? (
+                          profileData.rider[currentChat.id].profileImg ? (
+                            <img
+                              src={profileData.rider[currentChat.id].profileImg}
+                              alt="Profile"
+                              className="w-16 h-16 rounded-xl self-start border-[2px] mr-4 border-[#ff004d]"
+                            />
+                          ) : (
+                            <div className="flex h-16 w-16 items-center justify-center border-[#ff004d] border-2 rounded-xl mr-4 self-start">
+                              <ImageRider />
+                            </div>
+                          )
+                        ) : currentChat.type === "customer" ? (
+                          profileData.customer[currentChat.id].profileImg ? (
+                            <img
+                              src={
+                                profileData.customer[currentChat.id].profileImg
+                              }
+                              alt="Profile"
+                              className="w-16 h-16 rounded-xl self-start border-[2px] mr-4 border-[#ff004d]"
+                            />
+                          ) : (
+                            <div className="flex h-16 w-16 items-center justify-center border-[#ff004d] border-2 rounded-xl mr-4 self-start">
+                              <IconPersonImg />
+                            </div>
+                          )
+                        ) : null}
                       </div>
                     )}
 

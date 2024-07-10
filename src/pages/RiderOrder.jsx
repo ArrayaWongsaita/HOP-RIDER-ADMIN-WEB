@@ -377,7 +377,7 @@ const RiderOrder = () => {
               isOpen={modalTelephone}
               onClose={() => handleModalTelClose(false)}
             >
-              <p>{`tel xxxxxx`}</p>
+              <p className="text-white">{`tel xxxxxx`}</p>
               <div className="flex w-full items-center justify-between">
                 <CommonButton onClick={() => handleModalTelClose(true)}>
                   Yes

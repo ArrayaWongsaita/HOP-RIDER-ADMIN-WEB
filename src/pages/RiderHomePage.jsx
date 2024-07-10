@@ -7,13 +7,22 @@ export default function RiderHomePage() {
   const [initialTextVisible, setInitialTextVisible] = useState(true);
 
   useEffect(() => {
-    // แสดง "For Rider" เป็นเวลา 3 วินาที
-    const initialTimer = setTimeout(() => {
-      setInitialTextVisible(false);
-    }, 100);
+    // ตรวจสอบจาก sessionStorage ว่าข้อความได้ถูกแสดงไปแล้วหรือยัง
+    const hasShownInitialText = sessionStorage.getItem("hasShownInitialText");
 
-    // ล้างการทำงานของ initialTimer เมื่อ component ถูก unmount
-    return () => clearTimeout(initialTimer);
+    if (!hasShownInitialText) {
+      // แสดง "For Rider" เป็นเวลา 1 วินาที
+      const initialTimer = setTimeout(() => {
+        setInitialTextVisible(false);
+        // เก็บสถานะใน sessionStorage
+        sessionStorage.setItem("hasShownInitialText", "true");
+      }, 1000);
+
+      // ล้างการทำงานของ initialTimer เมื่อ component ถูก unmount
+      return () => clearTimeout(initialTimer);
+    } else {
+      setInitialTextVisible(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -22,7 +31,7 @@ export default function RiderHomePage() {
     if (!initialTextVisible) {
       dataLoadingTimer = setTimeout(() => {
         setLoading(false);
-      }, 100); // สมมติว่าโหลดข้อมูลเสร็จใน 3 วินาที
+      }, 2000); // สมมติว่าโหลดข้อมูลเสร็จใน 3 วินาที
     }
 
     // ล้างการทำงานของ dataLoadingTimer เมื่อ component ถูก unmount
@@ -30,7 +39,7 @@ export default function RiderHomePage() {
   }, [initialTextVisible]);
 
   return (
-    <div className="flex flex-col items-center gap-4 ">
+    <div className="flex flex-col items-center gap-4">
       {loading ? (
         initialTextVisible ? (
           <LoadScreen text="For Rider" />
