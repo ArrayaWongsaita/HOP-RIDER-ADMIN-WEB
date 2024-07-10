@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Header.css";
-
 import { XClose } from "../icons/IconXClose";
 import { LogoHopForNav } from "../icons/IconLogoHopForNav";
 import { IconMenu } from "../icons/IconMenu";
