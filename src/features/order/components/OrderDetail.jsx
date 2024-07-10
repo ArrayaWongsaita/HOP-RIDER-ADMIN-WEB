@@ -1,10 +1,17 @@
+import { IconRoutePickup } from "../../../icons/IconRoutePickup";
+import { IconRouteStart } from "../../../icons/IconRouteStart";
+
 /**
  * แสดงรายละเอียด order
  * @param {Object} order - ข้อมูล order
+ * @param {number} step - ขั้นตอนของ order
  */
-const OrderDetails = ({ order }) => (
+const OrderDetails = ({ order, step }) => (
   <div className="p-4 m-4 rounded-lg shadow-lg min-h-[150px] flex border-white text-white border-[2px]">
-    <div className="bg-slate-500">logo</div>
+    <div className="flex items-center justify-center h-full">
+      {step >= 2 ? <IconRoutePickup /> : <IconRouteStart />}{" "}
+      {/* ตรวจสอบเงื่อนไขและแสดงไอคอน */}
+    </div>
     <div className="flex flex-col justify-between w-full ml-2">
       <OrderDetailLine description="Your Location" />
       <OrderDetailLine description={order.locationA.description} />
