@@ -24,7 +24,7 @@ export default function RiderApproval() {
   }
 
   return (
-    <div>
+    <div className="pb-10">
       <div>
         <div className={`w-full h-[70px] flex items-center justify-between p-4 mb-5 pl-28
             font-semibold text-xl text-white

@@ -18,12 +18,13 @@ export default function ModalDenyPayment({ data, onClose }) {
     const handleSubmitDeny = async (event) => {
         event.preventDefault();
         const requestBody = {
-            riderId: data.id,
+            riderId: data?.id,
             status: 'DENIED',
-            planId: data.planId,
+            planId: data?.payments?.planId,
         };
         console.log(requestBody);
         await adminApi.approvePayment(requestBody, input);
+        console.log('submit');
         onClose();
     };
 
@@ -37,7 +38,7 @@ export default function ModalDenyPayment({ data, onClose }) {
                     <Textarea
                         rows={9}
                         border='none'
-                        placeholder={"Why to deny ?"}
+                        // placeholder={"Why to deny ?"}
                         name="comment"
                         value={input.comment}
                         onChange={handleChangeInput}

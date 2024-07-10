@@ -1,6 +1,7 @@
 import adminApi from "../../apis/adminApi";
 import CommonButton from "../../components/CommonButton";
 import PriceCard from "../../components/PriceCard";
+import PriceCardForAdmin from "../../components/PriceCardForAdmin";
 
 export default function ModalApprovePayment({ data, usedPlan, onClose }) {
     console.log(data)
@@ -8,12 +9,13 @@ export default function ModalApprovePayment({ data, usedPlan, onClose }) {
     const handleSubmitApproveRider = async (event) => {
         event.preventDefault();
         const requestBody = {
-            riderId: data.id,
+            riderId: data?.id,
             status: 'CONFIRMED',
-            planId: data.planId,
+            planId: data?.payments?.planId,
         };
         console.log(requestBody);
         await adminApi.approvePayment(requestBody);
+        console.log('submit');
         onClose();
     };
 
@@ -24,15 +26,18 @@ export default function ModalApprovePayment({ data, usedPlan, onClose }) {
             </div>
             <div className="border-2 border-[#00A850] w-[75%] h-[50%] rounded-xl flex justify-center items-center">
                 <div className="flex justify-around px-10 h-[100%] w-[100%] ">
-                    <div className="flex items-center justify-center h-[85%] w-[100%] ">
+                    <div className="flex items-center justify-center h-[100%] w-[100%] ">
+                        {/* <PriceCardForAdmin
+                            plan={usedPlan[data?.payments?.planId - 1]}
+                        /> */}
                         <PriceCard
                             hidden="hidden"
-                            plan={usedPlan[data.planId - 1]}
-                            planId={data.planId}
+                            plan={usedPlan[data?.payments?.planId - 1]}
+                            planId={data?.payments?.planId}
                         />
                     </div>
                     <div className="flex justify-center h-[100%] w-[100%] ">
-                        <img src={data.slip} alt="Slip Image" className="shadow-lg h-[85%] flex items-center justify-center" />
+                        <img src={data?.payments?.paymentSlip} alt="Slip Image" className="shadow-lg h-[85%] flex items-center justify-center" />
                     </div>
                 </div>
             </div>

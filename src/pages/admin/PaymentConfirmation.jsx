@@ -7,7 +7,7 @@ import useRider from "../../hooks/riderHook";
 import { useEffect } from "react";
 
 export default function PaymentConfirmation() {
-  const { userRider } = useRider();
+  const { userRider, riderPaymentPending } = useRider();
   const [filterData, setFilterData] = useState([...userRider]);
   const [search, setSearch] = useState('');
   const [filterBy, setFilterBy] = useState('PENDING')
@@ -29,22 +29,22 @@ export default function PaymentConfirmation() {
   };
 
   const handleClickPending = () => {
-    const filter = userRider.filter((item) => item.paymentStatus === "PENDING")
+    const filter = riderPaymentPending.filter((item) => item?.payments?.status === "PENDING")
     setFilterData(filter)
   };
 
   const handleClickSubScribed = () => {
-    const filter = userRider.filter((item) => item.subScribeDate > 0)
+    const filter = userRider.filter((item) => item?.subScribeDate > 0)
     setFilterData(filter)
   };
 
   const handleClickExpired = () => {
-    const filter = userRider.filter((item) => item.subScribeDate <= 0)
+    const filter = userRider.filter((item) => item?.subScribeDate <= 0)
     setFilterData(filter)
   };
 
   return (
-    <div>
+    <div className="pb-10">
       <div>
         <div className={`w-full h-[70px] flex items-center justify-between p-4 mb-5 pl-28
             font-semibold text-xl text-white
@@ -67,7 +67,7 @@ export default function PaymentConfirmation() {
       </div>
       <div className="w-[90%] mx-auto flex flex-col gap-3">
         {filterData.map((item) =>
-          <RiderBar status={item.subScribeDate > 0 ? item.expireDate : "Expired"} key={item.id} data={item}>
+          <RiderBar status={item?.subScribeDate > 0 ? item?.payments?.expiredDate : "Expired"} key={item.id} data={item}>
             {filterBy === 'PENDING'
               ? <RiderPaymentPending data={item} />
               : filterBy === 'APPROVED'

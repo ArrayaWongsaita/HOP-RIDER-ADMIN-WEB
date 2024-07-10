@@ -19,7 +19,7 @@ export default function Avatar({ border = "redTouch", size = "default" }) {
   return (
     <div
       className={`${sizeAll[size]} border-2 rounded-2xl ${borderColor[border]} 
-                flex justify-center items-center`}
+                flex justify-center items-center overflow-hidden`}
     >
       {authUser?.profileImage ? (
         <div className="w-[90px] h-[90px]">

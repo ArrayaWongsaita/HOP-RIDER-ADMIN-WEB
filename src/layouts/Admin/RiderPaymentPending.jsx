@@ -1,7 +1,6 @@
 import { useState } from "react";
 import CommonButton from "../../components/CommonButton";
 import ModalAdmin from "../../components/ModalAdmin";
-import PriceCard from "../../components/PriceCard";
 import { pricePackage } from "../../constants/pricePackagePlan";
 import ModalDenyPayment from "./ModalDenyPayment";
 import ModalApprovePayment from "./ModalApprovePayment";
@@ -16,7 +15,7 @@ export default function RiderPaymentPending({ data }) {
     const usedPlan = pricePackage
 
     const handleClickSlip = () => {
-        setSelectSrc(data.slip);
+        setSelectSrc(data?.payments?.paymentSlip);
         setOpen(true);
         console.log('Show Slip');
     };
@@ -45,20 +44,15 @@ export default function RiderPaymentPending({ data }) {
     text-xl text-white rounded-xl bg-gray-200">
             <div className="grid grid-cols-3 w-full h-[350px]">
                 <div className="flex justify-center items-center w-[100%] h-[100%]" >
-                    {/* <PriceCard
-                        hidden="hidden"
-                        plan={usedPlan[data.planId - 1]}
-                        planId={data.planId}
-                    /> */}
                     <PriceCardForAdmin
-                        plan={usedPlan[data.planId - 1]}
+                        plan={usedPlan[data?.payments?.planId - 1]}
                     />
                 </div>
                 <div
                     role="button"
                     onClick={handleClickSlip}
                     className="flex justify-center h-full items-center " >
-                    <img src={data.slip} alt="Slip Image" className="shadow-lg h-[300px]" />
+                    <img src={data?.payments?.paymentSlip} alt="Slip Image" className="shadow-lg h-[300px]" />
                 </div>
                 <div className="flex flex-col gap-8 items-end justify-center">
                     <CommonButton

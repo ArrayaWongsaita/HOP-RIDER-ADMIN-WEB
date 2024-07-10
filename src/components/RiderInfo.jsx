@@ -13,13 +13,13 @@ export default function RiderInfo({ data }) {
 
     console.log(data)
     const handleClickLicense = () => {
-        setSelectSrc(data.licenseImage);
+        setSelectSrc(data.driverLicense);
         setOpen(true);
         console.log('Show License');
     };
 
     const handleClickRegistration = () => {
-        setSelectSrc(data.vehicleRegistrationImage);
+        setSelectSrc(data.licensePlate);
         setOpen(true);
         console.log('Show Registration');
     };
@@ -59,7 +59,7 @@ export default function RiderInfo({ data }) {
                 <div className="text-black font-bold text-lg col-span-3">
                     <h1>ID: <span className="font-medium">{data.id}</span></h1>
                     <h1>Name: <span className="font-medium">{data.firstName} {data.lastName}</span></h1>
-                    <h1>ID Card: <span className="font-medium">{data.idCard}</span></h1>
+                    <h1>ID Card: <span className="font-medium">{data.citizenId}</span></h1>
                     <h1>Phone number: <span className="font-medium">{data.phone}</span></h1>
                     <h1>Email: <span className="font-medium">{data.email}</span></h1>
                     <h1>Address: <span className="font-medium">{data.address}</span></h1>

@@ -8,11 +8,12 @@ export default function ModalApproveRider({ data, onClose }) {
     const handleSubmitApproveRider = async (event) => {
         event.preventDefault();
         const requestBody = {
-            riderId: data.id,
+            riderId: data?.id,
             status: 'APPROVED',
         };
         console.log(requestBody);
         await adminApi.approveRider(requestBody);
+        console.log('submit');
         onClose();
     }
     
@@ -29,7 +30,7 @@ export default function ModalApproveRider({ data, onClose }) {
                     <div className="col-span-2">
                         <h1>ID: <span className="font-medium">{data.id}</span></h1>
                         <h1>Name: <span className="font-medium">{data.firstName} {data.lastName}</span></h1>
-                        <h1>ID Card: <span className="font-medium">{data.idCard}</span></h1>
+                        <h1>ID Card: <span className="font-medium">{data.citizenId}</span></h1>
                         <h1>Phone number: <span className="font-medium">{data.phone}</span></h1>
                         <h1>Email: <span className="font-medium">{data.email}</span></h1>
                         <h1>Address: <span className="font-medium">{data.address}</span></h1>

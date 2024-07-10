@@ -13,7 +13,7 @@ export default function DayCard({ data }) {
                             Expire :
                         </div>
                         <div className="text-torchRed text-[34px] text-shadow-xl font-extrabold">
-                            <h1>{data.expireDate}</h1>
+                            <h1>{data?.payments?.expiredDate}</h1>
                         </div>
                         <div className="text-luckyPoint text-[18px] text-shadow-xl invisible ">
                             Expire :

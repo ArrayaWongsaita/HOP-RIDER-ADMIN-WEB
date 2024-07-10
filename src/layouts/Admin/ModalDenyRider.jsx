@@ -18,7 +18,7 @@ export default function ModalDenyRider({ data, onClose }) {
     const handleSubmitDenyRider = async (event) => {
         event.preventDefault();
         const requestBody = {
-            riderId: data.id,
+            riderId: data?.id,
             status: 'DENIED',
         };
         console.log(requestBody, input);
