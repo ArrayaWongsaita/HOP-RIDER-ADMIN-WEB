@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Header.css";
 import { XClose } from "../icons/IconXClose";
@@ -10,10 +9,8 @@ import useAuth from "../hooks/authHook";
 export default function Header() {
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
-  const closeMobileMenu = () => setClick(false);
   const menuRef = useRef(null);
   const { logout } = useAuth();
-
   const navigate = useNavigate();
 
   const handleClickOutside = (event) => {
@@ -22,12 +19,14 @@ export default function Header() {
     }
   };
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  // const handleProfileSettingClick = () => {
+  //   navigate("/rider/profile");
+  //   setClick(false);
+  // };
+  const handleHomeClick = () => {
+    navigate("/rider");
+    setClick(false);
+  };
 
   const handleLogout = () => {
     logout();
@@ -35,8 +34,17 @@ export default function Header() {
     window.location.reload();
   };
 
+  useEffect(() => {
+    // เพิ่ม event listener เมื่อ component ถูก mount
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // ลบ event listener เมื่อ component ถูก unmount
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="header">
+    <div className="header z-50">
       <div className="container">
         <div className="header-con">
           <div className="logo-container">
@@ -44,10 +52,16 @@ export default function Header() {
           </div>
 
           <ul className={click ? "menu active" : "menu"}>
-            <li className="menu-linkA" onClick={closeMobileMenu}>
-              <a href="#">Profile Setting</a>
+            <li className="menu-linkA w-full " onClick={handleHomeClick}>
+              <a href="#">Home</a>
             </li>
-            <li className="menu-linkB" onClick={handleLogout}>
+            {/* <li
+              className="menu-linkA w-full "
+              onClick={handleProfileSettingClick}
+            >
+              <a href="#">Profile Setting</a>
+            </li> */}
+            <li className="menu-linkB w-full" onClick={handleLogout}>
               <a href="#">Logout</a>
             </li>
           </ul>

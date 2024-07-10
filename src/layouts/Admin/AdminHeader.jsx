@@ -1,5 +1,4 @@
-// import { IconLogoHop } from "../../icons/IconLogoHop";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AdminMenu from "./AdminMenu";
 import { IconMenu } from "../../icons/IconMenu";
 import { useEffect, useRef, useState } from "react";
@@ -14,6 +13,7 @@ export default function AdminHeader() {
   const [openDropdown, setOpenDropdown] = useState(false); // แก้ชื่อ state เป็น openDropdown
   const [hasNotification, setHasNotification] = useState(true);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setOpenDropdown(!openDropdown); // ใช้ setOpenDropdown สำหรับการเปลี่ยนสถานะของ openDropdown
@@ -23,6 +23,16 @@ export default function AdminHeader() {
     if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
       setOpenDropdown(false); // ใช้ setOpenDropdown สำหรับการปิด dropdown
     }
+  };
+
+  const handleChatClick = () => {
+    navigate("/admin/chat"); // Navigate ไปที่ /admin/chat
+    setOpenDropdown(false);
+  };
+
+  const handleLogout = () => {
+    navigate("/auth/login");
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -44,12 +54,10 @@ export default function AdminHeader() {
           <AdminMenu />
         </div>
       </div>
-      <div
-        ref={dropdownRef}
-        onClick={toggleDropdown} // แก้ให้ใช้ฟังก์ชัน toggleDropdown
-        className="flex flex-col items-end"
-      >
-        <div role="button" className="relative flex">
+      <div ref={dropdownRef} className="flex flex-col items-end">
+        <div role="button" className="relative flex" onClick={toggleDropdown}>
+          {" "}
+          {/* แก้ให้ใช้ฟังก์ชัน toggleDropdown */}
           <IconMenu />
           <div className="absolute left-7 bottom-1">
             {hasNotification && (
@@ -63,16 +71,11 @@ export default function AdminHeader() {
       </div>
 
       {openDropdown && ( // ใช้ openDropdown สำหรับการแสดง dropdown
-        <div className="absolute bg-gradient-to-r from-[#FF004D] from-10% to-[#1D2B53] to-100% w-[20%] h-[190px] right-0 top-28 z-40 flex justify-center items-center flex-col">
+        <div className="absolute bg-white right-0 top-28 z-40  w-[200px] flex justify-center items-center flex-col">
           <div
             role="button"
-            className="h-[50px] w-[100%] bg-transparent text-white font-bold text-[20px] text-right px-8 hover:underline flex justify-end items-end"
-          >
-            Profile Setting
-          </div>
-          <div
-            role="button"
-            className="relative h-[50px] w-[100%] bg-transparent text-white font-bold text-[20px] text-right px-8 hover:underline flex justify-end items-end"
+            onClick={handleChatClick} // เพิ่ม onClick สำหรับการ navigate ไปที่ /admin/chat
+            className="relative h-[50px] w-[100%] bg-transparent text-black font-bold text-[20px] text-right px-8 hover:underline flex justify-center items-center "
           >
             Chat
             {hasNotification && (
@@ -84,7 +87,8 @@ export default function AdminHeader() {
           </div>
           <div
             role="button"
-            className="h-[50px] w-[100%] bg-transparent text-white font-bold text-[20px] text-right px-8 hover:underline flex justify-end items-end"
+            className="h-[50px] w-[100%] bg-transparent text-black font-bold text-[20px] text-right px-8 hover:underline flex justify-center items-center"
+            onClick={handleLogout}
           >
             Logout
           </div>

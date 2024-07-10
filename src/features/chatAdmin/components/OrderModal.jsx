@@ -1,6 +1,8 @@
 import { useEffect, useRef, useCallback } from "react";
 import { statusOptions } from "../constants/index"; // เพิ่มการ import statusOptions
 import CommonButton from "../../../components/CommonButton";
+import { IconPersonImg } from "../../../icons/IconPersonImg"; // เพิ่มการ import ไอคอน
+import { ImageRider } from "../../../icons/IconImageRider"; // เพิ่มการ import ไอคอน
 
 const OrderModal = ({
   currentOrder,
@@ -73,11 +75,17 @@ const OrderModal = ({
         <div className="mb-4">
           <h3 className="font-semibold">Rider:</h3>
           <div className="flex items-center">
-            <img
-              src={profileData.rider[currentOrder.riderId].profileImg}
-              alt="Profile"
-              className="w-16 h-16 rounded-xl mr-4"
-            />
+            {profileData.rider[currentOrder.riderId].profileImg ? (
+              <img
+                src={profileData.rider[currentOrder.riderId].profileImg}
+                alt="Profile"
+                className="w-16 h-16 rounded-xl mr-4"
+              />
+            ) : (
+              <div className="flex h-16 w-16 items-center justify-center border-[#ff004d] border-2 rounded-xl mr-4">
+                <ImageRider />
+              </div>
+            )}
             <div>{`${profileData.rider[currentOrder.riderId].firstName} ${
               profileData.rider[currentOrder.riderId].lastName
             }`}</div>
@@ -86,11 +94,17 @@ const OrderModal = ({
         <div className="mb-4">
           <h3 className="font-semibold">Customer:</h3>
           <div className="flex items-center">
-            <img
-              src={profileData.customer[currentOrder.customerId].profileImg}
-              alt="Profile"
-              className="w-16 h-16 rounded-xl mr-4"
-            />
+            {profileData.customer[currentOrder.customerId].profileImg ? (
+              <img
+                src={profileData.customer[currentOrder.customerId].profileImg}
+                alt="Profile"
+                className="w-16 h-16 rounded-xl mr-4"
+              />
+            ) : (
+              <div className="flex h-16 w-16 items-center justify-center border-[#ff004d] border-2 rounded-xl mr-4">
+                <IconPersonImg />
+              </div>
+            )}
             <div>{`${profileData.customer[currentOrder.customerId].firstName} ${
               profileData.customer[currentOrder.customerId].lastName
             }`}</div>
