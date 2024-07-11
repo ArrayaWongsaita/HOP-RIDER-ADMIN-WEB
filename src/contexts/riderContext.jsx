@@ -15,10 +15,10 @@ export default function RiderContextProvider({ children }) {
         fetchAllRider();
     }, []);
 
-    console.log('userRider -->>', userRider);
-    console.log('userRiderExpired -->>', userRiderExpired);
-    console.log('userRiderSubscribe -->>', userRiderSubscribe);
-    console.log('userRiderPaymentPending -->>', userRiderPaymentPending);
+    // console.log('userRider -->>', userRider);
+    // console.log('userRiderExpired -->>', userRiderExpired);
+    // console.log('userRiderSubscribe -->>', userRiderSubscribe);
+    // console.log('userRiderPaymentPending -->>', userRiderPaymentPending);
 
     // Function get all rider แล้วจำแนกเป็น rider ทั้งหมดที่ได้มา คำนวณวัน subscribe ที่เหลืออยู่่
     // แล้วนำมา setState แยกเป็น rider ทั้ง, rider ที่มีสถานะ payment เป็น Subscribe, Expired
