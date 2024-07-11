@@ -85,10 +85,24 @@ export default function ChatAdminPage() {
         scrollToBottom()
       };
       
-      const handleNewChatToAdmin = (newChat)=>{
-        console.log("newChat",newChat)
-        setChatInfo((chat)=>[newChat,...chat])
-      }
+      const handleNewChatToAdmin = (newChat) => {
+        console.log("newChat", newChat);
+        setChatInfo((prevChatInfo) => {
+          // Merge newChat with previous chat info
+          const existingChatIndex = prevChatInfo.findIndex(chat => chat.id === newChat.id);
+          if (existingChatIndex !== -1) {
+            // Update existing chat
+            const updatedChatInfo = [...prevChatInfo];
+            updatedChatInfo[existingChatIndex] = {
+              ...prevChatInfo[existingChatIndex],
+              ...newChat,
+            };
+            return updatedChatInfo;
+          }
+          // Add new chat if it doesn't exist
+          return [newChat, ...prevChatInfo];
+        });
+      };
       socket.on("newChatToAdmin",handleNewChatToAdmin)
       socket.on("newAdminMessage", handleNewMessage);
       console.log("first");
