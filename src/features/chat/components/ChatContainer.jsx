@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useRef, useEffect } from "react";
+import { IconPersonImg } from "../../../icons/IconPersonImg";
 
 let delaySendMessage = false;
 
@@ -63,8 +64,8 @@ export default function ChatContainer({
       <div className="w-full bg-gradient-to-r from-[#516293] to-[#1D2B53] h-[100%] border-4 rounded-2xl flex flex-col justify-between items-center">
         <div className="w-full h-1/6 flex justify-between">
           <div className="h-full mx-2 aspect-[6/7] flex justify-center items-center">
-            <div className="border-torchRed border-[3px] rounded-xl w-3/4 h-3/4">
-              image
+            <div className="border-torchRed border-[3px] rounded-xl w-3/4 h-3/4 flex items-center justify-center">
+              <IconPersonImg/>
             </div>
           </div>
           <div className="flex-1 flex justify-center py-5">
