@@ -6,32 +6,55 @@ import useRider from "../../hooks/riderHook";
 
 export default function RiderApproval() {
   const { userRider } = useRider();
-  const [search, setSearch] = useState('');
-  const [filterBy, setFilterBy] = useState('SUBMITTED')
+  const [search, setSearch] = useState("");
+  const [filterBy, setFilterBy] = useState("SUBMITTED");
 
   console.log(userRider);
 
-  const menuList = [    // หัวข้อของ sub navbar
-    { id: 1, menuName: "Pending", onClick: () => setFilterBy('SUBMITTED'), isActive: 'SUBMITTED' },
-    { id: 2, menuName: "Approved", onClick: () => setFilterBy('APPROVED'), isActive: 'APPROVED' },
-    { id: 3, menuName: "Denied", onClick: () => setFilterBy('DENIED'), isActive: 'DENIED' },
+  const menuList = [
+    // หัวข้อของ sub navbar
+    {
+      id: 1,
+      menuName: "Pending",
+      onClick: () => setFilterBy("SUBMITTED"),
+      isActive: "SUBMITTED",
+    },
+    {
+      id: 2,
+      menuName: "Approved",
+      onClick: () => setFilterBy("APPROVED"),
+      isActive: "APPROVED",
+    },
+    {
+      id: 3,
+      menuName: "Denied",
+      onClick: () => setFilterBy("DENIED"),
+      isActive: "DENIED",
+    },
   ];
 
-  const targetRider = userRider.filter(item => item.status === filterBy)
+  const targetRider = userRider.filter((item) => item.status === filterBy);
 
   const handleOnChance = (event) => {
-    setSearch(event.target.value)
-  }
+    setSearch(event.target.value);
+  };
 
   return (
     <div className="pb-10">
       <div>
-        <div className={`w-full h-[70px] flex items-center justify-between p-4 mb-5 pl-28
+        <div
+          className={`w-full h-[80px] flex items-center justify-between p-4 mb-5 pl-28
             font-semibold text-xl text-white
-            bg-gradient-to-r from-[#1D2B53] from-30% to-[#FF004D] to-100% `}>
+            bg-gradient-to-r from-[#1D2B53] from-30% to-[#FF004D] to-100% `}
+        >
           {menuList.map((item) => (
-            <div key={item.id} role="button" onClick={item.onClick}
-              className={`hover:underline hover:font-extrabold ${filterBy === item.isActive ? 'underline' : ''}`}>
+            <div key={item.id} 
+            role="button" 
+            onClick={item.onClick}
+            className={`hover:underline hover:font-extrabold ${
+            filterBy === item.isActive ? "underline" : ""
+              }`}
+            >
               {item.menuName}
             </div>
           ))}
@@ -48,12 +71,12 @@ export default function RiderApproval() {
         </div>
       </div>
       <div className="w-[90%] mx-auto flex flex-col gap-3">
-        {targetRider.map((item) =>
+        {targetRider.map((item) => (
           <RiderBar status={item.status} key={item.id} data={item}>
             <RiderInfo data={item} />
           </RiderBar>
-        )}
+        ))}
       </div>
     </div>
-  )
+  );
 }

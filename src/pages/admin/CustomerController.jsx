@@ -7,7 +7,7 @@ import useRider from "../../hooks/riderHook";
 export default function CustomerController() {
   const [search, setSearch] = useState("");
   const { userRider } = useRider();
-  console.log(userRider)
+  console.log(userRider);
 
   const targetRider = userRider.filter(
     (item) =>
@@ -20,32 +20,30 @@ export default function CustomerController() {
   };
 
   return (
-    <div className="pb-10">
-      <div className="w-full h-full">
-        <div
-          className={`w-full h-[12%] flex items-center justify-center 
+    <div className="w-full h-full">
+      <div
+        className={`w-full h-[80px] flex items-center justify-center 
            mb-5
             font-semibold text-xl text-white
             bg-gradient-to-r from-[#1D2B53] from-30% to-[#FF004D] to-100% `}
-        >
-          <InputSearch
-            placeholder="search"
-            onChange={handleOnChance}
-            // onClick={() => console.log('Search di kub')}
-            name="search"
-            value={search}
-            rounded="xxlLeft"
-          />
-        </div>
+      >
+        <InputSearch
+          placeholder="search"
+          onChange={handleOnChance}
+          // onClick={() => console.log('Search di kub')}
+          name="search"
+          value={search}
+          rounded="xxlLeft"
+        />
+      </div>
 
-        <div className="flex flex-col gap-3 ">
-          {targetRider.length > 0 &&
-            targetRider.map((item) => (
-              <RiderBar status={item.status} key={item.id} data={item}>
-                <ComponentOrder data={item} />
-              </RiderBar>
-            ))}
-        </div>
+      <div className="flex flex-col gap-3 ">
+        {targetRider.length > 0 &&
+          targetRider.map((item) => (
+            <RiderBar status={item.status} key={item.id} data={item}>
+              <ComponentOrder data={item} />
+            </RiderBar>
+          ))}
       </div>
     </div>
   );

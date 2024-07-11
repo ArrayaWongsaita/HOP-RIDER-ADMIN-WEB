@@ -11,13 +11,28 @@ export default function PaymentConfirmation() {
   const [filterStatus, setFilterStatus] = useState('PENDING');
 
   const menuList = [    // หัวข้อของ sub navbar
-    { id: 1, menuName: "Pending", onClick: () => handleClickPending(), isActive: 'PENDING' },
-    { id: 2, menuName: "Subscribed", onClick: () => handleClickSubScribed(), isActive: 'APPROVED' },
-    { id: 3, menuName: "Expired", onClick: () => handleClickExpired(), isActive: 'EXPIRED' },
+    {
+      id: 1,
+      menuName: "Pending",
+      onClick: () => handleClickPending(),
+      isActive: 'PENDING'
+    },
+    {
+      id: 2,
+      menuName: "Subscribed",
+      onClick: () => handleClickSubScribed(),
+      isActive: 'APPROVED'
+    },
+    {
+      id: 3,
+      menuName: "Expired",
+      onClick: () => handleClickExpired(),
+      isActive: 'EXPIRED'
+    },
   ];
 
   const handleOnChance = (event) => {
-    setSearch(event.target.value)
+    setSearch(event.target.value);
   };
 
   const handleClickPending = () => {
@@ -35,12 +50,16 @@ export default function PaymentConfirmation() {
   return (
     <div className="pb-10">
       <div>
-        <div className={`w-full h-[70px] flex items-center justify-between p-4 mb-5 pl-28
+        <div
+          className={`w-full h-[80px] flex items-center justify-between p-4 mb-5 pl-28
             font-semibold text-xl text-white
-            bg-gradient-to-r from-[#1D2B53] from-30% to-[#FF004D] to-100% `}>
+            bg-gradient-to-r from-[#1D2B53] from-30% to-[#FF004D] to-100% `}
+        >
           {menuList.map((item) => (
             <div key={item.id} role="button" onClick={item.onClick}
-              className={`hover:underline hover:font-extrabold ${filterStatus === item.isActive ? 'underline' : ''}`}>
+              className={`hover:underline hover:font-extrabold ${filterStatus === item.isActive ? 'underline' : ""
+                }`}
+            >
               {item.menuName}
             </div>
           ))}
@@ -81,6 +100,6 @@ export default function PaymentConfirmation() {
             </RiderBar>
           )}
       </div>
-    </div>
-  )
+    </div >
+  );
 }

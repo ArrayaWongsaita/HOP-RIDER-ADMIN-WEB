@@ -1,5 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { statusOptions } from "../constants/index"; // เพิ่มการ import statusOptions
+import CommonButton from "../../../components/CommonButton";
+import { IconPersonImg } from "../../../icons/IconPersonImg"; // เพิ่มการ import ไอคอน
+import { ImageRider } from "../../../icons/IconImageRider"; // เพิ่มการ import ไอคอน
 
 const OrderModal = ({
   currentOrder,
@@ -16,16 +19,21 @@ const OrderModal = ({
 }) => {
   const modalRef = useRef(null);
 
+  const closeModal = useCallback(() => {
+    setEditingStatus(false);
+    closeOrderModal();
+  }, [setEditingStatus, closeOrderModal]);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
-        closeOrderModal();
+        closeModal();
       }
     };
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
-        closeOrderModal();
+        closeModal();
       }
     };
 
@@ -36,7 +44,7 @@ const OrderModal = ({
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [closeOrderModal]);
+  }, [closeModal]);
 
   useEffect(() => {
     if (currentOrder) {
@@ -59,7 +67,7 @@ const OrderModal = ({
       >
         <button
           className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
-          onClick={closeOrderModal}
+          onClick={closeModal}
         >
           X
         </button>
@@ -67,11 +75,17 @@ const OrderModal = ({
         <div className="mb-4">
           <h3 className="font-semibold">Rider:</h3>
           <div className="flex items-center">
-            <img
-              src={profileData.rider[currentOrder.riderId].profileImg}
-              alt="Profile"
-              className="w-10 h-10 rounded-full mr-4"
-            />
+            {profileData.rider[currentOrder.riderId].profileImg ? (
+              <img
+                src={profileData.rider[currentOrder.riderId].profileImg}
+                alt="Profile"
+                className="w-16 h-16 rounded-xl mr-4"
+              />
+            ) : (
+              <div className="flex h-16 w-16 items-center justify-center border-[#ff004d] border-2 rounded-xl mr-4">
+                <ImageRider />
+              </div>
+            )}
             <div>{`${profileData.rider[currentOrder.riderId].firstName} ${
               profileData.rider[currentOrder.riderId].lastName
             }`}</div>
@@ -80,11 +94,17 @@ const OrderModal = ({
         <div className="mb-4">
           <h3 className="font-semibold">Customer:</h3>
           <div className="flex items-center">
-            <img
-              src={profileData.customer[currentOrder.customerId].profileImg}
-              alt="Profile"
-              className="w-10 h-10 rounded-full mr-4"
-            />
+            {profileData.customer[currentOrder.customerId].profileImg ? (
+              <img
+                src={profileData.customer[currentOrder.customerId].profileImg}
+                alt="Profile"
+                className="w-16 h-16 rounded-xl mr-4"
+              />
+            ) : (
+              <div className="flex h-16 w-16 items-center justify-center border-[#ff004d] border-2 rounded-xl mr-4">
+                <IconPersonImg />
+              </div>
+            )}
             <div>{`${profileData.customer[currentOrder.customerId].firstName} ${
               profileData.customer[currentOrder.customerId].lastName
             }`}</div>
@@ -122,42 +142,27 @@ const OrderModal = ({
           {editingStatus ? (
             confirmStatusChange ? (
               <>
-                <button
-                  className="px-4 py-2 bg-gray-300 rounded-lg mr-2"
-                  onClick={handleStatusChangeCancel}
-                >
+                <CommonButton onClick={handleStatusChangeCancel}>
                   No
-                </button>
-                <button
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg"
-                  onClick={handleStatusChangeConfirm}
-                >
+                </CommonButton>
+                <CommonButton onClick={handleStatusChangeConfirm}>
                   Yes
-                </button>
+                </CommonButton>
               </>
             ) : (
               <>
-                <button
-                  className="px-4 py-2 bg-gray-300 rounded-lg mr-2"
-                  onClick={handleStatusChangeCancel}
-                >
+                <CommonButton onClick={handleStatusChangeCancel}>
                   Cancel
-                </button>
-                <button
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg"
-                  onClick={() => setConfirmStatusChange(true)}
-                >
+                </CommonButton>
+                <CommonButton onClick={() => setConfirmStatusChange(true)}>
                   Confirm
-                </button>
+                </CommonButton>
               </>
             )
           ) : (
-            <button
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg"
-              onClick={() => setEditingStatus(true)}
-            >
+            <CommonButton onClick={() => setEditingStatus(true)} width="100px">
               Edit Status
-            </button>
+            </CommonButton>
           )}
         </div>
       </div>

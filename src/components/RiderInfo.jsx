@@ -45,22 +45,34 @@ export default function RiderInfo({ data }) {
     };
 
     return (
-        <div className="w-full flex flex-col justify-between items-center px-8 py-3
-            text-xl text-white rounded-xl bg-gray-200">
-            <div className="w-full h-[40%] grid grid-cols-5">
-                <div className="h-[100%] w-[100%] p-3 col-span-1">
-                    <AvatarRider srcImage={data.profileImage} size="full" />
+        <div className="w-full h-[447px] flex flex-col  px-8 py-3
+        text-xl text-white rounded-xl bg-gray-200">
+            <div className="w-100% h-[80%] flex justify-around">
+                <div className="h-[80%] w-[33%] flex justify-center items-center">
+                    <AvatarRider srcImage={data.profileImage} size="full" className="w-[80%] h-[80%]" />
                 </div>
-                <div className="text-black font-bold text-lg col-span-3">
-                    <h1>ID: <span className="font-medium">{data.id}</span></h1>
-                    <h1>Name: <span className="font-medium">{data.firstName} {data.lastName}</span></h1>
-                    <h1>ID Card: <span className="font-medium">{data.citizenId}</span></h1>
-                    <h1>Phone number: <span className="font-medium">{data.phone}</span></h1>
-                    <h1>Email: <span className="font-medium">{data.email}</span></h1>
-                    <h1>Address: <span className="font-medium">{data.address}</span></h1>
+                <div className="text-black font-bold text-lg h-[80%] w-[33%] flex justify-center items-start flex-col">
+                    <h1>
+                        ID: <span className="font-medium">{data.id}</span>
+                    </h1>
+                    <h1>
+                        Name: <span className="font-medium">{data.firstName} {data.lastName}</span>
+                    </h1>
+                    <h1>
+                        ID Card: <span className="font-medium">{data.citizenId}</span>
+                    </h1>
+                    <h1>
+                        Phone number: <span className="font-medium">{data.phone}</span>
+                    </h1>
+                    <h1>
+                        Email: <span className="font-medium">{data.email}</span>
+                    </h1>
+                    <h1>
+                        Address: <span className="font-medium">{data.address}</span>
+                    </h1>
                 </div>
                 {data.status !== 'APPROVED'
-                    ? <div className="flex flex-col items-end justify-center gap-4 col-span-1">
+                    ? <div className="justify-center gap-4 col-span-1 h-[80%] w-[33%] flex  items-center flex-col">
                         <CommonButton
                             bg="green"
                             text="whiteToLuckyPoint"
@@ -84,32 +96,33 @@ export default function RiderInfo({ data }) {
                     </div>
                     : ''}
             </div>
-
-            <div className="flex justify-center w-full py-3">
-                <hr className="w-[95%] border border-[#FF004D]" />
-            </div>
-
-            <div className="w-full h-[60%] px-5 flex justify-between text-black font-bold">
-                <div
-                    className="p-3 flex justify-center"
-                    role="button"
-                    onClick={handleClickLicense}
-                >
-                    License
+            <div className="w-full h-[10%] px-5 flex justify-between text-black font-bold flex-col">
+                <div className="flex justify-center w-full py-3">
+                    <hr className="w-[95%] border border-[#FF004D]" />
                 </div>
-                <div
-                    className="p-3 flex justify-center"
-                    role="button"
-                    onClick={handleClickRegistration}
-                >
-                    Vehicle Registration
-                </div>
-                <div
-                    className="p-3 flex justify-center"
-                    role="button"
-                    onClick={handleClickVehiclePicture}
-                >
-                    Vehicle picture
+
+                <div className="w-full h-[60%] px-5 flex justify-between text-black font-bold">
+                    <div
+                        className="p-3 flex justify-center"
+                        role="button"
+                        onClick={handleClickLicense}
+                    >
+                        License
+                    </div>
+                    <div
+                        className="p-3 flex justify-center"
+                        role="button"
+                        onClick={handleClickRegistration}
+                    >
+                        Vehicle Registration
+                    </div>
+                    <div
+                        className="p-3 flex justify-center"
+                        role="button"
+                        onClick={handleClickVehiclePicture}
+                    >
+                        Vehicle picture
+                    </div>
                 </div>
             </div>
             <ModalAdmin open={open} onClose={handleCloseModal} >
@@ -124,6 +137,6 @@ export default function RiderInfo({ data }) {
                             : "Something wrong"
                 }
             </ModalAdmin>
-        </div>
-    )
+        </div >
+    );
 }

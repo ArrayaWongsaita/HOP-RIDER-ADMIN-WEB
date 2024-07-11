@@ -3,12 +3,16 @@ import { useNavigate } from "react-router-dom"; // import useNavigate
 import CommonButton from "../components/CommonButton";
 import { IconArrow } from "../icons/IconArrow";
 import useSocket from "../hooks/socketIoHook";
+import { toast } from "react-toastify";
+import useAuth from "../hooks/authHook";
 
+let isAccept = false;
 export default function OrderFromCustomer() {
   const { socket, setNewOrder } = useSocket();
   const [orders, setOrders] = useState([]);
   const [riderPosition, setRiderPosition] = useState({});
   const navigate = useNavigate(); // ใช้ useNavigate
+  const { authUser } = useAuth();
 
   useEffect(() => {
     const handlePosition = (position) => {
@@ -33,7 +37,8 @@ export default function OrderFromCustomer() {
     };
 
     const handleRouteHistory = (newRoute) => {
-      setNewOrder(newRoute);
+      console.log("handleRouteHistory data = ", newRoute);
+      // setNewOrder(newRoute);
       navigate(`/rider/order/${newRoute.id}`);
       socket.off("routeHistory", handleRouteHistory); // ยกเลิกการรับฟังหลังจาก navigate
     };
@@ -64,12 +69,24 @@ export default function OrderFromCustomer() {
   }, [socket]);
 
   // ฟังก์ชันเมื่อกดปุ่ม ACCEPT
-  const handleAccept = (routeId) => {
-    const riderLat = riderPosition.lat;
-    const riderLng = riderPosition.lng;
-    socket.emit("acceptRoute", { routeId, riderLat, riderLng });
-    console.log(`รับงาน ${routeId} RiderId กำลังรอ`);
-    // navigate(`/rider/order/${routeId}`); // navigate ไปที่ /rider/order
+  const handleAccept = (routeId, customerId) => {
+    if (!isAccept) {
+      if (!riderPosition.lat && !riderPosition.lng && routeId) return;
+      const riderLat = riderPosition.lat;
+      const riderLng = riderPosition.lng;
+      socket.emit("acceptRoute", { routeId, riderLat, riderLng ,customerId});
+      isAccept = true
+      setTimeout(() => {
+        isAccept = false
+      }, 1200);
+      toast.success(
+        `This route accepted successfully by ${
+          authUser ? authUser?.firstName : "you"
+        }!`
+      );
+
+      // navigate(`/rider/order/${routeId}`); // navigate ไปที่ /rider/order
+    }
   };
 
   if (!orders.length) {
@@ -126,7 +143,7 @@ export default function OrderFromCustomer() {
                 border="accept"
                 align="flexCenter"
                 rounded="10"
-                onClick={() => handleAccept(order.id)} // เรียกใช้ฟังก์ชัน handleAccept เมื่อกดปุ่ม
+                onClick={() => handleAccept(order.id, order.customerId)} // เรียกใช้ฟังก์ชัน handleAccept เมื่อกดปุ่ม
               >
                 ACCEPT
               </CommonButton>

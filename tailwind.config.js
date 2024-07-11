@@ -34,5 +34,6 @@ export default {
   plugins: [
     require("@tailwindcss/line-clamp"),
     require("tailwindcss-textshadow"),
+    require("tailwind-scrollbar-hide"),
   ],
 };
