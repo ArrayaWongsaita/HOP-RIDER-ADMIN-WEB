@@ -44,6 +44,7 @@ export default function AuthContextProvider({ children }) {
 
     const value = {
         authUser,
+        setAuthUser,
         isAuthUserLoading,
         login,
         logout,

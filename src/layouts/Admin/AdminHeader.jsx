@@ -43,7 +43,7 @@ export default function AdminHeader() {
   }, []);
 
   return (
-    <header className="flex justify-between items-center shadow-md bg-none px-20 z-50">
+    <header className="flex justify-between items-center shadow-md bg-none px-20">
       <div>
         <Link to="/admin" className="flex justify-center items-center">
           <LogoHopForNav width="120" />
@@ -71,11 +71,13 @@ export default function AdminHeader() {
       </div>
 
       {openDropdown && ( // ใช้ openDropdown สำหรับการแสดง dropdown
-        <div className="absolute bg-white right-0 top-28 z-40  w-[200px] flex justify-center items-center flex-col">
+        <div className="absolute bg-white right-0 top-28 z-40  w-[200px] flex justify-center items-center flex-col 
+        bg-gradient-to-r from-[#1D2B53] from-15% to-[#FF004D] to-100%
+        ">
           <div
             role="button"
             onClick={handleChatClick} // เพิ่ม onClick สำหรับการ navigate ไปที่ /admin/chat
-            className="relative h-[50px] w-[100%] bg-transparent text-black font-bold text-[20px] text-right px-8 hover:underline flex justify-center items-center "
+            className="relative h-[50px] w-[100%] bg-transparent text-white font-bold text-[20px] text-right px-8 hover:underline flex justify-center items-center "
           >
             Chat
             {hasNotification && (
@@ -87,7 +89,7 @@ export default function AdminHeader() {
           </div>
           <div
             role="button"
-            className="h-[50px] w-[100%] bg-transparent text-black font-bold text-[20px] text-right px-8 hover:underline flex justify-center items-center"
+            className="h-[50px] w-[100%] bg-transparent text-white font-bold text-[20px] text-right px-8 hover:underline flex justify-center items-center"
             onClick={handleLogout}
           >
             Logout

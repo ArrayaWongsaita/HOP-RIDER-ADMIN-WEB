@@ -1,9 +1,9 @@
 
-export default function PriceCardForAdmin({ plan, width = 'w-[70%]', height = 'h-[70%]' }) {
+export default function PriceCardForAdmin({ plan, width = 'w-[70%]', height = 'h-[70%]', gap = 'gap-8' }) {
 
     return (
-        <div className={`bg-white rounded-[16px] shadow-lg ${width} ${height}`}>
-            <div className="w-full h-full flex flex-col gap-8 items-center justify-center p-5">
+        <div className={`bg-white rounded-[16px] shadow-lg border border-torchRed  ${width} ${height}`}>
+            <div className={`w-full h-full flex flex-col ${gap} items-center justify-center p-5`}>
                 <div className="text-luckyPoint text-[18px] text-shadow-xl flex flex-col items-center ">
                     <div className=" text-torchRed text-[27px] font-bold text-shadow-xl">
                         {plan?.month}

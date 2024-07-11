@@ -4,48 +4,30 @@ import RiderBar from "../../components/RiderBar";
 import RiderPaymentSubscribe from "../../layouts/Admin/RiderPaymentSubscribe";
 import RiderPaymentPending from "../../layouts/Admin/RiderPaymentPending";
 import useRider from "../../hooks/riderHook";
-import { useEffect } from "react";
 
 export default function PaymentConfirmation() {
-  const { userRider } = useRider();
-  const [filterData, setFilterData] = useState([...userRider]);
-  const [search, setSearch] = useState("");
-  const [filterBy, setFilterBy] = useState("PENDING");
+  const { userRiderSubscribe, userRiderPaymentPending, userRiderExpired } = useRider();
+  const [search, setSearch] = useState('');
+  const [filterStatus, setFilterStatus] = useState('PENDING');
 
-  useEffect(() => {
-    if (filterBy === "PENDING") {
-      handleClickPending();
-    }
-  }, []);
-
-  const menuList = [
-    // หัวข้อของ sub navbar
+  const menuList = [    // หัวข้อของ sub navbar
     {
       id: 1,
       menuName: "Pending",
-      onClick: () => {
-        handleClickPending();
-        setFilterBy("PENDING");
-      },
-      isActive: "PENDING",
+      onClick: () => handleClickPending(),
+      isActive: 'PENDING'
     },
     {
       id: 2,
       menuName: "Subscribed",
-      onClick: () => {
-        handleClickSubScribed();
-        setFilterBy("APPROVED");
-      },
-      isActive: "APPROVED",
+      onClick: () => handleClickSubScribed(),
+      isActive: 'APPROVED'
     },
     {
       id: 3,
       menuName: "Expired",
-      onClick: () => {
-        handleClickExpired();
-        setFilterBy("EXPIRED");
-      },
-      isActive: "EXPIRED",
+      onClick: () => handleClickExpired(),
+      isActive: 'EXPIRED'
     },
   ];
 
@@ -54,22 +36,19 @@ export default function PaymentConfirmation() {
   };
 
   const handleClickPending = () => {
-    const filter = userRider.filter((item) => item.paymentStatus === "PENDING");
-    setFilterData(filter);
+    setFilterStatus('PENDING')
   };
 
   const handleClickSubScribed = () => {
-    const filter = userRider.filter((item) => item.subScribeDate > 0);
-    setFilterData(filter);
+    setFilterStatus('APPROVED')
   };
 
   const handleClickExpired = () => {
-    const filter = userRider.filter((item) => item.subScribeDate <= 0);
-    setFilterData(filter);
+    setFilterStatus('EXPIRED')
   };
 
   return (
-    <div>
+    <div className="pb-10">
       <div>
         <div
           className={`w-full h-[80px] flex items-center justify-between p-4 mb-5 pl-28
@@ -77,42 +56,50 @@ export default function PaymentConfirmation() {
             bg-gradient-to-r from-[#1D2B53] from-30% to-[#FF004D] to-100% `}
         >
           {menuList.map((item) => (
-            <div
-              key={item.id}
-              role="button"
-              onClick={item.onClick}
-              className={`hover:underline hover:font-extrabold ${
-                filterBy === item.isActive ? "underline" : ""
-              }`}
+            <div key={item.id} role="button" onClick={item.onClick}
+              className={`hover:underline hover:font-extrabold ${filterStatus === item.isActive ? 'underline' : ""
+                }`}
             >
               {item.menuName}
             </div>
           ))}
-          <InputSearch
-            placeholder="search"
-            onChange={handleOnChance}
-            onClick={() => console.log("Search di kub")}
-            name="search"
-            value={search}
-            rounded="xxlLeft"
-          />
+          <div className="invisible">
+            <InputSearch
+              placeholder='search'
+              onChange={handleOnChance}
+              onClick={() => console.log('Search di kub')}
+              name='search'
+              value={search}
+              rounded="xxlLeft"
+            />
+          </div>
         </div>
       </div>
       <div className="w-[90%] mx-auto flex flex-col gap-3">
-        {filterData.map((item) => (
-          <RiderBar key={item.id} data={item}>
-            {filterBy === "PENDING" ? (
+        {filterStatus === 'PENDING' &&
+          userRiderPaymentPending.map((item) =>
+            <RiderBar key={item.id} data={item}
+            >
               <RiderPaymentPending data={item} />
-            ) : filterBy === "APPROVED" ? (
+            </RiderBar>
+          )}
+        {filterStatus === 'APPROVED' &&
+          userRiderSubscribe.map((item) =>
+            <RiderBar key={item.id} data={item}
+              status={item?.subScribeDate > 0 ? item?.payments?.expiredDate : "Expired"}
+            >
               <RiderPaymentSubscribe data={item} />
-            ) : filterBy === "EXPIRED" ? (
+            </RiderBar>
+          )}
+        {filterStatus === 'EXPIRED' &&
+          userRiderExpired.map((item) =>
+            <RiderBar key={item.id} data={item}
+              status={item?.subScribeDate > 0 ? item?.payments?.expiredDate : "Expired"}
+            >
               <RiderPaymentSubscribe data={item} />
-            ) : (
-              "Something wrong"
-            )}
-          </RiderBar>
-        ))}
+            </RiderBar>
+          )}
       </div>
-    </div>
+    </div >
   );
 }
