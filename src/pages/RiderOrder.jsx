@@ -15,7 +15,6 @@ import { useParams } from "react-router-dom";
 import ChatContainer from "../features/chat/components/ChatContainer";
 import ModalChatNotification from "../features/order/components/ModalChatNotification";
 
-
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 let chatOpen = false;
 
@@ -126,19 +125,19 @@ const RiderOrder = () => {
     }
   }, [chatId, socket]);
 
-  useEffect(()=>{
-    if(socket){
-        const handleChatAdminId = (data) =>{
-          setChatAdminId(data.id)
-          if(data?.messages){
-            setMessagesAdmin(data.messages);
-          }
+  useEffect(() => {
+    if (socket) {
+      const handleChatAdminId = (data) => {
+        setChatAdminId(data.id);
+        if (data?.messages) {
+          setMessagesAdmin(data.messages);
         }
-      socket.on("chatAdminInfo",handleChatAdminId)
+      };
+      socket.on("chatAdminInfo", handleChatAdminId);
 
-      if(chatAdminId){
+      if (chatAdminId) {
         const handleNewMessageAdmin = (message) => {
-          console.log("newMessageAdmin")
+          console.log("newMessageAdmin");
           // if (!chatOpen) {
           //   setIsModalChatOpen(true);
           // }
@@ -148,17 +147,14 @@ const RiderOrder = () => {
           setMessagesAdmin((messages) => [...messages, message]);
         };
 
-
         socket.on("newMessageAdmin", handleNewMessageAdmin);
 
-        
         return () => {
-
-          socket.off("chatAdminId",handleChatAdminId)
-        }
+          socket.off("chatAdminId", handleChatAdminId);
+        };
       }
     }
-  },[socket , chatAdminId])
+  }, [socket, chatAdminId]);
 
   const handleChatClick = () => {
     setIsChatOpen(true);
@@ -170,9 +166,9 @@ const RiderOrder = () => {
   };
 
   const handleChatAdminClick = () => {
-    console.log(chatAdminId,"----------------------")
-    if(!chatAdminId){
-      socket.emit("chatToAdmin")
+    console.log(chatAdminId, "----------------------");
+    if (!chatAdminId) {
+      socket.emit("chatToAdmin");
     }
     setIsChatAdminOpen(true);
     chatOpen = true;
@@ -402,7 +398,7 @@ const RiderOrder = () => {
               isOpen={modalVisible}
               onClose={() => handleModalClose(false)}
             >
-              <p>{buttonText} ?</p>
+              <p className="text-white">{buttonText} ?</p>
               <div className="flex w-full items-center justify-between">
                 <CommonButton onClick={() => handleModalClose(true)}>
                   Yes

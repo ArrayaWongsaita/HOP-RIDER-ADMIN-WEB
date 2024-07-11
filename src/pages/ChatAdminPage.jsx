@@ -46,8 +46,6 @@ export default function ChatAdminPage() {
   const inputRef = useRef(null);
   const notificationSoundRef = useRef(new Audio("/sound/notiChat2.mp3"));
 
-
-
   const { socket } = useSocket();
   const [chatInfo, setChatInfo] = useState([]);
   const [chatWith, setChatWith] = useState("User");
@@ -61,11 +59,11 @@ export default function ChatAdminPage() {
     "กรุณาตรวจสอบรายละเอียดการส่ง",
     "ขออภัยในความล่าช้า",
   ];
-  useEffect(()=>{
-    if(socket){
+  useEffect(() => {
+    if (socket) {
       const handleNewMessage = (message) => {
-        console.log(message)
-        console.log(message.senderRole)
+        console.log(message);
+        console.log(message.senderRole);
         // let newChatInfo = chatInfo.map(item=> {
         //   if(item.id === message.chatId){
         //     item.messages.push(message)
@@ -74,16 +72,16 @@ export default function ChatAdminPage() {
         //   return item
         // })
         // console.log(newChatInfo)
-        
-        setChatInfo((message)=>message.map(item=> {
-          if(item.id === message.chatId){
-            item.messages.push(message)
-          }
-          return item
-        })
-      
-      )
-  
+
+        setChatInfo((message) =>
+          message.map((item) => {
+            if (item.id === message.chatId) {
+              item.messages.push(message);
+            }
+            return item;
+          })
+        );
+
         // let isMessageInChatRider = false
         // let newMessage = chatRider.map(item=> {
         //   if(item.id === message.chatId){
@@ -107,19 +105,19 @@ export default function ChatAdminPage() {
         //   console.log("----------customer-------------")
         //   scrollToBottom()
         //   setChatCustomer(newMessage)
-        //   return 
-        // } 
+        //   return
+        // }
         // console.log("----------nf-------------")
-          
+
         // console.log(message)
-      }
-      socket.on("newAdminMessage", handleNewMessage)
-      console.log("first")
-      return ()=>{
-        socket.off("newAdminMessage", handleNewMessage)
-      }
+      };
+      socket.on("newAdminMessage", handleNewMessage);
+      console.log("first");
+      return () => {
+        socket.off("newAdminMessage", handleNewMessage);
+      };
     }
-  },[socket])
+  }, [socket]);
 
   useEffect(() => {
     const getAllChatInfo = async () => {
@@ -127,10 +125,7 @@ export default function ChatAdminPage() {
         const res = await adminApi.fetchAllChatAdminInfo();
         console.log(res.data, "====================");
 
-
-
-        setChatInfo(res.data)
-
+        setChatInfo(res.data);
       } catch (error) {
         console.log(error);
       }
@@ -225,14 +220,14 @@ export default function ChatAdminPage() {
   };
 
   const handleSend = () => {
-    console.log("send")
+    console.log("send");
     if (inputValue.trim() !== "") {
       socket.emit("sendMessageAdmin", {
-        chatId:currentChat.id,
-        senderId:1,
+        chatId: currentChat.id,
+        senderId: 1,
         content: inputValue,
         senderRole: "ADMIN",
-      })
+      });
 
       // const newMessage = {
       //   sender: "admin",
@@ -456,11 +451,15 @@ export default function ChatAdminPage() {
           {/* Contact list */}
           <div className="rounded-b-2xl rounded-tr-2xl mx-auto h-full w-full flex flex-grow relative z-40 bg-gradient-to-br from-[#FF004D] from-10% to-[#1D2B53] to-85% p-[2%] gap-4">
             <div className="w-[25%] bg-[#1D2B53] rounded-xl p-2 overflow-y-auto scrollbar-hide">
-              {(chatInfo.filter(item=>  selectedChatType === "customer"? item.userId : item.riderId )).map((item) => {
-                  const lastMessage = item.messages[item.messages.length -1];
+              {chatInfo
+                .filter((item) =>
+                  selectedChatType === "customer" ? item.userId : item.riderId
+                )
+                .map((item) => {
+                  const lastMessage = item.messages[item.messages.length - 1];
                   // console.log(lastMessage)
                   // const isUnread = lastMessage?.senderRole === "ADMIN";
-                    // console.log(item)
+                  // console.log(item)
                   return (
                     <div
                       key={item.id}
@@ -476,7 +475,10 @@ export default function ChatAdminPage() {
                     >
                       <div className="flex items-center">
                         <img
-                          src={item?.rider?.profileImage|| "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"}
+                          src={
+                            item?.rider?.profileImage ||
+                            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
+                          }
                           alt="Profile"
                           className="w-16 h-16 rounded-xl mr-4"
                         />
@@ -485,14 +487,13 @@ export default function ChatAdminPage() {
                             item?.rider?.firstName || item?.user?.firstName
                           } ${
                             item?.rider?.lastName || item?.user?.lastName
-
                           }`}</div>
                           <div className="text-xs text-white flex-1 overflow-hidden line-clamp-2 w-[120px] ">
                             {`${
                               lastMessage?.senderRole === "ADMIN"
                                 ? "Admin"
                                 : currentChat.type
-                            }: ${lastMessage?.content|| ""}`}
+                            }: ${lastMessage?.content || ""}`}
                           </div>
                         </div>
                       </div>
@@ -578,7 +579,9 @@ export default function ChatAdminPage() {
 
               <div className="flex-1 p-4 overflow-y-auto scrollbar-hide">
                 {chatInfo.length > 0 &&
-                  chatInfo[chatInfo.findIndex(item => item.id === currentChat.id)].messages.map((msg, index) => (
+                  chatInfo[
+                    chatInfo.findIndex((item) => item.id === currentChat.id)
+                  ]?.messages.map((msg, index) => (
                     <div
                       key={index}
                       className={`flex ${
