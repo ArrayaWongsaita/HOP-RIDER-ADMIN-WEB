@@ -74,9 +74,11 @@ export default function OrderFromCustomer() {
       if (!riderPosition.lat && !riderPosition.lng && routeId) return;
       const riderLat = riderPosition.lat;
       const riderLng = riderPosition.lng;
-      socket.emit("acceptRoute", { routeId, riderLat, riderLng, customerId });
-      isAccept = true;
-      // console.log(`รับงาน ${routeId} RiderId กำลังรอ`);
+      socket.emit("acceptRoute", { routeId, riderLat, riderLng ,customerId});
+      isAccept = true
+      setTimeout(() => {
+        isAccept = false
+      }, 1200);
       toast.success(
         `This route accepted successfully by ${
           authUser ? authUser?.firstName : "you"
