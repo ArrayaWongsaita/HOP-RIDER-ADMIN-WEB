@@ -14,7 +14,7 @@ import useSocket from "../hooks/socketIoHook";
 import { useParams } from "react-router-dom";
 import ChatContainer from "../features/chat/components/ChatContainer";
 import ModalChatNotification from "../features/order/components/ModalChatNotification";
-import { log } from "react-modal/lib/helpers/ariaAppHider";
+
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 let chatOpen = false;
@@ -36,6 +36,8 @@ const RiderOrder = () => {
 
   const [isModalChatOpen, setIsModalChatOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatAdminId, setChatAdminId] = useState(null);
+  const [messagesAdmin, setMessagesAdmin] = useState([]);
   const [isChatAdminOpen, setIsChatAdminOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [chatId, setChatId] = useState(null);
@@ -124,6 +126,40 @@ const RiderOrder = () => {
     }
   }, [chatId, socket]);
 
+  useEffect(()=>{
+    if(socket){
+        const handleChatAdminId = (data) =>{
+          setChatAdminId(data.id)
+          if(data?.messages){
+            setMessagesAdmin(data.messages);
+          }
+        }
+      socket.on("chatAdminInfo",handleChatAdminId)
+
+      if(chatAdminId){
+        const handleNewMessageAdmin = (message) => {
+          console.log("newMessageAdmin")
+          // if (!chatOpen) {
+          //   setIsModalChatOpen(true);
+          // }
+          setMessagesAdmin((messagesAdmin) =>
+            messagesAdmin.filter((item) => item.senderRole !== "TYPING")
+          );
+          setMessagesAdmin((messages) => [...messages, message]);
+        };
+
+
+        socket.on("newMessageAdmin", handleNewMessageAdmin);
+
+        
+        return () => {
+
+          socket.off("chatAdminId",handleChatAdminId)
+        }
+      }
+    }
+  },[socket , chatAdminId])
+
   const handleChatClick = () => {
     setIsChatOpen(true);
     chatOpen = true;
@@ -134,6 +170,10 @@ const RiderOrder = () => {
   };
 
   const handleChatAdminClick = () => {
+    console.log(chatAdminId,"----------------------")
+    if(!chatAdminId){
+      socket.emit("chatToAdmin")
+    }
     setIsChatAdminOpen(true);
     chatOpen = true;
   };
@@ -332,9 +372,9 @@ const RiderOrder = () => {
         )}
         {isChatAdminOpen && (
           <ChatContainer
-            messages={messages}
+            messages={messagesAdmin}
             socket={socket}
-            chatId={chatId}
+            chatId={chatAdminId}
             closeChat={handleChatAdminClose}
             senderId={order.riderId}
             chatWith="Admin"

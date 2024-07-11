@@ -15,6 +15,11 @@ import {
 import InputSearch from "../components/InputSearch";
 import CommonButton from "../components/CommonButton";
 import { VscSend } from "react-icons/vsc";
+import useSocket from "../hooks/socketIoHook";
+import adminApi from "../apis/adminApi";
+
+const role = "ADMIN";
+
 export default function ChatAdminPage() {
   const [currentChat, setCurrentChat] = useState({ type: "rider", id: 1 });
   const [inputValue, setInputValue] = useState("");
@@ -39,6 +44,12 @@ export default function ChatAdminPage() {
   const inputRef = useRef(null);
   const notificationSoundRef = useRef(new Audio("/sound/notiChat2.mp3"));
 
+
+
+  const { socket } = useSocket();
+  const [chatInfo, setChatInfo] = useState([]);
+  const [chatWith, setChatWith] = useState("User");
+
   const suggestions = [
     "กรุณารอสักครู่ admin กำลังตรวจสอบ",
     "ขอบคุณที่ติดต่อเข้ามา",
@@ -48,6 +59,82 @@ export default function ChatAdminPage() {
     "กรุณาตรวจสอบรายละเอียดการส่ง",
     "ขออภัยในความล่าช้า",
   ];
+  useEffect(()=>{
+    if(socket){
+      const handleNewMessage = (message) => {
+        console.log(message)
+        console.log(message.senderRole)
+        // let newChatInfo = chatInfo.map(item=> {
+        //   if(item.id === message.chatId){
+        //     item.messages.push(message)
+
+        //   }
+        //   return item
+        // })
+        // console.log(newChatInfo)
+        
+        setChatInfo((message)=>message.map(item=> {
+          if(item.id === message.chatId){
+            item.messages.push(message)
+          }
+          return item
+        })
+      
+      )
+  
+        // let isMessageInChatRider = false
+        // let newMessage = chatRider.map(item=> {
+        //   if(item.id === message.chatId){
+        //     item.messages.push(message)
+        //     isMessageInChatRider = true
+        //   }
+        //   return item
+        // })
+        // if(isMessageInChatRider){
+        //   console.log("----------rider-------------")
+        //   scrollToBottom()
+        //   setChatRider(newMessage)
+        //   return
+        // }
+        // let isMessageInChatCustomer = false
+        // newMessage = chatCustomer.map(item=> {
+        //   if(item.id === message.chatId)item.messages.push(message)
+        //     return item
+        // })
+        // if(isMessageInChatCustomer){
+        //   console.log("----------customer-------------")
+        //   scrollToBottom()
+        //   setChatCustomer(newMessage)
+        //   return 
+        // } 
+        // console.log("----------nf-------------")
+          
+        // console.log(message)
+      }
+      socket.on("newAdminMessage", handleNewMessage)
+      console.log("first")
+      return ()=>{
+        socket.off("newAdminMessage", handleNewMessage)
+      }
+    }
+  },[socket])
+
+  useEffect(() => {
+    const getAllChatInfo = async () => {
+      try {
+        const res = await adminApi.fetchAllChatAdminInfo();
+        console.log(res.data, "====================");
+
+
+
+        setChatInfo(res.data)
+
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getAllChatInfo();
+  }, []);
 
   useEffect(() => {
     setChats(mockChats);
@@ -65,6 +152,7 @@ export default function ChatAdminPage() {
       }, {}),
     };
 
+    console.log(initialLastMessages);
     setLastMessages(initialLastMessages);
 
     setProfileData({
@@ -135,28 +223,36 @@ export default function ChatAdminPage() {
   };
 
   const handleSend = () => {
+    console.log("send")
     if (inputValue.trim() !== "") {
-      const newMessage = {
-        sender: "admin",
-        text: inputValue,
-        timestamp: new Date(),
-      };
-      setChats((prevChats) => {
-        const updatedChats = { ...prevChats };
-        updatedChats[currentChat.type][currentChat.id].push(newMessage);
+      socket.emit("sendMessageAdmin", {
+        chatId:currentChat.id,
+        senderId:1,
+        content: inputValue,
+        senderRole: "ADMIN",
+      })
 
-        setLastMessages((prevLastMessages) => ({
-          ...prevLastMessages,
-          [currentChat.type]: {
-            ...prevLastMessages[currentChat.type],
-            [currentChat.id]: newMessage,
-          },
-        }));
+      // const newMessage = {
+      //   sender: "admin",
+      //   text: inputValue,
+      //   timestamp: new Date(),
+      // };
+      // setChats((prevChats) => {
+      //   const updatedChats = { ...prevChats };
+      //   updatedChats[currentChat.type][currentChat.id].push(newMessage);
 
-        setLastAdminMessageTime(new Date());
+      //   setLastMessages((prevLastMessages) => ({
+      //     ...prevLastMessages,
+      //     [currentChat.type]: {
+      //       ...prevLastMessages[currentChat.type],
+      //       [currentChat.id]: newMessage,
+      //     },
+      //   }));
 
-        return updatedChats;
-      });
+      //   setLastAdminMessageTime(new Date());
+
+      //   return updatedChats;
+      // });
       setInputValue("");
       scrollToBottom();
     }
@@ -283,6 +379,8 @@ export default function ChatAdminPage() {
     setSearch(event.target.value);
   };
 
+  // console.log(chatRider[1].messages)
+
   return (
     <>
       {/* New version */}
@@ -356,64 +454,59 @@ export default function ChatAdminPage() {
           {/* Contact list */}
           <div className="rounded-b-2xl rounded-tr-2xl mx-auto h-full w-full flex flex-grow relative z-40 bg-gradient-to-br from-[#FF004D] from-10% to-[#1D2B53] to-85% p-[2%] gap-4">
             <div className="w-[25%] bg-[#1D2B53] rounded-xl p-2 overflow-y-auto scrollbar-hide">
-              {Object.keys(filteredChats)
-                .sort((a, b) => {
-                  return (
-                    new Date(lastMessages[currentChat.type][b].timestamp) -
-                    new Date(lastMessages[currentChat.type][a].timestamp)
-                  );
-                })
-                .map((id) => {
-                  const lastMessage = lastMessages[currentChat.type][id];
-                  const isUnread = lastMessage.sender !== "admin";
-
+              {(chatInfo.filter(item=>  selectedChatType === "customer"? item.userId : item.riderId )).map((item) => {
+                  const lastMessage = item.messages[item.messages.length -1];
+                  // console.log(lastMessage)
+                  // const isUnread = lastMessage?.senderRole === "ADMIN";
+                    // console.log(item)
                   return (
                     <div
-                      key={id}
+                      key={item.id}
                       className={`flex justify-between p-4 cursor-pointer h-[90px] ${
-                        currentChat.id === Number(id) ? "bg-[#384E8D]" : ""
+                        currentChat.id === Number(item.id) ? "bg-[#384E8D]" : ""
                       }`}
                       onClick={() =>
                         setCurrentChat({
                           type: currentChat.type,
-                          id: Number(id),
+                          id: Number(item.id),
                         })
                       }
                     >
                       <div className="flex items-center">
                         <img
-                          src={profileData[currentChat.type][id].profileImg}
+                          src={item?.rider?.profileImage|| "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"}
                           alt="Profile"
                           className="w-16 h-16 rounded-xl mr-4"
                         />
                         <div className="flex flex-col justify-center h-full">
                           <div className="flex-1 flex items-center truncate text-white">{`${
-                            profileData[currentChat.type][id].firstName
+                            item?.rider?.firstName || item?.user?.firstName
                           } ${
-                            profileData[currentChat.type][id].lastName
+                            item?.rider?.lastName || item?.user?.lastName
+
                           }`}</div>
                           <div className="text-xs text-white flex-1 overflow-hidden line-clamp-2 ">
                             {`${
-                              lastMessage.sender === "admin"
+                              lastMessage?.senderRole === "ADMIN"
                                 ? "Admin"
                                 : currentChat.type
-                            }: ${lastMessage.text}`}
+                            }: ${lastMessage?.content|| ""}`}
                           </div>
                         </div>
                       </div>
                       <div className="flex items-center">
-                        {isUnread && (
-                          <span className="w-2.5 h-2.5 bg-red-500 rounded-full mr-2 blink" />
-                        )}
+                        {/* {isUnread && (
+                          <span className="w-2.5 h-2.5 bg-green-300 rounded-full mr-2 blink" />
+                        )} */}
 
                         <div className="text-xs text-white min-w-[60px]">
-                          {new Date(lastMessage.timestamp).toLocaleTimeString(
+                          {/* {new Date(lastMessage.timestamp).toLocaleTimeString(
                             [],
                             {
                               hour: "2-digit",
                               minute: "2-digit",
                             }
-                          )}
+                          )} */}
                         </div>
                       </div>
                     </div>
@@ -472,7 +565,48 @@ export default function ChatAdminPage() {
               <div className="border-white border-[1px] mt-1 mb-2"></div>
 
               <div className="flex-1 p-4 overflow-y-auto scrollbar-hide">
-                {currentMessages.map((message, index) => (
+                {chatInfo.length > 0 &&
+                  chatInfo[chatInfo.findIndex(item => item.id === currentChat.id)].messages.map((msg, index) => (
+                    <div
+                      key={index}
+                      className={`flex ${
+                        msg.senderRole === role
+                          ? "justify-end"
+                          : "justify-start"
+                      }`}
+                    >
+                      {msg.senderRole === "TYPING" ? (
+                        <div className="bg-white text-2xl p-4 m-3 rounded-tl-2xl rounded-tr-2xl rounded-br-2xl flex gap-4">
+                          <h1 className="text-[50px] text-black flex items-center px-2">
+                            <span className="animate-wave-1 inline-block pr-1">
+                              .
+                            </span>
+                            <span className="animate-wave-2 inline-block pr-1">
+                              .
+                            </span>
+                            <span className="animate-wave-3 inline-block pr-1">
+                              .
+                            </span>
+                          </h1>
+                        </div>
+                      ) : (
+                        <div
+                          ref={messagesEndRef}
+                          className={`bg-white text-2xl p-4 m-3 rounded-tl-2xl rounded-tr-2xl flex gap-4 ${
+                            msg.senderRole === role
+                              ? "rounded-bl-2xl text-torchRed"
+                              : "rounded-br-2xl"
+                          }`}
+                        >
+                          <h1>
+                            {msg.senderRole === role ? "You:" : `${chatWith}:`}
+                          </h1>{" "}
+                          {msg.content}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                {/* {currentMessages.map((message, index) => (
                   <div
                     key={index}
                     className={`mb-2 flex ${
@@ -512,7 +646,7 @@ export default function ChatAdminPage() {
                       </div>
                     </div>
                   </div>
-                ))}
+                ))} */}
                 <div ref={messagesEndRef} />
               </div>
 
@@ -585,4 +719,307 @@ export default function ChatAdminPage() {
       </div>
     </>
   );
+
+  // return (
+  //   <>
+  //     {/* New version */}
+  //     <div className="flex flex-1 overflow-hidden h-full w-full pl-[40px] pr-[40px] pt-[60px] pb-[20px]">
+  //       <div className="mx-auto relative z-40 h-full w-full">
+  //         <div className="w-[100%] flex justify-between absolute top-[-45px] z-20">
+  //           <div className="flex">
+  //             {!isSwapped ? (
+  //               <>
+  //                 <div
+  //                   role="button"
+  //                   className={`text-white h-[60px] w-[100px] flex justify-center items-center rounded-t-2xl text-[18px] ${
+  //                     selectedChatType === "rider"
+  //                       ? "bg-[#FF004D] hover:bg-[#cc0040]"
+  //                       : "bg-[#1D2B53] hover:bg-[#161e41]"
+  //                   }`}
+  //                   onClick={() => handleChatTypeChange("rider")}
+  //                 >
+  //                   Rider
+  //                 </div>
+  //                 <div
+  //                   role="button"
+  //                   className={`text-white h-[60px] w-[100px] flex justify-center items-center rounded-t-2xl text-[18px] ${
+  //                     selectedChatType === "customer"
+  //                       ? "bg-[#FF004D] hover:bg-[#cc0040]"
+  //                       : "bg-[#1D2B53] hover:bg-[#161e41]"
+  //                   } -ml-px`}
+  //                   onClick={() => handleChatTypeChange("customer")}
+  //                 >
+  //                   Customer
+  //                 </div>
+  //               </>
+  //             ) : (
+  //               <>
+  //                 <div
+  //                   role="button"
+  //                   className={`text-white h-[60px] w-[100px] flex justify-center items-center rounded-t-2xl text-[18px] ${
+  //                     selectedChatType === "customer"
+  //                       ? "bg-[#FF004D] hover:bg-[#cc0040]"
+  //                       : "bg-[#1D2B53] hover:bg-[#161e41]"
+  //                   }`}
+  //                   onClick={() => handleChatTypeChange("customer")}
+  //                 >
+  //                   Customer
+  //                 </div>
+  //                 <div
+  //                   role="button"
+  //                   className={`text-white h-[60px] w-[100px] flex justify-center items-center rounded-t-2xl text-[18px] ${
+  //                     selectedChatType === "rider"
+  //                       ? "bg-[#FF004D] hover:bg-[#cc0040]"
+  //                       : "bg-[#1D2B53] hover:bg-[#161e41]"
+  //                   } -ml-px`}
+  //                   onClick={() => handleChatTypeChange("rider")}
+  //                 >
+  //                   Rider
+  //                 </div>
+  //               </>
+  //             )}
+  //           </div>
+  //           <div className="text-white h-[44px] w-full flex  justify-end  items-center rounded-2xl text-[18px] -ml-px">
+  //             <InputSearch
+  //               placeholder="Search"
+  //               onChange={handleOnChange}
+  //               name="search"
+  //               value={search}
+  //               rounded="xxlLeft"
+  //             />
+  //           </div>
+  //         </div>
+
+  //         {/* Contact list */}
+  //         <div className="rounded-b-2xl rounded-tr-2xl mx-auto h-full w-full flex flex-grow relative z-40 bg-gradient-to-br from-[#FF004D] from-10% to-[#1D2B53] to-85% p-[2%] gap-4">
+  //           <div className="w-[25%] bg-[#1D2B53] rounded-xl p-2 overflow-y-auto scrollbar-hide">
+  //             {Object.keys(filteredChats)
+  //               .sort((a, b) => {
+  //                 return (
+  //                   new Date(lastMessages[currentChat.type][b].timestamp) -
+  //                   new Date(lastMessages[currentChat.type][a].timestamp)
+  //                 );
+  //               })
+  //               .map((id) => {
+  //                 const lastMessage = lastMessages[currentChat.type][id];
+  //                 const isUnread = lastMessage.sender !== "admin";
+
+  //                 return (
+  //                   <div
+  //                     key={id}
+  //                     className={`flex justify-between p-4 cursor-pointer h-[90px] ${
+  //                       currentChat.id === Number(id) ? "bg-[#384E8D]" : ""
+  //                     }`}
+  //                     onClick={() =>
+  //                       setCurrentChat({
+  //                         type: currentChat.type,
+  //                         id: Number(id),
+  //                       })
+  //                     }
+  //                   >
+  //                     <div className="flex items-center">
+  //                       <img
+  //                         src={profileData[currentChat.type][id].profileImg}
+  //                         alt="Profile"
+  //                         className="w-16 h-16 rounded-xl mr-4"
+  //                       />
+  //                       <div className="flex flex-col justify-center h-full">
+  //                         <div className="flex-1 flex items-center truncate text-white">{`${
+  //                           profileData[currentChat.type][id].firstName
+  //                         } ${
+  //                           profileData[currentChat.type][id].lastName
+  //                         }`}</div>
+  //                         <div className="text-xs text-white flex-1 overflow-hidden line-clamp-2 ">
+  //                           {`${
+  //                             lastMessage.sender === "admin"
+  //                               ? "Admin"
+  //                               : currentChat.type
+  //                           }: ${lastMessage.text}`}
+  //                         </div>
+  //                       </div>
+  //                     </div>
+  //                     <div className="flex items-center">
+  //                       {isUnread && (
+  //                         <span className="w-2.5 h-2.5 bg-red-500 rounded-full mr-2 blink" />
+  //                       )}
+
+  //                       <div className="text-xs text-white min-w-[60px]">
+  //                         {new Date(lastMessage.timestamp).toLocaleTimeString(
+  //                           [],
+  //                           {
+  //                             hour: "2-digit",
+  //                             minute: "2-digit",
+  //                           }
+  //                         )}
+  //                       </div>
+  //                     </div>
+  //                   </div>
+  //                 );
+  //               })}
+  //           </div>
+
+  //           {/* chat */}
+  //           <div className="w-[75%] bg-gradient-to-br from-[#1D2B53] from-10% to-[#FF004D]  to-70%  rounded-xl p-4 flex flex-col h-full">
+  //             <div className="h-[10%] flex items-center">
+  //               <div className="w-16 h-16 rounded-xl mr-2 self-start  flex items-center justify-center">
+  //                 <img
+  //                   src={currentProfile?.profileImg}
+  //                   alt="Profile"
+  //                   className="max-h-16 max-w-16 min-h-16 min-w-16 rounded-lg   ml-4 object-cover"
+  //                 />
+  //               </div>
+  //               <div className="ml-4">
+  //                 <div className="text-white font-semibold">
+  //                   ID: {currentChat.id}
+  //                 </div>
+  //                 <div className="text-white">
+  //                   {currentProfile?.firstName} {currentProfile?.lastName}
+  //                 </div>
+  //               </div>
+  //               <div className="flex ml-auto">
+  //                 <div className="relative" ref={dropdownRef}>
+  //                   <CommonButton
+  //                     onClick={() => setShowDropdown(!showDropdown)}
+  //                   >
+  //                     Manage
+  //                   </CommonButton>
+  //                   {showDropdown && (
+  //                     <div className="absolute right-0 mt-1 py-2 w-[200px] bg-[#1d2b53] rounded-lg shadow-xl z-20 items-start justify-start flex flex-col ">
+  //                       <button
+  //                         className="flex px-4 py-2 text-left  text-white hover:bg-[#384E8D] hover:text-white w-full  items-center"
+  //                         onClick={() => handleShowOrder(currentChat.id)}
+  //                       >
+  //                         <PencilSquareIcon className="h-5 w-5 mr-2" />
+  //                         Order Status
+  //                       </button>
+  //                       <button
+  //                         className="flex px-4 py-2 text-left  text-white hover:bg-[#384E8D] hover:text-white w-full  items-center"
+  //                         onClick={handleEndChat}
+  //                       >
+  //                         <ChatBubbleLeftEllipsisIcon className="h-5 w-5 mr-2" />
+  //                         End Chat
+  //                       </button>
+  //                     </div>
+  //                   )}
+  //                 </div>
+  //               </div>
+  //             </div>
+
+  //             {/* เส้นใต้ profile */}
+  //             <div className="border-white border-[1px] mt-1 mb-2"></div>
+
+  //             <div className="flex-1 p-4 overflow-y-auto scrollbar-hide">
+  //               {currentMessages.map((message, index) => (
+  //                 <div
+  //                   key={index}
+  //                   className={`mb-2 flex ${
+  //                     message.sender === "admin"
+  //                       ? "justify-end"
+  //                       : "justify-start"
+  //                   }`}
+  //                 >
+  //                   {message.sender !== "admin" && (
+  //                     <div className="w-16 h-16 rounded-xl mr-2 self-start flex items-center justify-center">
+  //                       <img
+  //                         src={
+  //                           currentChat.type === "rider"
+  //                             ? profileData.rider[currentChat.id].profileImg
+  //                             : profileData.customer[currentChat.id].profileImg
+  //                         }
+  //                         alt="Profile"
+  //                         className="w-16 h-16 rounded-xl mr-2 self-start border-[2px] border-[#ff004d]"
+  //                       />
+  //                     </div>
+  //                   )}
+
+  //                   <div
+  //                     className={`inline-block p-2 max-w-lg break-words ${
+  //                       message.sender === "admin"
+  //                         ? "rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl bg-white text-black"
+  //                         : "rounded-tl-2xl rounded-tr-2xl rounded-br-2xl bg-white text-black"
+  //                     }`}
+  //                   >
+  //                     {message.sender === "admin" ? "Admin: " : ""}
+  //                     {message.text}
+  //                     <div className="text-xs text-gray-500 text-end">
+  //                       {new Date(message.timestamp).toLocaleTimeString([], {
+  //                         hour: "2-digit",
+  //                         minute: "2-digit",
+  //                       })}
+  //                     </div>
+  //                   </div>
+  //                 </div>
+  //               ))}
+  //               <div ref={messagesEndRef} />
+  //             </div>
+
+  //             {/* input message */}
+  //             <div className="relative p-4  border-t">
+  //               <div className="flex gap-2 mb-2 overflow-x-auto scrollbar-hide">
+  //                 {suggestions.map((suggestion, index) => (
+  //                   <button
+  //                     key={index}
+  //                     className="px-4 py-2 bg-[#1D2B53] text-white rounded-full whitespace-nowrap"
+  //                     onClick={() => handleSuggestionClick(suggestion)}
+  //                   >
+  //                     {suggestion}
+  //                   </button>
+  //                 ))}
+  //               </div>
+  //               <div className="flex items-center gap-2">
+  //                 <input
+  //                   ref={inputRef}
+  //                   type="text"
+  //                   className="flex-1 p-2 border rounded-lg"
+  //                   value={inputValue}
+  //                   onChange={(e) => setInputValue(e.target.value)}
+  //                   placeholder="พิมพ์ข้อความ..."
+  //                   onFocus={(e) => {
+  //                     e.target.select();
+  //                   }}
+  //                   onKeyPress={(e) => {
+  //                     if (e.key === "Enter") {
+  //                       handleSend();
+  //                     }
+  //                   }}
+  //                 />
+
+  //                 <CommonButton
+  //                   onClick={handleSend}
+  //                   width="send"
+  //                   height="send"
+  //                   bg="torchRed"
+  //                 >
+  //                   <VscSend />
+  //                 </CommonButton>
+  //               </div>
+  //               {/* <SimulateMessageInput onSimulateSend={handleSimulateSend} /> */}
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //       {showModal && (
+  //         <EndChatModal
+  //           closeModal={cancelEndChat}
+  //           confirmEndChat={confirmEndChat}
+  //         />
+  //       )}
+  //       {showOrderModal && currentOrder && (
+  //         <OrderModal
+  //           currentOrder={currentOrder}
+  //           profileData={profileData}
+  //           editingStatus={editingStatus}
+  //           selectedStatus={selectedStatus}
+  //           setEditingStatus={setEditingStatus}
+  //           setSelectedStatus={setSelectedStatus}
+  //           setConfirmStatusChange={setConfirmStatusChange}
+  //           handleStatusChangeConfirm={handleStatusChangeConfirm}
+  //           handleStatusChangeCancel={handleStatusChangeCancel}
+  //           confirmStatusChange={confirmStatusChange}
+  //           closeOrderModal={closeOrderModal}
+  //         />
+  //       )}
+  //     </div>
+  //   </>
+  // );
 }

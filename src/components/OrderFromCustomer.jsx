@@ -74,8 +74,10 @@ export default function OrderFromCustomer() {
       const riderLng = riderPosition.lng;
       socket.emit("acceptRoute", { routeId, riderLat, riderLng ,customerId});
       isAccept = true
+      setTimeout(() => {
+        isAccept = false
+      }, 1200);
       console.log(`รับงาน ${routeId} RiderId กำลังรอ`);
-      // navigate(`/rider/order/${routeId}`); // navigate ไปที่ /rider/order
     }
     };
 

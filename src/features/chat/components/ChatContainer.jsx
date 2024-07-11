@@ -5,7 +5,7 @@ let delaySendMessage = false;
 
 export default function ChatContainer({
   role = "RIDER",
-  chatWith = "user",
+  chatWith = "User",
   messages,
   socket,
   chatId,
@@ -35,12 +35,21 @@ export default function ChatContainer({
   const sendMessage = () => {
     if (message.trim() && !delaySendMessage && chatId) {
       console.log("send");
-      socket.emit("sendMessage", {
+      if(chatWith === "User"){
+        socket.emit("sendMessage", {
         chatId,
         senderId,
         content: message,
         senderRole: role,
-      });
+      })
+      ;}else {
+        socket.emit("sendMessageAdmin", {
+          chatId,
+          senderId,
+          content: message,
+          senderRole: role,
+        })
+      }
       setMessage("");
       delaySendMessage = true;
       setTimeout(() => {
