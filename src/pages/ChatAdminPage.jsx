@@ -76,7 +76,7 @@ export default function ChatAdminPage() {
             if (item.id === newMessage.chatId) {
               return {
                 ...item,
-                messages: [...item.messages, newMessage],
+                messages: [...(item.messages || []), newMessage],
               };
             }
             return item;
