@@ -52,7 +52,7 @@ export default function RiderPaymentPending({ data }) {
                     role="button"
                     onClick={handleClickSlip}
                     className="flex justify-center h-full items-center " >
-                    <img src={data?.payments?.paymentSlip} alt="Slip Image" className="shadow-lg h-[300px]" />
+                    <img src={data?.payments?.paymentSlip} alt="Slip Image" className="h-[300px] flex items-center justify-center rounded-2xl  shadow-lg" />
                 </div>
                 <div className="flex flex-col gap-8 items-end justify-center">
                     <CommonButton
@@ -80,7 +80,7 @@ export default function RiderPaymentPending({ data }) {
             <ModalAdmin open={open} onClose={handleCloseModal} >
                 {/* onClose={() => setOpen(false)} */}
                 {selectSrc ? <div className="h-[100%] w-[100%] p-8 flex justify-center mx-auto">
-                    <img src={selectSrc} alt="selected Image" />
+                    <img src={selectSrc} alt="selected Image" className="h-[100%] flex items-center justify-center rounded-2xl  shadow-lg" />
                 </div>
                     : approve ?
                         <ModalApprovePayment data={data} usedPlan={usedPlan} onClose={handleCloseModal} />

@@ -44,14 +44,16 @@ export default function PaymentConfirmation() {
               {item.menuName}
             </div>
           ))}
-          <InputSearch
-            placeholder='search'
-            onChange={handleOnChance}
-            onClick={() => console.log('Search di kub')}
-            name='search'
-            value={search}
-            rounded="xxlLeft"
-          />
+          <div className="invisible">
+            <InputSearch
+              placeholder='search'
+              onChange={handleOnChance}
+              onClick={() => console.log('Search di kub')}
+              name='search'
+              value={search}
+              rounded="xxlLeft"
+            />
+          </div>
         </div>
       </div>
       <div className="w-[90%] mx-auto flex flex-col gap-3">

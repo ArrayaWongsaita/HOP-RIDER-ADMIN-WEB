@@ -30,19 +30,21 @@ export default function RiderApproval() {
             font-semibold text-xl text-white
             bg-gradient-to-r from-[#1D2B53] from-30% to-[#FF004D] to-100% `}>
           {menuList.map((item) => (
-            <div key={item.id} role="button" onClick={item.onClick} 
-            className={`hover:underline hover:font-extrabold ${filterBy === item.isActive ? 'underline' : ''}`}>
+            <div key={item.id} role="button" onClick={item.onClick}
+              className={`hover:underline hover:font-extrabold ${filterBy === item.isActive ? 'underline' : ''}`}>
               {item.menuName}
             </div>
           ))}
-          <InputSearch
-            placeholder='search'
-            onChange={handleOnChance}
-            onClick={() => console.log('Search di kub')}
-            name='search'
-            value={search}
-            rounded="xxlLeft"
-          />
+          <div className="invisible">
+            <InputSearch
+              placeholder='search'
+              onChange={handleOnChance}
+              onClick={() => console.log('Search di kub')}
+              name='search'
+              value={search}
+              rounded="xxlLeft"
+            />
+          </div>
         </div>
       </div>
       <div className="w-[90%] mx-auto flex flex-col gap-3">
