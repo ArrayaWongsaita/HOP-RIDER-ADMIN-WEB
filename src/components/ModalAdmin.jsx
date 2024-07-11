@@ -17,9 +17,9 @@ export default function ModalAdmin({ children, open, onClose }) {
     <>
       {open ? createPortal (
         <div>
-          <div className="fixed inset-0 z-30 bg-gainsboro opacity-80"></div>
+          <div className="fixed inset-0 z-90 bg-gainsboro opacity-80"></div>
           <div
-            className="fixed inset-0 z-40 flex justify-evenly items-center min-w-screen flex-col "
+            className="fixed inset-0 z-100 flex justify-evenly items-center min-w-screen flex-col "
             onMouseDown={onClose}
           >
             <div className="flex w-full justify-end px-20">

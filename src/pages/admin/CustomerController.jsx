@@ -1,7 +1,6 @@
 import { useState } from "react";
 import InputSearch from "../../components/InputSearch";
 import RiderBar from "../../components/RiderBar";
-import RiderOrder from "../../components/RiderOrder";
 import ComponentOrder from "../../components/ComponentOrder";
 import useRider from "../../hooks/riderHook";
 
@@ -41,7 +40,7 @@ export default function CustomerController() {
       <div className="flex flex-col gap-3 ">
         {targetRider.length > 0 &&
           targetRider.map((item) => (
-            <RiderBar key={item.id} data={item}>
+            <RiderBar status={item.status} key={item.id} data={item}>
               <ComponentOrder data={item} />
             </RiderBar>
           ))}
