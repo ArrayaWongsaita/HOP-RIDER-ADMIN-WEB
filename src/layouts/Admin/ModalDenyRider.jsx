@@ -2,12 +2,14 @@ import { useState } from "react";
 import CommonButton from "../../components/CommonButton";
 import Textarea from "../../components/Textarea";
 import adminApi from "../../apis/adminApi";
+import useRider from "../../hooks/riderHook";
 
 const initialInput = {
     comment: '',
 };
 
-export default function ModalDenyRider({ data }) {
+export default function ModalDenyRider({ data, onClose }) {
+    const { setUserRider } = useRider();
     const [input, setInput] = useState(initialInput);
     console.log(data)
 
@@ -16,11 +18,26 @@ export default function ModalDenyRider({ data }) {
     };
     
     const handleSubmitDenyRider = async (event) => {
-        event.preventDefault();
-        console.log(data.id, input);
-        await adminApi.denyRider(data.id, input);
-        
-    }
+        try {
+            event.preventDefault();
+            const requestBody = {
+                riderId: data?.id,
+                status: 'DENIED',
+            };
+            console.log(requestBody, input);
+            await adminApi.approveRider(requestBody, input);
+            console.log('submit');
+            // update state ใน context
+            setUserRider(prevState =>
+                prevState.map(item =>
+                    item.id === data.id ? { ...item, status: 'APPROVED' } : item
+                )
+            );
+            onClose();
+        }   catch (err) {
+            console.log(err)
+        }
+    };
 
     return (
         <div className="w-[100%] h-[100%] flex flex-col justify-center items-center gap-8">
@@ -32,7 +49,7 @@ export default function ModalDenyRider({ data }) {
                     <Textarea
                     rows={9}
                     border='none'
-                        placeholder={"Why to deny ?"}
+                        // placeholder={"Why to deny ?"}
                         name="comment"
                         value={input.comment}
                         onChange={handleChangeInput}

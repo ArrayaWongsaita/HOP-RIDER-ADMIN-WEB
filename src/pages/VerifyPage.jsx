@@ -14,6 +14,7 @@ import { ImageRider } from "../icons/IconImageRider";
 import { ImportImage } from "../icons/IconImportImage";
 import riderApi from "../apis/riderApi";
 import LoadScreen from "../components/LoadScreen";
+import { useNavigate } from "react-router-dom";
 
 const initialInput = {
   birthDate: "",
@@ -31,7 +32,7 @@ const color1 = "bg-[#FF004D] text-[#FFFFFF]";
 const color2 = "bg-[#FFFFFF] text-[#FF004D]";
 
 export default function VerifyPage() {
-  const { authUser } = useAuth();
+  const { authUser, setAuthUser } = useAuth()
   const [input, setInput] = useState(initialInput);
   const [inputError, setInputError] = useState(initialInputError);
   const [profileImage, setProfileImage] = useState({});
@@ -40,6 +41,7 @@ export default function VerifyPage() {
   const [afterSubmit, setAfterSubmit] = useState(false);
   // console.log(input)
   const [initialTextVisible, setInitialTextVisible] = useState(false);
+  const navigate = useNavigate()
 
   const missingProfileImage = useRef(null);
   const missingInput = useRef(null);
@@ -114,7 +116,10 @@ export default function VerifyPage() {
       console.log(Object.fromEntries(formData));
 
       console.log("Send formData!!");
-      await riderApi.verify(formData);
+      const response = await riderApi.verify(formData);
+      console.log('verify success!!');
+      setAuthUser(response.data);
+      navigate('/rider/waiting');
 
       toast.update(toastId, {
         render:
@@ -166,9 +171,8 @@ export default function VerifyPage() {
             </InputImage>
           </div>
           <div
-            className={`mt-5 p-2 rounded-2xl ${
-              profileImage?.profileImage ? color2 : color1
-            } hover:cursor-default`}
+            className={`mt-5 p-2 rounded-2xl ${profileImage?.profileImage ? color2 : color1
+              } hover:cursor-default`}
           >
             <p>+ upload your profile image</p>
           </div>
@@ -257,9 +261,8 @@ export default function VerifyPage() {
             </InputImage>
           </div>
           <div
-            className={`mt-5 p-2 rounded-2xl ${
-              profileImage?.licenseImage ? color2 : color1
-            } hover:cursor-default`}
+            className={`mt-5 p-2 rounded-2xl ${profileImage?.licenseImage ? color2 : color1
+              } hover:cursor-default`}
           >
             <p>+ upload your driver&apos;s license here</p>
           </div>
@@ -286,9 +289,8 @@ export default function VerifyPage() {
             </InputImage>
           </div>
           <div
-            className={`mt-5 p-2 rounded-2xl ${
-              profileImage?.vehicleRegistrationImage ? color2 : color1
-            } hover:cursor-default`}
+            className={`mt-5 p-2 rounded-2xl ${profileImage?.vehicleRegistrationImage ? color2 : color1
+              } hover:cursor-default`}
           >
             <p>+ upload your vehicle registration copy here</p>
           </div>
@@ -315,9 +317,8 @@ export default function VerifyPage() {
             </InputImage>
           </div>
           <div
-            className={`mt-5 p-2 rounded-2xl ${
-              profileImage?.vehicleImage ? color2 : color1
-            } hover:cursor-default`}
+            className={`mt-5 p-2 rounded-2xl ${profileImage?.vehicleImage ? color2 : color1
+              } hover:cursor-default`}
           >
             <p>+ upload your picture of your vehicle here</p>
           </div>
@@ -329,9 +330,8 @@ export default function VerifyPage() {
 
         <div className="text-white w-full text-sm flex flex-col items-center gap-4 py-4">
           <div
-            className={`flex items-center gap-2 ${
-              afterSubmit ? !option1 && "text-[#FF004D]" : ""
-            }`}
+            className={`flex items-center gap-2 ${afterSubmit ? !option1 && "text-[#FF004D]" : ""
+              }`}
           >
             <input
               type="checkbox"
@@ -341,9 +341,8 @@ export default function VerifyPage() {
             <label htmlFor="option01">Clean criminal record.</label>
           </div>
           <div
-            className={`flex items-center gap-2 ${
-              afterSubmit ? !option2 && "text-[#FF004D]" : ""
-            }`}
+            className={`flex items-center gap-2 ${afterSubmit ? !option2 && "text-[#FF004D]" : ""
+              }`}
           >
             <input
               type="checkbox"

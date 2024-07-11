@@ -104,7 +104,7 @@ export const dataRider = [
         driverLicense: 'B56789012',
         licensePlate: 'RST234',
         vehicleImage: null,
-        status: 'CANCELED',
+        status: 'DENIED',
         createdAt: new Date(),
         updatedAt: new Date(),
         planId: 5,
