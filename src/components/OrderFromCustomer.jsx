@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import useAuth from "../hooks/authHook";
 import ModalCommon from "./ModalCommon";
 import { motion, AnimatePresence } from "framer-motion";
+import { IconLogoHop } from "../icons/IconLogoHop";
 
 let isAccept = false;
 export default function OrderFromCustomer() {
@@ -83,8 +84,7 @@ export default function OrderFromCustomer() {
         isAccept = false;
       }, 1200);
       toast.success(
-        `This route accepted successfully by ${
-          authUser ? authUser?.firstName : "you"
+        `This route accepted successfully by ${authUser ? authUser?.firstName : "you"
         }!`
       );
 
@@ -98,7 +98,9 @@ export default function OrderFromCustomer() {
   }, []);
 
   if (!orders.length) {
-    return <div>กำลังโหลด...</div>;
+    return <div className="w-[100%] h-[80vh] flex justify-center items-center pl-10">
+      <IconLogoHop width="300" height="200" />
+      </div>;
   }
 
   return (

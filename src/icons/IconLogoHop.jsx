@@ -1,8 +1,8 @@
-export function IconLogoHop() {
+export function IconLogoHop({ width="225", height="160" }) {
   return (
     <svg
-      width="225"
-      height="160"
+      width={width}
+      height={height}
       viewBox="0 0 314 182"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
