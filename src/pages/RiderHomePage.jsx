@@ -16,7 +16,7 @@ export default function RiderHomePage() {
         setInitialTextVisible(false);
         // เก็บสถานะใน sessionStorage
         sessionStorage.setItem("hasShownInitialText", "true");
-      }, 1000);
+      }, 2000);
 
       // ล้างการทำงานของ initialTimer เมื่อ component ถูก unmount
       return () => clearTimeout(initialTimer);
