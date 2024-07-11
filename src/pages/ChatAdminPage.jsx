@@ -7,8 +7,6 @@ import EndChatModal from "../features/chatAdmin/components/EndChatModal";
 import OrderModal from "../features/chatAdmin/components/OrderModal";
 // import SimulateMessageInput from "../features/chatAdmin/components/SimulateMessageInput";
 import {
-  mockRiders,
-  mockCustomers,
   orderDataMock,
   mockChats,
 } from "../features/chatAdmin/constants/mockData";
@@ -21,11 +19,12 @@ import { IconPersonImg } from "../icons/IconPersonImg";
 import { ImageRider } from "../icons/IconImageRider";
 
 const role = "ADMIN";
+let isSetCurrentChatCalled = false;
 
 export default function ChatAdminPage() {
   const [currentChat, setCurrentChat] = useState({ type: "rider", id: 1 });
   const [inputValue, setInputValue] = useState("");
-  const [chats, setChats] = useState({ rider: {}, customer: {} });
+  const [chats, setChats] = useState(mockChats);
   const [lastMessages, setLastMessages] = useState({ rider: {}, customer: {} });
   const [profileData, setProfileData] = useState({ rider: {}, customer: {} });
   const [lastAdminMessageTime, setLastAdminMessageTime] = useState(null);
@@ -59,62 +58,43 @@ export default function ChatAdminPage() {
     "กรุณาตรวจสอบรายละเอียดการส่ง",
     "ขออภัยในความล่าช้า",
   ];
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      console.log("move");
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chatInfo]);
   useEffect(() => {
     if (socket) {
-      const handleNewMessage = (message) => {
-        console.log(message);
-        console.log(message.senderRole);
-        // let newChatInfo = chatInfo.map(item=> {
-        //   if(item.id === message.chatId){
-        //     item.messages.push(message)
-
-        //   }
-        //   return item
-        // })
-        // console.log(newChatInfo)
-
-        setChatInfo((message) =>
-          message.map((item) => {
-            if (item.id === message.chatId) {
-              item.messages.push(message);
+      const handleNewMessage = (newMessage) => {
+        console.log(newMessage);
+        console.log(newMessage.senderRole);
+      
+        setChatInfo((prevChatInfo) => {
+          return prevChatInfo.map((item) => {
+            if (item.id === newMessage.chatId) {
+              return {
+                ...item,
+                messages: [...item.messages, newMessage],
+              };
             }
             return item;
-          })
-        );
-
-        // let isMessageInChatRider = false
-        // let newMessage = chatRider.map(item=> {
-        //   if(item.id === message.chatId){
-        //     item.messages.push(message)
-        //     isMessageInChatRider = true
-        //   }
-        //   return item
-        // })
-        // if(isMessageInChatRider){
-        //   console.log("----------rider-------------")
-        //   scrollToBottom()
-        //   setChatRider(newMessage)
-        //   return
-        // }
-        // let isMessageInChatCustomer = false
-        // newMessage = chatCustomer.map(item=> {
-        //   if(item.id === message.chatId)item.messages.push(message)
-        //     return item
-        // })
-        // if(isMessageInChatCustomer){
-        //   console.log("----------customer-------------")
-        //   scrollToBottom()
-        //   setChatCustomer(newMessage)
-        //   return
-        // }
-        // console.log("----------nf-------------")
-
-        // console.log(message)
+          });
+        })
+        scrollToBottom()
       };
+      
+      const handleNewChatToAdmin = (newChat)=>{
+        console.log("newChat",newChat)
+        setChatInfo((chat)=>[newChat,...chat])
+      }
+      socket.on("newChatToAdmin",handleNewChatToAdmin)
       socket.on("newAdminMessage", handleNewMessage);
       console.log("first");
       return () => {
         socket.off("newAdminMessage", handleNewMessage);
+        socket.off("newChatToAdmin",handleNewChatToAdmin)
       };
     }
   }, [socket]);
@@ -124,38 +104,12 @@ export default function ChatAdminPage() {
       try {
         const res = await adminApi.fetchAllChatAdminInfo();
         console.log(res.data, "====================");
-
         setChatInfo(res.data);
       } catch (error) {
         console.log(error);
       }
     };
     getAllChatInfo();
-  }, []);
-
-  useEffect(() => {
-    setChats(mockChats);
-
-    const initialLastMessages = {
-      rider: Object.keys(mockChats.rider).reduce((acc, id) => {
-        const lastMessage = mockChats.rider[id].slice(-1)[0];
-        acc[id] = lastMessage;
-        return acc;
-      }, {}),
-      customer: Object.keys(mockChats.customer).reduce((acc, id) => {
-        const lastMessage = mockChats.customer[id].slice(-1)[0];
-        acc[id] = lastMessage;
-        return acc;
-      }, {}),
-    };
-
-    console.log(initialLastMessages);
-    setLastMessages(initialLastMessages);
-
-    setProfileData({
-      rider: mockRiders,
-      customer: mockCustomers,
-    });
   }, []);
 
   useEffect(() => {
@@ -228,55 +182,9 @@ export default function ChatAdminPage() {
         content: inputValue,
         senderRole: "ADMIN",
       });
-
-      // const newMessage = {
-      //   sender: "admin",
-      //   text: inputValue,
-      //   timestamp: new Date(),
-      // };
-      // setChats((prevChats) => {
-      //   const updatedChats = { ...prevChats };
-      //   updatedChats[currentChat.type][currentChat.id].push(newMessage);
-
-      //   setLastMessages((prevLastMessages) => ({
-      //     ...prevLastMessages,
-      //     [currentChat.type]: {
-      //       ...prevLastMessages[currentChat.type],
-      //       [currentChat.id]: newMessage,
-      //     },
-      //   }));
-
-      //   setLastAdminMessageTime(new Date());
-
-      //   return updatedChats;
-      // });
       setInputValue("");
       scrollToBottom();
     }
-  };
-
-  const handleSimulateSend = (message) => {
-    const newMessage = {
-      sender: currentChat.type,
-      text: message,
-      timestamp: new Date(),
-    };
-    setChats((prevChats) => {
-      const updatedChats = { ...prevChats };
-      updatedChats[currentChat.type][currentChat.id].push(newMessage);
-
-      setLastMessages((prevLastMessages) => ({
-        ...prevLastMessages,
-        [currentChat.type]: {
-          ...prevLastMessages[currentChat.type],
-          [currentChat.id]: newMessage,
-        },
-      }));
-
-      setUserInteracted(true); // ตั้งค่า userInteracted เป็น true เมื่อมีการส่งข้อความจำลอง
-      return updatedChats;
-    });
-    scrollToBottom();
   };
 
   const handleSuggestionClick = (suggestion) => {
@@ -310,6 +218,7 @@ export default function ChatAdminPage() {
     const nextChatId = Object.keys(chats[type])[0];
     setCurrentChat({ type: type, id: Number(nextChatId) });
     setSelectedChatType(type);
+    isSetCurrentChatCalled = false;
     setIsSwapped(type === "customer");
   };
 
@@ -346,31 +255,21 @@ export default function ChatAdminPage() {
     setConfirmStatusChange(false);
   };
 
-  // const hasUnreadRider = Object.values(lastMessages.rider).some(
-  //   (msg) => msg.sender !== "admin"
-  // );
-  // const hasUnreadCustomer = Object.values(lastMessages.customer).some(
-  //   (msg) => msg.sender !== "admin"
-  // );
+  // const filterChats = (chats, searchTerm) => {
+  //   return Object.entries(chats).reduce((acc, [id, chat]) => {
+  //     const profile = profileData[currentChat.type][id];
+  //     if (
+  //       id.includes(searchTerm) ||
+  //       profile.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //       profile.lastName.toLowerCase().includes(searchTerm.toLowerCase())
+  //     ) {
+  //       acc[id] = chat;
+  //     }
+  //     return acc;
+  //   }, {});
+  // };
 
-  const currentMessages = chats[currentChat.type]?.[currentChat.id] || [];
-  const currentProfile = profileData[currentChat.type]?.[currentChat.id];
-
-  const filterChats = (chats, searchTerm) => {
-    return Object.entries(chats).reduce((acc, [id, chat]) => {
-      const profile = profileData[currentChat.type][id];
-      if (
-        id.includes(searchTerm) ||
-        profile.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        profile.lastName.toLowerCase().includes(searchTerm.toLowerCase())
-      ) {
-        acc[id] = chat;
-      }
-      return acc;
-    }, {});
-  };
-
-  const filteredChats = filterChats(chats[currentChat.type] || {}, search);
+  // const filteredChats = filterChats(chats[currentChat.type] || {}, search);
 
   const handleOnChange = (event) => {
     setSearch(event.target.value);
@@ -455,11 +354,21 @@ export default function ChatAdminPage() {
                 .filter((item) =>
                   selectedChatType === "customer" ? item.userId : item.riderId
                 )
-                .map((item) => {
+                .map((item, index) => {
                   const lastMessage = item.messages[item.messages.length - 1];
-                  // console.log(lastMessage)
-                  // const isUnread = lastMessage?.senderRole === "ADMIN";
-                  // console.log(item)
+                  if (index === 0 && !isSetCurrentChatCalled) {
+                    setCurrentChat({
+                      profileImage:
+                        item?.rider?.profileImage ||
+                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png",
+                      type: currentChat.type,
+                      id: Number(item.id),
+                      firstName:
+                        item?.rider?.firstName || item?.user?.firstName,
+                      lastName: item?.rider?.lastName || item?.user?.lastName,
+                    });
+                    isSetCurrentChatCalled = true;
+                  }
                   return (
                     <div
                       key={item.id}
@@ -468,8 +377,15 @@ export default function ChatAdminPage() {
                       }`}
                       onClick={() =>
                         setCurrentChat({
+                          profileImage:
+                            item?.rider?.profileImage ||
+                            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png",
                           type: currentChat.type,
                           id: Number(item.id),
+                          firstName:
+                            item?.rider?.firstName || item?.user?.firstName,
+                          lastName:
+                            item?.rider?.lastName || item?.user?.lastName,
                         })
                       }
                     >
@@ -521,9 +437,9 @@ export default function ChatAdminPage() {
             <div className="w-[75%] bg-gradient-to-br from-[#1D2B53] from-10% to-[#FF004D]  to-70%  rounded-xl p-4 flex flex-col h-full">
               <div className="h-[10%] flex items-center">
                 <div className="w-16 h-16 rounded-xl mr-2 self-start  flex items-center justify-center">
-                  {currentProfile?.profileImg ? (
+                  {currentChat?.profileImage ? (
                     <img
-                      src={currentProfile?.profileImg}
+                      src={currentChat?.profileImage}
                       alt="Profile"
                       className="w-16 h-16 rounded-xl ml-4"
                     />
@@ -542,7 +458,7 @@ export default function ChatAdminPage() {
                     ID: {currentChat.id}
                   </div>
                   <div className="text-white">
-                    {currentProfile?.firstName} {currentProfile?.lastName}
+                    {currentChat?.firstName} {currentChat?.lastName}
                   </div>
                 </div>
                 <div className="flex ml-auto">
