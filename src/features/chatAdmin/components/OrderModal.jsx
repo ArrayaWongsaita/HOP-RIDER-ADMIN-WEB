@@ -6,7 +6,6 @@ import { ImageRider } from "../../../icons/IconImageRider"; // เพิ่ม�
 
 const OrderModal = ({
   currentOrder,
-  profileData,
   editingStatus,
   selectedStatus,
   setEditingStatus,
@@ -75,9 +74,9 @@ const OrderModal = ({
         <div className="mb-4">
           <h3 className="font-semibold">Rider:</h3>
           <div className="flex items-center">
-            {profileData.rider[currentOrder.riderId].profileImg ? (
+            {currentOrder?.rider?.profileImage ? (
               <img
-                src={profileData.rider[currentOrder.riderId].profileImg}
+                src={currentOrder?.rider?.profileImage}
                 alt="Profile"
                 className="w-16 h-16 rounded-xl mr-4"
               />
@@ -86,28 +85,16 @@ const OrderModal = ({
                 <ImageRider />
               </div>
             )}
-            <div>{`${profileData.rider[currentOrder.riderId].firstName} ${
-              profileData.rider[currentOrder.riderId].lastName
-            }`}</div>
+            <div>{`${currentOrder?.rider?.firstName} ${currentOrder?.rider?.lastName}`}</div>
           </div>
         </div>
         <div className="mb-4">
           <h3 className="font-semibold">Customer:</h3>
           <div className="flex items-center">
-            {profileData.customer[currentOrder.customerId].profileImg ? (
-              <img
-                src={profileData.customer[currentOrder.customerId].profileImg}
-                alt="Profile"
-                className="w-16 h-16 rounded-xl mr-4"
-              />
-            ) : (
-              <div className="flex h-16 w-16 items-center justify-center border-[#ff004d] border-2 rounded-xl mr-4">
-                <IconPersonImg />
-              </div>
-            )}
-            <div>{`${profileData.customer[currentOrder.customerId].firstName} ${
-              profileData.customer[currentOrder.customerId].lastName
-            }`}</div>
+            <div className="flex h-16 w-16 items-center justify-center border-[#ff004d] border-2 rounded-xl mr-4">
+              <IconPersonImg />
+            </div>
+            <div>{`${currentOrder?.customer.firstName} ${currentOrder?.customer.lastName}`}</div>
           </div>
         </div>
         <div className="mb-4">

@@ -50,10 +50,10 @@ export const orderDataMock = {
 export const statusOptions = [
   "PENDING",
   "ACCEPTED",
-  "GOING",
-  "PICKEDUP",
-  "OTW",
+  "PICKINGUP",
   "ARRIVED",
-  "CANCELED",
+  "PICKEDUP",
+  "DELIVERING",
   "FINISHED",
+  "CANCELED",
 ];

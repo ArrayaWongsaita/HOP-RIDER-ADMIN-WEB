@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import OrderFromCustomer from "../components/OrderFromCustomer";
+
 import LoadScreen from "../components/LoadScreen";
+import OrderFromCustomer from "../features/order/components/OrderFromCustomer";
 
 export default function RiderHomePage() {
   const [loading, setLoading] = useState(true);
