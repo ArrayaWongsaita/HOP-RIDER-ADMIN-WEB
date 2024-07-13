@@ -108,7 +108,6 @@ export function CircleNoti({ width, height }) {
 
 export default function AdminHeader() {
   const [openDropdown, setOpenDropdown] = useState(false);
-  const [hasNotification, setHasNotification] = useState(true);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
@@ -156,12 +155,6 @@ export default function AdminHeader() {
         <div role="button" className="relative flex" onClick={toggleDropdown}>
           <IconMenu />
           <div className="absolute left-7 bottom-1">
-            {hasNotification && (
-              <div className="relative flex justify-center items-center text-[15px]">
-                <CircleNoti width="w-[30px]" height="h-[30px]" />
-                <span className="text-white absolute">20</span>
-              </div>
-            )}
           </div>
         </div>
         {openDropdown && (
@@ -175,12 +168,6 @@ export default function AdminHeader() {
               className="relative h-[50px] w-[100%] bg-transparent text-white font-bold text-[20px] text-right px-8 hover:underline flex justify-center items-center"
             >
               Chat
-              {hasNotification && (
-                <div className="relative flex justify-center items-center text-[15px] right-20">
-                  <CircleNoti width="w-[30px]" height="h-[30px]" />
-                  <span className="text-white absolute">20</span>
-                </div>
-              )}
             </div>
             <div
               role="button"

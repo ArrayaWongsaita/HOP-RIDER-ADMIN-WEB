@@ -14,6 +14,7 @@ import useSocket from "../hooks/socketIoHook";
 import { useParams } from "react-router-dom";
 import ChatContainer from "../features/chat/components/ChatContainer";
 import ModalChatNotification from "../features/order/components/ModalChatNotification";
+import { useNavigate } from "react-router-dom";
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 let chatOpen = false;
@@ -43,19 +44,39 @@ const RiderOrder = () => {
 
   const { socket, order, setNewOrder, setSocketIoClient } = useSocket();
   const { routeId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (socket) {
       const handleRouteHistory = (data) => {
-        console.log(data);
+        if (data.status === "FINISHED") {
+          navigate("/rider");
+        }
         if (data?.chatInfo) {
-          console.log(data.chatInfo.id, "chat----------------");
           setChatId(data.chatInfo.id);
         }
         if (data) {
-          if (data?.status === "ACCEPTED") data.status = 2;
-          if (data?.status === "PICKINGUP") data.status = 3;
-          if (data?.status === "PICKEDUP") data.status = 4;
+          switch (data.status) {
+            case "ACCEPTED":
+              data.status = 2;
+              break;
+            case "ARRIVED":
+              setButtonText("PICKEDUP");
+              setStep(1);
+              data.status = 2;
+              break;
+            case "PICKINGUP":
+              setStatusLogged((prev) => ({ ...prev, status2: true }));
+              data.status = 3;
+              break;
+            case "PICKEDUP":
+              setButtonText("DELIVERED");
+              setStep(2);
+              data.status = 4;
+              break;
+            default:
+              console.log("Unknown status");
+          }
           setNewOrder(data);
         }
       };
@@ -82,7 +103,6 @@ const RiderOrder = () => {
         setMessages(messages);
       };
       const handleNewMessage = (message) => {
-        console.log(message);
         if (!chatOpen && message.senderRole !== "RIDER") {
           setIsModalChatOpen(true);
         }
@@ -110,7 +130,6 @@ const RiderOrder = () => {
         }
       };
 
-      console.log("--------------------------joinChat", chatId);
       socket.emit("joinChat", { chatId });
       socket.on("chatHistory", handleChatHistory);
       socket.on("newMessage", handleNewMessage);
@@ -137,10 +156,6 @@ const RiderOrder = () => {
 
       if (chatAdminId) {
         const handleNewMessageAdmin = (message) => {
-          console.log("newMessageAdmin");
-          // if (!chatOpen) {
-          //   setIsModalChatOpen(true);
-          // }
           setMessagesAdmin((messagesAdmin) =>
             messagesAdmin.filter((item) => item.senderRole !== "TYPING")
           );
@@ -166,7 +181,6 @@ const RiderOrder = () => {
   };
 
   const handleChatAdminClick = () => {
-    console.log(chatAdminId, "----------------------");
     if (!chatAdminId) {
       socket.emit("chatToAdmin");
     }
@@ -183,9 +197,7 @@ const RiderOrder = () => {
   useEffect(() => {
     const setCurrentLocation = async () => {
       if (!order) return;
-      console.log(step, "step ---");
       if (step > 0) return;
-      //  if(error) return
 
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -235,8 +247,6 @@ const RiderOrder = () => {
   }, [order]);
 
   const calculateRoute = (origin, destination) => {
-    console.log("origin", origin);
-    console.log("defaultLocation", destination);
     if (!window.google || !window.google.maps) {
       console.error("Google Maps JavaScript API is not loaded.");
       return;
@@ -343,16 +353,6 @@ const RiderOrder = () => {
     socket.emit("leaveChat", { chatId });
     setPaymentModalVisible(false);
   };
-
-  // if (error) {
-  //   return <div>{error}</div>;
-  // }
-
-  // if (!order) {
-  //   return <div>Loading order...</div>;
-  // }
-
-  console.log(route, "-------===========================");
 
   return (
     <div className="flex flex-col min-h-[862px]">
