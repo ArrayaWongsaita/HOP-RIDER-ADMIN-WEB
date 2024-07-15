@@ -85,7 +85,10 @@ const OrderModal = ({
                 <ImageRider />
               </div>
             )}
-            <div>{`${currentOrder?.rider?.firstName} ${currentOrder?.rider?.lastName}`}</div>
+            <div>
+              <div>{`${currentOrder?.rider?.firstName} ${currentOrder?.rider?.lastName}`}</div>
+              <div>Phone : {currentOrder?.rider?.phone}</div>
+            </div>
           </div>
         </div>
         <div className="mb-4">
@@ -94,7 +97,10 @@ const OrderModal = ({
             <div className="flex h-16 w-16 items-center justify-center border-[#ff004d] border-2 rounded-xl mr-4">
               <IconPersonImg />
             </div>
-            <div>{`${currentOrder?.customer.firstName} ${currentOrder?.customer.lastName}`}</div>
+            <div>
+              <div>{`${currentOrder?.customer.firstName} ${currentOrder?.customer.lastName}`}</div>
+              <div>Phone : {currentOrder?.customer?.phone}</div>
+            </div>
           </div>
         </div>
         <div className="mb-4">
