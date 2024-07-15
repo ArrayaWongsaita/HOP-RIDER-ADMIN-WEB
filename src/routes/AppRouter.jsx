@@ -82,7 +82,7 @@ const router = createBrowserRouter([
       { path: "/admin/riderApproval", element: <RiderApproval /> },
       { path: "/admin/paymentConfirmation", element: <PaymentConfirmation /> },
       { path: "/admin/customerController", element: <CustomerController /> },
-      { path: "/admin/chat", element:  <ChatAdminPage /> },
+      { path: "/admin/chat", element: <ChatAdminPage /> },
     ],
   },
 ]);

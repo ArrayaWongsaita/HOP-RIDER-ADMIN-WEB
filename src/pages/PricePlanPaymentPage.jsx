@@ -29,6 +29,8 @@ export default function PricePlanPaymentPage() {
   const { planId } = useParams();
   const navigate = useNavigate();
 
+  console.log(planId);
+  
   const changeHandler = (e) => {
     setSelected(e.target.value);
   };
@@ -44,14 +46,15 @@ export default function PricePlanPaymentPage() {
       }
 
       const formData = new FormData()
-      formData.append("slipImage", slipImage)
-      formData.append("package", planId)
+      formData.append("paymentSlip", slipImage)
+      formData.append("planId", planId)
 
       console.log('formData ----->>>');
       console.log(Object.fromEntries(formData));
 
       await riderApi.subscribe(formData);
-      navigate("/rider/");
+      console.log("Success")
+      navigate("/rider/waitingCheckPayment");
     } catch (err) {
       console.log(err);
     }
