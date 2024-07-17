@@ -48,7 +48,8 @@ export default function WaitingApprovePage() {
                     <div className="flex justify-center items-center px-6">
                         <h1 className="text-[#FF004D] text-xl">status : <span className="text-white">waiting for Admin approval</span></h1>
                     </div>
-                    : navigate('/rider')
+                    // : navigate('/rider')
+                    : null
                 }
 
             </div>
