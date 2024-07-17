@@ -9,6 +9,7 @@ export const AuthContext = createContext();
 
 export default function AuthContextProvider({ children }) {
     const [authUser, setAuthUser] = useState(null);
+    const [userSlip, setUserSlip] = useState(null);
     const [isAuthUserLoading, setIsAuthUserLoading] = useState(true);
 
     useEffect(() => {
@@ -19,8 +20,11 @@ export default function AuthContextProvider({ children }) {
         try {
             if (getAccessToken()) {
                 const res = await authApi.getAuthUser();
-                console.log(res)
+                const subscribe = await authApi.getSlip();
+                console.log(res);
+                console.log(subscribe);
                 setAuthUser(res.data.user);
+                setUserSlip(subscribe.data);
             }
         } catch (err) {
             console.log(err);
@@ -44,6 +48,7 @@ export default function AuthContextProvider({ children }) {
 
     const value = {
         authUser,
+        userSlip,
         setAuthUser,
         isAuthUserLoading,
         login,
