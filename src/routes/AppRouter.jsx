@@ -39,13 +39,6 @@ const router = createBrowserRouter([
       </SocketIoContextProvider>
     ),
     children: [
-      { path: "/rider/price", element: <PricePlanPage /> },
-      {
-        path: "/rider/price/payment/:planId",
-        element: <PricePlanPaymentPage />,
-      },
-      { path: "/rider/order", element: <RiderOrder /> },
-      { path: "/rider/order/:routeId", element: <RiderOrder /> },
       {
         path: "/rider/verify",
         element: (
@@ -62,8 +55,11 @@ const router = createBrowserRouter([
           //   </ProtectedRouteCheckSubmitted>
         ),
       },
-      { path: "/rider/profile", element: <ProfileSettingPage /> },
-      { path: "/rider/", element: <RiderHomePage /> },
+      { path: "/rider/price", element: <PricePlanPage /> },
+      {
+        path: "/rider/price/payment/:planId",
+        element: <PricePlanPaymentPage />,
+      },
       {
         path: "/rider/waitingCheckPayment",
         element: <WaitingCheckPaymentPage />,
@@ -73,8 +69,13 @@ const router = createBrowserRouter([
         element: <ProtectedRouteCheckApproved />,
         children: [{ path: "/rider/", element: <RiderHomePage /> }],
       },
+      { path: "/rider/order", element: <RiderOrder /> },
+      { path: "/rider/order/:routeId", element: <RiderOrder /> },
+      { path: "/rider/profile", element: <ProfileSettingPage /> },
+      { path: "/rider/", element: <RiderHomePage /> },
     ],
   },
+  
   {
     path: "/admin",
     element: <SocketIoContextProvider><AdminMainContainer /></SocketIoContextProvider>,

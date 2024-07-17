@@ -6,7 +6,6 @@ import useAuth from "../hooks/authHook";
 
 export default function WaitingApprovePage() {
     const { authUser } = useAuth();
-    const message = false
 
     const navigate = useNavigate();
 
@@ -29,7 +28,7 @@ export default function WaitingApprovePage() {
                     <hr className="w-[85%] border border-[#FF004D]" />
                 </div>
 
-                {message ?
+                {authUser?.status === "CANCELED" ?
                     <div className="flex flex-col w-full justify-center items-center gap-12">
                         <div className="flex justify-center items-center px-6">
                             <h1 className="text-[#FF004D] text-xl">message : <span className="text-white">Your rider license is wrong please resend.</span></h1>
@@ -45,10 +44,11 @@ export default function WaitingApprovePage() {
                             Back To Verify
                         </CommonButton>
                     </div>
-                    :
+                    : authUser?.status === "SUBMITTED" ?
                     <div className="flex justify-center items-center px-6">
                         <h1 className="text-[#FF004D] text-xl">status : <span className="text-white">waiting for Admin approval</span></h1>
                     </div>
+                    : navigate('/rider')
                 }
 
             </div>

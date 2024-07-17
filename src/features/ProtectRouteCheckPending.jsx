@@ -8,12 +8,17 @@ export default function ProtectedRouteCheckPending({ children }) {
     const navigate = useNavigate();
 
     if (!authUser && !isAuthUserLoading) return navigate("/auth/login");
-    if (authUser?.status !== "PENDING") {
+
+    if (authUser?.status === "SUBMITTED") {
         navigate('/rider/waiting')
     }
-        return (
-            <>
-                {isAuthUserLoading ? <h1>Loading AuthUserLoading</h1> : children}
-            </>
-        );
+
+    if (authUser?.status === "APPROVED") {
+        navigate('/rider/')
+    }
+    return (
+        <>
+            {isAuthUserLoading ? <h1>Loading AuthUserLoading</h1> : children}
+        </>
+    );
 }
