@@ -8,8 +8,8 @@ export default function ProtectedRouteCheckApproved({ children }) {
     const navigate = useNavigate();
 
     if (!authUser && !isAuthUserLoading) return navigate("/auth/login");
-    if (authUser?.status !== "APPROVED") {
-        navigate('/rider/verify')
+    if (authUser?.status !== "APPROVED" && authUser?.status !== "SUBMITTED" ) {
+        // navigate('/rider/verify')
     }
         return (
             <>
